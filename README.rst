@@ -4,7 +4,11 @@
 haproxytool
 =================
 
-    *A tool to manage HAProxy via stats socket.*
+    *A tool to manage `HAProxy <http://www.haproxy.org>`_ via stats socket.*
+
+It uses `haproxyadmin <https://github.com/unixsurfer/haproxyadmin>`_
+Python library to interact with HAProxy and run all commands.
+One of the main feature is that can work with HAProxy in multi-process mode (nbproc > 1)
 
 .. contents::
 
