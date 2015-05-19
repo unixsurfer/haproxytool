@@ -14,7 +14,6 @@
 
 Usage:
     haproxytool pool [-D DIR | -h] (-S | -r | -p | -s) [NAME...]
-    haproxytool pool [-D DIR | -h] --list
     haproxytool pool [-D DIR | -h] (-l | -M)
     haproxytool pool [-D DIR | -h] -m METRIC NAME...
 
