@@ -1,59 +1,17 @@
 CHANGES
 =======
 
+0.0.8
+-----
+
+* frontend: make frontname optional argument in the usage pattern
+* pool: make pool name an optional argument in the usage pattern
+* pool: remove redundant usage pattern for listing pools
+* server: make server name an optional argument in the usage pattern
+* I need to learn reStructuredText markup syntax
+* the start of adding something useful in README
+
 0.0.7
 -----
 
-* bump version in cli.py
-* Update ChangeLog
-* use only left-aligned
-* use left-aligned and right-aligned in the output for servers
-* update ChangeLog
-
-0.0.6
------
-
-* bump version in cli.py
-* change default socket dir and remove equal from usage pattern for D
-* Work with Python2.7 as haproxyadmin library is Python2.7 compatible
-* ChangeLog updates
-
-0.0.5
------
-
-* Bumps version in cli.py
-* ChangeLog updates
-* Switches to gmail e-mail address
-* Adds README.rst
-
-0.0.4
------
-
-* Bumps version in cli.py
-
-0.0.3
------
-
-* Fix alignment in usage
-* Adds AUTHORS, updates ChangeLog
-
-0.0.2
------
-
-* Drop haproxy from the file names
-
-0.0.1
------
-
-* adds banner:-
-* remove extension
-* fix wrong path on import(thanks Juliano)
-* removed unused code
-* setup tools
-* it should be ready now
-* haproxy_dump
-* bugs
-* server is ready
-* refactored and moved to haproxytool dir
-* pylint complains and rename SETTING to OPTION
-* Initial commit
+* initial commit to github
