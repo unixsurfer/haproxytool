@@ -35,7 +35,7 @@ from operator import methodcaller
 
 
 def main():
-    args = docopt(__doc__, version='haproxytool 0.0.7', options_first=True)
+    args = docopt(__doc__, version='haproxytool 0.0.8', options_first=True)
 
     # print('global arguments:')
     # print(args)
