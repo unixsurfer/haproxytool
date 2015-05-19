@@ -13,10 +13,10 @@
 """Manage servers
 
 Usage:
-    haproxytool server [-D DIR | -h] (-r | -s | -e | -d | -R | -n | -t | -p | -W) [--pool=<name>...] NAME...
-    haproxytool server [-D DIR | -h] -w VALUE [--pool=<name>...] NAME...
+    haproxytool server [-D DIR | -h] (-r | -s | -e | -d | -R | -n | -t | -p | -W) [--pool=<name>...] [NAME...]
+    haproxytool server [-D DIR | -h] -w VALUE [--pool=<name>...] [NAME...]
     haproxytool server [-D DIR | -h] (-l | -M)
-    haproxytool server [-D DIR | -h] -m METRIC [--pool=<name>...] NAME...
+    haproxytool server [-D DIR | -h] -m METRIC [--pool=<name>...] [NAME...]
 
 
 Arguments:
@@ -76,13 +76,12 @@ def build_server_list(hap, names=None, pools=None):
                         print("{} was not found".format(name))
 
     if not servers:
-        exit("No server was found")
+        exit(1)
 
     return servers
 
 
-def list_servers(hap):
-    servers = build_server_list(hap)
+def list_servers(servers):
     print("# poolname servername")
     for server in servers:
         print("{:<30} {}".format(server.poolname, server.name))
@@ -107,6 +106,7 @@ def process(servers):
     for server in servers:
         print("{:<30} {:<42} {}".format(server.poolname, server.name,
                                         server.process_nb))
+
 
 def enable(servers):
     for server in servers:
@@ -166,7 +166,8 @@ def weight(servers, value):
         for server in servers:
             try:
                 method_caller(server)
-                print("{} set weight to {}".format(server.name, value))
+                print("{} pool set weight to {} in {} pool".format(
+                    server.name, value, server.poolname))
             except exceptions.CommandFailed as error:
                 print("{} failed to change weight:{}".format(server.name,
                                                              error))
@@ -193,11 +194,10 @@ def main():
     arguments = docopt(__doc__)
     hap = haproxy.HAProxy(socket_dir=arguments['--socket-dir'])
 
-    if arguments['NAME']:
-        servers = build_server_list(hap, arguments['NAME'], arguments['--pool'])
+    servers = build_server_list(hap, arguments['NAME'], arguments['--pool'])
 
     if arguments['--list']:
-        list_servers(hap)
+        list_servers(servers)
     elif arguments['--status']:
         status(servers)
     elif arguments['--requests']:
