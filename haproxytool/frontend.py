@@ -13,10 +13,10 @@
 """Manage frontends
 
 Usage:
-    haproxytool frontend [-D DIR | -h] (-r | -s | -o | -e | -d | -t | -p) NAME...
-    haproxytool frontend [-D DIR | -h] -w OPTION VALUE NAME...
+    haproxytool frontend [-D DIR | -h] (-r | -s | -o | -e | -d | -t | -p) [NAME...]
+    haproxytool frontend [-D DIR | -h] -w OPTION VALUE [NAME...]
     haproxytool frontend [-D DIR | -h] (-l | -M)
-    haproxytool frontend [-D DIR | -h] -m METRIC NAME...
+    haproxytool frontend [-D DIR | -h] -m METRIC [NAME...]
 
 Arguments:
     DIR     Directory path
@@ -59,13 +59,12 @@ def build_frontend_list(hap, names=None):
                 print("{} was not found".format(name))
 
     if not frontends:
-        exit("No frontend was found")
+        exit(1)
 
     return frontends
 
 
-def list_frontends(hap):
-    frontends = build_frontend_list(hap)
+def list_frontends(frontends):
     for frontend in frontends:
         print("{}".format(frontend.name))
 
@@ -148,12 +147,10 @@ def main():
     arguments = docopt(__doc__)
 
     hap = haproxy.HAProxy(socket_dir=arguments['--socket-dir'])
-
-    if arguments['NAME']:
-        frontends = build_frontend_list(hap, arguments['NAME'])
+    frontends = build_frontend_list(hap, arguments['NAME'])
 
     if arguments['--list']:
-        list_frontends(hap)
+        list_frontends(frontends)
     elif arguments['--status']:
         status(frontends)
     elif arguments['--requests']:
