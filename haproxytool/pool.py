@@ -15,7 +15,7 @@
 Usage:
     haproxytool pool [-D DIR | -h] (-S | -r | -p | -s) [NAME...]
     haproxytool pool [-D DIR | -h] (-l | -M)
-    haproxytool pool [-D DIR | -h] -m METRIC NAME...
+    haproxytool pool [-D DIR | -h] -m METRIC [NAME...]
 
 Arguments:
     DIR     Directory path
@@ -51,13 +51,12 @@ def build_pool_list(hap, names=None):
                 print("{} was not found".format(name))
 
     if not pools:
-        exit("No pool was found")
+        exit(1)
 
     return pools
 
 
-def list_pools(hap):
-    pools = build_pool_list(hap)
+def list_pools(pools):
     for pool in pools:
         print("{}".format(pool.name))
 
@@ -111,13 +110,10 @@ def main():
     hap = haproxy.HAProxy(socket_dir=arguments['--socket-dir'])
 
     # Build a list of pool objects
-    if arguments['NAME']:
-        pools = build_pool_list(hap, arguments['NAME'])
-    else:
-        pools = build_pool_list(hap)
+    pools = build_pool_list(hap, arguments['NAME'])
 
     if arguments['--list']:
-        list_pools(hap)
+        list_pools(pools)
     elif arguments['--status']:
         status(pools)
     elif arguments['--requests']:
