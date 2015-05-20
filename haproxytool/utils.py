@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
 # vim:fenc=utf-8
 #
-# File name: utils.py
-#
-# Creation date: 10-05-2015
-#
 # Created by: Pavlos Parissis <pavlos.parissis@booking.com>
 #
 import re
