@@ -51,7 +51,7 @@ TOBEADDED
 Licensing
 ---------
 
-GPLv2
+Apache 2.0
 
 Contacts
 --------
