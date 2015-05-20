@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # vim:fenc=utf-8
 #
-# Created by: Pavlos Parissis <pavlos.parissis@booking.com>
+# Created by: Pavlos Parissis <pavlos.parissis@gmail.com>
 #
 """A tool to manage HAProxy via the stats socket.
 
