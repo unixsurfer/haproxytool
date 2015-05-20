@@ -120,7 +120,7 @@ Commands for frontends
     process
 
 :NOTE: The return value of the option is the sum of the values across all
-    HAProxy process
+    HAProxy processes
 
 Commands for pools
 ~~~~~~~~~~~~~~~~~~
