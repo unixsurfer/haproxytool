@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # vim:fenc=utf-8
 #
-# Created by: Pavlos Parissis <pavlos.parissis@booking.com>
+# Created by: Pavlos Parissis <pavlos.parissis@gmail.com>
 #
 import re
 from operator import attrgetter
