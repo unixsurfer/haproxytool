@@ -4,9 +4,6 @@
 #
 # pylint: disable=superfluous-parens
 #
-# File name: haproxy_frontend.py
-#
-# Creation date: 09-05-2015
 #
 # Created by: Pavlos Parissis <pavlos.parissis@booking.com>
 #

@@ -4,10 +4,6 @@
 #
 # pylint: disable=superfluous-parens
 #
-# File name: haproxy_dump.py
-#
-# Creation date: 09-05-2015
-#
 # Created by: Pavlos Parissis <pavlos.parissis@booking.com>
 #
 """Dump a collection of information about frontends, pools and servers

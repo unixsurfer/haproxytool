@@ -2,10 +2,6 @@
 # -*- coding: utf-8 -*-
 # vim:fenc=utf-8
 #
-# File name: haproxy_pool.py
-#
-# Creation date: 09-05-2015
-#
 # Created by: Pavlos Parissis <pavlos.parissis@booking.com>
 #
 """A tool to manage HAProxy via the stats socket.
