@@ -40,7 +40,7 @@ Here is the basic syntax to start with::
     Arguments:
         DIR  a directory path
 
-    Avalable haproxytool commands are:
+    Available haproxytool commands are:
         frontend  Frontend operations
         pool      Pool operations
         server    Server operations
