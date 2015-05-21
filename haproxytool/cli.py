@@ -33,9 +33,6 @@ from operator import methodcaller
 def main():
     args = docopt(__doc__, version='haproxytool 0.0.8', options_first=True)
 
-    # print('global arguments:')
-    # print(args)
-    # print('command arguments:')
     call_main = methodcaller('main')
 
     our_cmds = ['frontend', 'pool', 'server', 'dump', 'haproxy']
