@@ -20,7 +20,6 @@ Avalable haproxytool commands are:
     frontend  Frontend operations
     pool      Pool operations
     server    Server operations
-    haproxy   HAProxy operations
     dump      Dumps all informations
 
 See 'haproxytool help <command>' for more information on a specific command.
