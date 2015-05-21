@@ -15,6 +15,41 @@ One of the main feature is that can work with HAProxy in multi-process mode (nbp
 Examples
 --------
 
+Usage
+~~~~~
+
+The command line interface tries to be friendly and compatible with the rest of
+the tools available in the Linux land. The `docopt Python module
+<https://pypi.python.org/pypi/docopt>`_ is used to build the CLI interface.
+
+Here is the basic syntax to start with::
+
+    % haproxytool
+    Usage: haproxytool [-v | -h | --socket-dir DIR] <command> [<args>...]
+
+    % haproxytool -h
+    A tool to manage HAProxy via the stats socket.
+
+    Usage: haproxytool [-v | -h | --socket-dir DIR] <command> [<args>...]
+
+    Options:
+    -h, --help                show this screen.
+    -v, --version             show version.
+    -D DIR, --socket-dir=DIR  directory with HAProxy socket files [default: /var/lib/haproxy]
+
+    Arguments:
+        DIR  a directory path
+
+    Avalable haproxytool commands are:
+        frontend  Frontend operations
+        pool      Pool operations
+        server    Server operations
+        dump      Dumps all informations
+
+    See 'haproxytool help <command>' for more information on a specific command.
+
+Keep reading for more details about each command.
+
 Commands for frontends
 ~~~~~~~~~~~~~~~~~~~~~~
 
