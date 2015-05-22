@@ -15,7 +15,7 @@ Usage:
 
 Arguments:
     DIR     Directory path
-    METRIC   Name of a metric, use '-M' to get metric names
+    METRIC  Name of a metric, use '-M' to get metric names
 
 Options:
     -h, --help                show this screen
