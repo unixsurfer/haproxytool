@@ -1,6 +1,28 @@
 CHANGES
 =======
 
+0.0.9
+-----
+
+* cli.py: bump release
+* pool.py fix indentation in usage
+* fix typo in README and cli.py
+* README: add Acknowledgement section
+* README: add generic usage
+* cli.py: remove haproxy command as this functionality isn't ready yet
+* cli.py remove redundant code
+* fix typo in README
+* add example section in README
+* utils.py: switch to gmail account
+* utils.py: remove redundant information from the header
+* AUTHORS: remove booking e-mail address
+* change license to Apache 2.0
+* switch to gmail account
+* remove redundant information from the headers of each module
+* __init__: clean useless string which was added accidentally
+* bump version in cli.py
+* update ChangeLog
+
 0.0.8
 -----
 
