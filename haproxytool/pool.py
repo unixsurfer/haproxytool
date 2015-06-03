@@ -19,7 +19,7 @@ Arguments:
 
 Options:
     -h, --help                show this screen
-    -S, --servers             show members
+    -S, --servers             show servers
     -r, --requests            show requests
     -p, --process             show process number
     -s, --status              show status
@@ -75,7 +75,7 @@ def process(pools):
 def servers(pools):
     for pool in pools:
         print("{}".format(pool.name))
-        for server in pool.members():
+        for server in pool.servers():
             print("{:<3} {}".format(' ', server.name))
 
 

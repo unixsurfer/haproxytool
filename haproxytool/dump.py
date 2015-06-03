@@ -25,11 +25,11 @@ from haproxyadmin import haproxy
 
 
 def get_pools(hap):
-    print("# pool name, status, requests, members")
+    print("# pool name, status, requests, servers")
     for pool in hap.pools():
-        members = ','.join([x.name for x in pool.members()])
+        servers = ','.join([x.name for x in pool.servers()])
         print("{},{},{},{}".format(pool.name, pool.status, pool.requests,
-                                   members))
+                                   servers))
 
 
 def get_frontends(hap):
@@ -41,7 +41,7 @@ def get_frontends(hap):
 
 def get_servers(hap):
     print("# server name, status, requests, pool")
-    for server in hap.members():
+    for server in hap.servers():
         print("{},{},{},{}".format(server.name, server.status, server.requests,
                                    server.poolname))
 

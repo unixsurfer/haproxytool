@@ -178,7 +178,7 @@ Commands for pools
 
     Options:
         -h, --help                show this screen
-        -S, --servers             show members
+        -S, --servers             show servers
         -r, --requests            show requests
         -p, --process             show process number
         -s, --status              show status

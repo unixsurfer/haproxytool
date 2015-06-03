@@ -48,17 +48,17 @@ def build_server_list(hap, names=None, pools=None):
     servers = []
     if not names:
         if not pools:
-            for server in hap.members():
+            for server in hap.servers():
                 servers.append(server)
         else:
             for pool in pools:
-                for server in hap.members(pool):
+                for server in hap.servers(pool):
                     servers.append(server)
     else:
         if not pools:
             for name in names:
                 try:
-                    for server in hap.member(name):
+                    for server in hap.server(name):
                         servers.append(server)
                 except ValueError:
                     print("{} was not found".format(name))
@@ -66,7 +66,7 @@ def build_server_list(hap, names=None, pools=None):
             for pool in pools:
                 for name in names:
                     try:
-                        for server in hap.member(name, pool):
+                        for server in hap.server(name, pool):
                             servers.append(server)
                     except ValueError:
                         print("{} was not found".format(name))
