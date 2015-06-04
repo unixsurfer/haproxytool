@@ -274,15 +274,15 @@ Commands for servers
 
     % haproxytool -D /run/haproxy server -W bck_all_srv1
     # backendname servername
-    backend1_proc34                bck_all_srv1                               1.0
-    backend2_proc34                bck_all_srv1                               1.0
-    backend_proc1                  bck_all_srv1                               100.0
+    backend1_proc34                bck_all_srv1                               1
+    backend2_proc34                bck_all_srv1                               1
+    backend_proc1                  bck_all_srv1                               100
     pparissis at axilleas in ~/bin
 
     % haproxytool -D /run/haproxy server -W bck_all_srv1 --backend=backend_proc1 --backend=backend2_proc34
     # backendname servername
-    backend_proc1                  bck_all_srv1                               100.0
-    backend2_proc34                bck_all_srv1                               1.0
+    backend_proc1                  bck_all_srv1                               100
+    backend2_proc34                bck_all_srv1                               1
     pparissis at axilleas in ~/bin
 
 * Set weight on servers across all backends and per backend
