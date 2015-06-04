@@ -9,10 +9,10 @@
 """Manage servers
 
 Usage:
-    haproxytool server [-D DIR | -h] (-r | -s | -e | -d | -R | -n | -t | -p | -W) [--pool=<name>...] [NAME...]
-    haproxytool server [-D DIR | -h] -w VALUE [--pool=<name>...] [NAME...]
+    haproxytool server [-D DIR | -h] (-r | -s | -e | -d | -R | -n | -t | -p | -W) [--backend=<name>...] [NAME...]
+    haproxytool server [-D DIR | -h] -w VALUE [--backend=<name>...] [NAME...]
     haproxytool server [-D DIR | -h] (-l | -M)
-    haproxytool server [-D DIR | -h] -m METRIC [--pool=<name>...] [NAME...]
+    haproxytool server [-D DIR | -h] -m METRIC [--backend=<name>...] [NAME...]
 
 
 Arguments:
@@ -44,18 +44,18 @@ from haproxyadmin import haproxy, exceptions
 from operator import methodcaller
 
 
-def build_server_list(hap, names=None, pools=None):
+def build_server_list(hap, names=None, backends=None):
     servers = []
     if not names:
-        if not pools:
+        if not backends:
             for server in hap.servers():
                 servers.append(server)
         else:
-            for pool in pools:
-                for server in hap.servers(pool):
+            for backend in backends:
+                for server in hap.servers(backend):
                     servers.append(server)
     else:
-        if not pools:
+        if not backends:
             for name in names:
                 try:
                     for server in hap.server(name):
@@ -63,10 +63,10 @@ def build_server_list(hap, names=None, pools=None):
                 except ValueError:
                     print("{} was not found".format(name))
         else:
-            for pool in pools:
+            for backend in backends:
                 for name in names:
                     try:
-                        for server in hap.server(name, pool):
+                        for server in hap.server(name, backend):
                             servers.append(server)
                     except ValueError:
                         print("{} was not found".format(name))
@@ -78,29 +78,29 @@ def build_server_list(hap, names=None, pools=None):
 
 
 def list_servers(servers):
-    print("# poolname servername")
+    print("# backendname servername")
     for server in servers:
-        print("{:<30} {}".format(server.poolname, server.name))
+        print("{:<30} {}".format(server.backendname, server.name))
 
 
 def status(servers):
-    print("# poolname servername")
+    print("# backendname servername")
     for server in servers:
-        print("{:<30} {:<42} {}".format(server.poolname, server.name,
+        print("{:<30} {:<42} {}".format(server.backendname, server.name,
                                         server.status))
 
 
 def requests(servers):
-    print("# poolname servername")
+    print("# backendname servername")
     for server in servers:
-        print("{:<30} {:<42} {}".format(server.poolname, server.name,
+        print("{:<30} {:<42} {}".format(server.backendname, server.name,
                                         server.requests))
 
 
 def process(servers):
-    print("# poolname servername")
+    print("# backendname servername")
     for server in servers:
-        print("{:<30} {:<42} {}".format(server.poolname, server.name,
+        print("{:<30} {:<42} {}".format(server.backendname, server.name,
                                         server.process_nb))
 
 
@@ -108,7 +108,8 @@ def enable(servers):
     for server in servers:
         try:
             server.setstate(haproxy.STATE_ENABLE)
-            print("{} enabled in {} pool".format(server.name, server.poolname))
+            print("{} enabled in {} backend".format(server.name,
+                                                    server.backendname))
         except exceptions.CommandFailed as error:
             print("{} failed to be enabled:{}".format(server.name, error))
 
@@ -117,7 +118,8 @@ def disable(servers):
     for server in servers:
         try:
             server.setstate(haproxy.STATE_DISABLE)
-            print("{} disabled in {} pool".format(server.name, server.poolname))
+            print("{} disabled in {} backend".format(server.name,
+                                                     server.backendname))
         except exceptions.CommandFailed as error:
             print("{} failed to be disabled:{}".format(server.name, error))
 
@@ -126,8 +128,8 @@ def ready(servers):
     for server in servers:
         try:
             server.setstate(haproxy.STATE_READY)
-            print("{} set to ready in {} pool".format(server.name,
-                                                      server.poolname))
+            print("{} set to ready in {} backend".format(server.name,
+                                                         server.backendname))
         except exceptions.CommandFailed as error:
             print("{} failed to set normal state:{}".format(server.name,
                                                             error))
@@ -137,8 +139,8 @@ def drain(servers):
     for server in servers:
         try:
             server.setstate(haproxy.STATE_DRAIN)
-            print("{} set to drain in {} pool".format(server.name,
-                                                      server.poolname))
+            print("{} set to drain in {} backend".format(server.name,
+                                                         server.backendname))
         except exceptions.CommandFailed as error:
             print("{} failed to set in drain state:{}".format(server.name,
                                                               error))
@@ -148,8 +150,8 @@ def maintenance(servers):
     for server in servers:
         try:
             server.setstate(haproxy.STATE_READY)
-            print("{} set to ready in {} pool".format(server.name,
-                                                      server.poolname))
+            print("{} set to ready in {} backend".format(server.name,
+                                                         server.backendname))
         except exceptions.CommandFailed as error:
             print("{} failed to set to maintenance state:{}".format(server.name,
                                                                     error))
@@ -162,8 +164,8 @@ def weight(servers, value):
         for server in servers:
             try:
                 method_caller(server)
-                print("{} pool set weight to {} in {} pool".format(
-                    server.name, value, server.poolname))
+                print("{} backend set weight to {} in {} backend".format(
+                    server.name, value, server.backendname))
             except exceptions.CommandFailed as error:
                 print("{} failed to change weight:{}".format(server.name,
                                                              error))
@@ -175,9 +177,9 @@ def get_metric(servers, metric):
     if metric not in haproxy.SERVER_METRICS:
         exit("{} no valid metric".format(metric))
 
-    print("# poolname servername")
+    print("# backendname servername")
     for server in servers:
-        print("{:<30} {:<42} {}".format(server.poolname, server.name,
+        print("{:<30} {:<42} {}".format(server.backendname, server.name,
                                         server.metric(metric)))
 
 
@@ -190,7 +192,7 @@ def main():
     arguments = docopt(__doc__)
     hap = haproxy.HAProxy(socket_dir=arguments['--socket-dir'])
 
-    servers = build_server_list(hap, arguments['NAME'], arguments['--pool'])
+    servers = build_server_list(hap, arguments['NAME'], arguments['--backend'])
 
     if arguments['--list']:
         list_servers(servers)

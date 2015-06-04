@@ -6,12 +6,12 @@
 #
 # Created by: Pavlos Parissis <pavlos.parissis@gmail.com>
 #
-"""Manage pools
+"""Manage backends
 
 Usage:
-    haproxytool pool [-D DIR | -h] (-S | -r | -p | -s) [NAME...]
-    haproxytool pool [-D DIR | -h] (-l | -M)
-    haproxytool pool [-D DIR | -h] -m METRIC [NAME...]
+    haproxytool backend [-D DIR | -h] (-S | -r | -p | -s) [NAME...]
+    haproxytool backend [-D DIR | -h] (-l | -M)
+    haproxytool backend [-D DIR | -h] -m METRIC [NAME...]
 
 Arguments:
     DIR     Directory path
@@ -25,7 +25,7 @@ Options:
     -s, --status              show status
     -m, --metric              show value of a metric
     -M, --list-metrics        show all metrics
-    -l, --list                show all pools
+    -l, --list                show all backends
     -D DIR, --socket-dir=DIR  directory with HAProxy socket files
     [default: /var/lib/haproxy]
 
@@ -34,65 +34,65 @@ from docopt import docopt
 from haproxyadmin import haproxy
 
 
-def build_pool_list(hap, names=None):
-    pools = []
+def build_backend_list(hap, names=None):
+    backends = []
     if not names:
-        for pool in hap.pools():
-            pools.append(pool)
+        for backend in hap.backends():
+            backends.append(backend)
     else:
         for name in names:
             try:
-                pools.append(hap.pool(name))
+                backends.append(hap.backend(name))
             except ValueError:
                 print("{} was not found".format(name))
 
-    if not pools:
+    if not backends:
         exit(1)
 
-    return pools
+    return backends
 
 
-def list_pools(pools):
-    for pool in pools:
-        print("{}".format(pool.name))
+def list_backends(backends):
+    for backend in backends:
+        print("{}".format(backend.name))
 
 
-def status(pools):
-    for pool in pools:
-        print("{} {}".format(pool.name, pool.status))
+def status(backends):
+    for backend in backends:
+        print("{} {}".format(backend.name, backend.status))
 
 
-def requests(pools):
-    for pool in pools:
-        print("{} {}".format(pool.name, pool.requests))
+def requests(backends):
+    for backend in backends:
+        print("{} {}".format(backend.name, backend.requests))
 
 
-def process(pools):
-    for pool in pools:
-        print("{} {}".format(pool.name, pool.process_nb))
+def process(backends):
+    for backend in backends:
+        print("{} {}".format(backend.name, backend.process_nb))
 
 
-def servers(pools):
-    for pool in pools:
-        print("{}".format(pool.name))
-        for server in pool.servers():
+def servers(backends):
+    for backend in backends:
+        print("{}".format(backend.name))
+        for server in backend.servers():
             print("{:<3} {}".format(' ', server.name))
 
 
-def get_metric(pools, metric):
+def get_metric(backends, metric):
     """Retrieve the value of a metric.
 
-    :param pools: A list of :class:`haproxy.Pool` objects
-    :type pools: list
+    :param backends: A list of :class:`haproxy.Backend` objects
+    :type backends: list
     :param metric: metric name
     :type metric: string
     :return: value of given metric
     """
-    if metric not in haproxy.POOL_METRICS:
+    if metric not in haproxy.BACKEND_METRICS:
         exit("{} no valid metric".format(metric))
 
-    for pool in pools:
-        print("{} {}".format(pool.name, pool.metric(metric)))
+    for backend in backends:
+        print("{} {}".format(backend.name, backend.metric(metric)))
 
 
 def list_metrics():
@@ -105,23 +105,23 @@ def main():
     arguments = docopt(__doc__)
     hap = haproxy.HAProxy(socket_dir=arguments['--socket-dir'])
 
-    # Build a list of pool objects
-    pools = build_pool_list(hap, arguments['NAME'])
+    # Build a list of backend objects
+    backends = build_backend_list(hap, arguments['NAME'])
 
     if arguments['--list']:
-        list_pools(pools)
+        list_backends(backends)
     elif arguments['--status']:
-        status(pools)
+        status(backends)
     elif arguments['--requests']:
-        requests(pools)
+        requests(backends)
     elif arguments['METRIC']:
-        get_metric(pools, arguments['METRIC'])
+        get_metric(backends, arguments['METRIC'])
     elif arguments['--process']:
-        process(pools)
+        process(backends)
     elif arguments['--list-metrics']:
         list_metrics()
     elif arguments['--servers']:
-        servers(pools)
+        servers(backends)
 
 # This is the standard boilerplate that calls the main() function.
 if __name__ == '__main__':

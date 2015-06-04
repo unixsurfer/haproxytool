@@ -42,7 +42,7 @@ Here is the basic syntax to start with::
 
     Available haproxytool commands are:
         frontend  Frontend operations
-        pool      Pool operations
+        backend   Backend operations
         server    Server operations
         dump      Dumps all informations
 
@@ -157,20 +157,20 @@ Commands for frontends
 :NOTE: The return value of the option is the sum of the values across all
     HAProxy processes
 
-Commands for pools
+Commands for backends
 ~~~~~~~~~~~~~~~~~~
 
 * Usage
 
 ::
 
-    % haproxytool pool --help
-    Manage pools
+    % haproxytool backend --help
+    Manage backends
 
     Usage:
-        haproxytool pool [-D DIR | -h] (-S | -r | -p | -s) [NAME...]
-        haproxytool pool [-D DIR | -h] (-l | -M)
-        haproxytool pool [-D DIR | -h] -m METRIC [NAME...]
+        haproxytool backend [-D DIR | -h] (-S | -r | -p | -s) [NAME...]
+        haproxytool backend [-D DIR | -h] (-l | -M)
+        haproxytool backend [-D DIR | -h] -m METRIC [NAME...]
 
     Arguments:
         DIR     Directory path
@@ -184,7 +184,7 @@ Commands for pools
         -s, --status              show status
         -m, --metric              show value of a metric
         -M, --list-metrics        show all metrics
-        -l, --list                show all pools
+        -l, --list                show all backends
         -D DIR, --socket-dir=DIR  directory with HAProxy socket files
         [default: /var/lib/haproxy]
 
@@ -199,10 +199,10 @@ Commands for servers
     Manage servers
 
     Usage:
-        haproxytool server [-D DIR | -h] (-r | -s | -e | -d | -R | -n | -t | -p | -W) [--pool=<name>...] [NAME...]
-        haproxytool server [-D DIR | -h] -w VALUE [--pool=<name>...] [NAME...]
+        haproxytool server [-D DIR | -h] (-r | -s | -e | -d | -R | -n | -t | -p | -W) [--backend=<name>...] [NAME...]
+        haproxytool server [-D DIR | -h] -w VALUE [--backend=<name>...] [NAME...]
         haproxytool server [-D DIR | -h] (-l | -M)
-        haproxytool server [-D DIR | -h] -m METRIC [--pool=<name>...] [NAME...]
+        haproxytool server [-D DIR | -h] -m METRIC [--backend=<name>...] [NAME...]
 
 
     Arguments:
@@ -233,7 +233,7 @@ Commands for servers
 ::
 
     % haproxytool -D /run/haproxy server -l
-    # poolname servername
+    # backendname servername
     backend1_proc34                bck1_proc34_srv1
     backend1_proc34                bck1_proc34_srv2
     backend1_proc34                bck_all_srv1
@@ -248,19 +248,19 @@ Commands for servers
     backend2_proc34                bck_all_srv1
     backend2_proc34                bck2_proc34_srv2
 
-* Show status of servers per pool
+* Show status of servers per backend
 
 ::
 
-    % haproxytool -D /run/haproxy server -s --pool=backend_proc1
-    # poolname servername
+    % haproxytool -D /run/haproxy server -s --backend=backend_proc1
+    # backendname servername
     backend_proc1                  bck_all_srv1                               DOWN
     backend_proc1                  member1_proc1                              no check
     backend_proc1                  member2_proc1                              no check
 
 
-    % haproxytool -D /run/haproxy server -s --pool=backend_proc1 --pool=backend2_proc34
-    # poolname servername
+    % haproxytool -D /run/haproxy server -s --backend=backend_proc1 --backend=backend2_proc34
+    # backendname servername
     backend_proc1                  member1_proc1                              no check
     backend_proc1                  bck_all_srv1                               DOWN
     backend_proc1                  member2_proc1                              no check
@@ -268,35 +268,35 @@ Commands for servers
     backend2_proc34                bck2_proc34_srv1                           no check
     backend2_proc34                bck_all_srv1                               no check
 
-* Show weight of servers across all pools and per pool
+* Show weight of servers across all backends and per backend
 
 ::
 
     % haproxytool -D /run/haproxy server -W bck_all_srv1
-    # poolname servername
+    # backendname servername
     backend1_proc34                bck_all_srv1                               1.0
     backend2_proc34                bck_all_srv1                               1.0
     backend_proc1                  bck_all_srv1                               100.0
     pparissis at axilleas in ~/bin
 
-    % haproxytool -D /run/haproxy server -W bck_all_srv1 --pool=backend_proc1 --pool=backend2_proc34
-    # poolname servername
+    % haproxytool -D /run/haproxy server -W bck_all_srv1 --backend=backend_proc1 --backend=backend2_proc34
+    # backendname servername
     backend_proc1                  bck_all_srv1                               100.0
     backend2_proc34                bck_all_srv1                               1.0
     pparissis at axilleas in ~/bin
 
-* Set weight on servers across all pools and per pool
+* Set weight on servers across all backends and per backend
 
 ::
 
     % haproxytool -D /run/haproxy server -w 10 bck_all_srv1
-    bck_all_srv1 pool set weight to 10 in backend2_proc34 pool
-    bck_all_srv1 pool set weight to 10 in backend1_proc34 pool
-    bck_all_srv1 pool set weight to 10 in backend_proc1 pool
+    bck_all_srv1 backend set weight to 10 in backend2_proc34 backend
+    bck_all_srv1 backend set weight to 10 in backend1_proc34 backend
+    bck_all_srv1 backend set weight to 10 in backend_proc1 backend
 
-    % haproxytool -D /run/haproxy server -w 50 bck_all_srv1 --pool=backend_proc1 --pool=backend2_proc34
-    bck_all_srv1 pool set weight to 50 in backend_proc1 pool
-    bck_all_srv1 pool set weight to 50 in backend2_proc34 pool
+    % haproxytool -D /run/haproxy server -w 50 bck_all_srv1 --backend=backend_proc1 --backend=backend2_proc34
+    bck_all_srv1 backend set weight to 50 in backend_proc1 backend
+    bck_all_srv1 backend set weight to 50 in backend2_proc34 backend
     pparissis at axilleas in ~/bin
 
 * Show requests
@@ -304,7 +304,7 @@ Commands for servers
 ::
 
     % haproxytool -D /run/haproxy server -r bck_all_srv1
-    # poolname servername
+    # backendname servername
     backend_proc1                  bck_all_srv1                               0
     backend2_proc34                bck_all_srv1                               2
     backend1_proc34                bck_all_srv1                               10
@@ -362,7 +362,7 @@ description.
 
 
     % haproxytool -D /run/haproxy server -m bin bck_all_srv1
-    # poolname servername
+    # backendname servername
     backend1_proc34                bck_all_srv1                               760
     backend2_proc34                bck_all_srv1                               152
     backend_proc1                  bck_all_srv1                               0
@@ -372,7 +372,7 @@ description.
 ::
 
     % haproxytool -D /run/haproxy server -p bck_all_srv1
-    # poolname servername
+    # backendname servername
     backend2_proc34                bck_all_srv1                               [4, 3]
     backend_proc1                  bck_all_srv1                               [1]
     backend1_proc34                bck_all_srv1                               [4, 3]
@@ -382,23 +382,23 @@ description.
 ::
 
     % haproxytool -D /run/haproxy server -d bck_all_srv1
-    bck_all_srv1 disabled in backend1_proc34 pool
-    bck_all_srv1 disabled in backend_proc1 pool
-    bck_all_srv1 disabled in backend2_proc34 pool
+    bck_all_srv1 disabled in backend1_proc34 backend
+    bck_all_srv1 disabled in backend_proc1 backend
+    bck_all_srv1 disabled in backend2_proc34 backend
 
     % haproxytool -D /run/haproxy server -s bck_all_srv1
-    # poolname servername
+    # backendname servername
     backend_proc1                  bck_all_srv1                               MAINT
     backend2_proc34                bck_all_srv1                               MAINT
     backend1_proc34                bck_all_srv1                               MAINT
 
     % haproxytool -D /run/haproxy server -e bck_all_srv1
-    bck_all_srv1 enabled in backend2_proc34 pool
-    bck_all_srv1 enabled in backend1_proc34 pool
-    bck_all_srv1 enabled in backend_proc1 pool
+    bck_all_srv1 enabled in backend2_proc34 backend
+    bck_all_srv1 enabled in backend1_proc34 backend
+    bck_all_srv1 enabled in backend_proc1 backend
 
     % haproxytool -D /run/haproxy server -s bck_all_srv1
-    # poolname servername
+    # backendname servername
     backend1_proc34                bck_all_srv1                               UP
     backend2_proc34                bck_all_srv1                               no check
     backend_proc1                  bck_all_srv1                               DOWN
@@ -411,7 +411,7 @@ Dump command
 ::
 
     % haproxytool dump --help
-    Dump a collection of information about frontends, pools and servers
+    Dump a collection of information about frontends, backends and servers
 
     Usage:
         haproxytool dump [-fpsh -D DIR ]
@@ -419,7 +419,7 @@ Dump command
     Options:
         -h, --help                show this screen
         -f, --frontends           show frontends
-        -p, --pools               show pool
+        -b, --backends            show backend
         -s, --servers             show server
         -D DIR, --socket-dir=DIR  directory with HAProxy socket files
         [default: /var/lib/haproxy]

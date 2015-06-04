@@ -18,7 +18,7 @@ Arguments:
 
 Available haproxytool commands are:
     frontend  Frontend operations
-    pool      Pool operations
+    backend   Backend operations
     server    Server operations
     dump      Dumps all informations
 
@@ -34,7 +34,7 @@ def main():
 
     call_main = methodcaller('main')
 
-    our_cmds = ['frontend', 'pool', 'server', 'dump', 'haproxy']
+    our_cmds = ['frontend', 'backend', 'server', 'dump', 'haproxy']
     if args['<command>'] in our_cmds:
         # get module path
         module = __import__('haproxytool.%s' % args['<command>'])

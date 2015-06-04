@@ -6,16 +6,16 @@
 #
 # Created by: Pavlos Parissis <pavlos.parissis@gmail.com>
 #
-"""Dump a collection of information about frontends, pools and servers
+"""Dump a collection of information about frontends, backends and servers
 
 Usage:
-    haproxytool dump [-fpsh -D DIR ]
+    haproxytool dump [-fbsh -D DIR ]
 
 Options:
     -h, --help                show this screen
     -f, --frontends           show frontends
-    -p, --pools               show pool
-    -s, --servers             show server
+    -b, --backends            show backends
+    -s, --servers             show servers
     -D DIR, --socket-dir=DIR  directory with HAProxy socket files
     [default: /var/lib/haproxy]
 
@@ -24,12 +24,12 @@ from docopt import docopt
 from haproxyadmin import haproxy
 
 
-def get_pools(hap):
-    print("# pool name, status, requests, servers")
-    for pool in hap.pools():
-        servers = ','.join([x.name for x in pool.servers()])
-        print("{},{},{},{}".format(pool.name, pool.status, pool.requests,
-                                   servers))
+def get_backends(hap):
+    print("# backend name, status, requests, servers")
+    for backend in hap.backends():
+        servers = ','.join([x.name for x in backend.servers()])
+        print("{},{},{},{}".format(backend.name, backend.status,
+                                   backend.requests, servers))
 
 
 def get_frontends(hap):
@@ -40,15 +40,15 @@ def get_frontends(hap):
 
 
 def get_servers(hap):
-    print("# server name, status, requests, pool")
+    print("# server name, status, requests, backend")
     for server in hap.servers():
         print("{},{},{},{}".format(server.name, server.status, server.requests,
-                                   server.poolname))
+                                   server.backendname))
 
 
 def dump(hap):
     get_frontends(hap)
-    get_pools(hap)
+    get_backends(hap)
     get_servers(hap)
 
 
@@ -63,8 +63,8 @@ def main():
     if arguments['--frontends']:
         get_frontends(hap)
 
-    if arguments['--pools']:
-        get_pools(hap)
+    if arguments['--backends']:
+        get_backends(hap)
 
     if arguments['--servers']:
         get_servers(hap)
