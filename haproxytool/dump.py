@@ -54,21 +54,24 @@ def dump(hap):
 
 def main():
     arguments = docopt(__doc__)
+    args_passed = False
+
     hap = haproxy.HAProxy(socket_dir=arguments['--socket-dir'])
 
-    if (not arguments['--frontends'] and not arguments['--pools'] and not
-            arguments['--servers']):
-        dump(hap)
-
     if arguments['--frontends']:
+        args_passed = True
         get_frontends(hap)
 
     if arguments['--backends']:
+        args_passed = True
         get_backends(hap)
 
     if arguments['--servers']:
+        args_passed = True
         get_servers(hap)
 
+    if not args_passed:
+        dump(hap)
 # This is the standard boilerplate that calls the main() function.
 if __name__ == '__main__':
     main()
