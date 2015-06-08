@@ -1,10 +1,19 @@
 CHANGES
 =======
 
+0.0.10
+------
+
+* cli.py bump release
+* REAME: haproxyadmin lib only returns integers and not floating numbers
+* dump:py simplify CLI parsing
+* changes due to the refactor of PoolMember to Server in haproxyadmin library
+* changes due to the refactor of PoolMember to Server in haproxyadmin library
+
 0.0.9
 -----
 
-* cli.py: bump release
+* bump release
 * pool.py fix indentation in usage
 * fix typo in README and cli.py
 * README: add Acknowledgement section
