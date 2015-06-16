@@ -9,7 +9,7 @@
 """Manage servers
 
 Usage:
-    haproxytool server [-D DIR | -h] (-r | -s | -e | -d | -R | -n | -t | -p | -W) [--backend=<name>...] [NAME...]
+    haproxytool server [-D DIR | -h] (-r | -s | -e | -d | -R | -n | -t | -p | -W | -i) [--backend=<name>...] [NAME...]
     haproxytool server [-D DIR | -h] -w VALUE [--backend=<name>...] [NAME...]
     haproxytool server [-D DIR | -h] (-l | -M)
     haproxytool server [-D DIR | -h] -m METRIC [--backend=<name>...] [NAME...]
@@ -29,6 +29,7 @@ Options:
     -t, --maintenance         set server in maintenance mode
     -r, --requests            show requests
     -p, --process             show process number
+    -i, --sid                 show server ID
     -s, --status              show status
     -m, --metric              show value of a metric
     -M, --list-metrics        show all metrics
@@ -95,6 +96,13 @@ def requests(servers):
     for server in servers:
         print("{:<30} {:<42} {}".format(server.backendname, server.name,
                                         server.requests))
+
+
+def sid(servers):
+    print("# backendname servername")
+    for server in servers:
+        print("{:<30} {:<42} {}".format(server.backendname, server.name,
+                                        server.sid))
 
 
 def process(servers):
@@ -200,6 +208,8 @@ def main():
         status(servers)
     elif arguments['--requests']:
         requests(servers)
+    elif arguments['--sid']:
+        sid(servers)
     elif arguments['--enable']:
         enable(servers)
     elif arguments['--disable']:

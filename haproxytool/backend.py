@@ -9,7 +9,7 @@
 """Manage backends
 
 Usage:
-    haproxytool backend [-D DIR | -h] (-S | -r | -p | -s) [NAME...]
+    haproxytool backend [-D DIR | -h] (-S | -r | -p | -s | -i) [NAME...]
     haproxytool backend [-D DIR | -h] (-l | -M)
     haproxytool backend [-D DIR | -h] -m METRIC [NAME...]
 
@@ -22,6 +22,7 @@ Options:
     -S, --servers             show servers
     -r, --requests            show requests
     -p, --process             show process number
+    -i, --iid                 show proxy ID number
     -s, --status              show status
     -m, --metric              show value of a metric
     -M, --list-metrics        show all metrics
@@ -65,6 +66,11 @@ def status(backends):
 def requests(backends):
     for backend in backends:
         print("{} {}".format(backend.name, backend.requests))
+
+
+def iid(backends):
+    for backend in backends:
+        print("{} {}".format(backend.name, backend.iid))
 
 
 def process(backends):
@@ -114,6 +120,8 @@ def main():
         status(backends)
     elif arguments['--requests']:
         requests(backends)
+    elif arguments['--iid']:
+        iid(backends)
     elif arguments['METRIC']:
         get_metric(backends, arguments['METRIC'])
     elif arguments['--process']:

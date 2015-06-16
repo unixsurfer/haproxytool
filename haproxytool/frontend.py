@@ -10,7 +10,7 @@
 """Manage frontends
 
 Usage:
-    haproxytool frontend [-D DIR | -h] (-r | -s | -o | -e | -d | -t | -p) [NAME...]
+    haproxytool frontend [-D DIR | -h] (-r | -s | -o | -e | -d | -t | -p | -i) [NAME...]
     haproxytool frontend [-D DIR | -h] -w OPTION VALUE [NAME...]
     haproxytool frontend [-D DIR | -h] (-l | -M)
     haproxytool frontend [-D DIR | -h] -m METRIC [NAME...]
@@ -28,6 +28,7 @@ Options:
     -t, --shutdown            shutdown frontend
     -r, --requests            show requests
     -p, --process             show process number
+    -i, --iid                 show proxy ID number
     -s, --status              show status
     -o, --options             show value of options that can be changed with '-w'
     -m, --metric              show value of a metric
@@ -74,6 +75,11 @@ def status(frontends):
 def requests(frontends):
     for frontend in frontends:
         print("{} {}".format(frontend.name, frontend.requests))
+
+
+def iid(frontends):
+    for frontend in frontends:
+        print("{} {}".format(frontend.name, frontend.iid))
 
 
 def process(frontends):
@@ -152,6 +158,8 @@ def main():
         status(frontends)
     elif arguments['--requests']:
         requests(frontends)
+    elif arguments['--iid']:
+        iid(frontends)
     elif arguments['--options']:
         options(frontends)
     elif arguments['--enable']:
