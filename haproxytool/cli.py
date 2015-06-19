@@ -30,7 +30,7 @@ from operator import methodcaller
 
 
 def main():
-    args = docopt(__doc__, version='haproxytool 0.0.10', options_first=True)
+    args = docopt(__doc__, version='haproxytool 0.1.0', options_first=True)
 
     call_main = methodcaller('main')
 

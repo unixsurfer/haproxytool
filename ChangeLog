@@ -1,6 +1,13 @@
 CHANGES
 =======
 
+0.1.0
+-----
+
+* bump release
+* add support for showing ID for frontend, backends and servers
+* remove booking.com mail address from AUTHORS
+
 0.0.10
 ------
 
