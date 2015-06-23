@@ -1,6 +1,12 @@
 CHANGES
 =======
 
+0.1.1
+-----
+
+* RELEASE 0.1.1 version
+* catch exceptions raised when we instantiate HAProxy class
+
 0.1.0
 -----
 
