@@ -42,6 +42,9 @@ Options:
 from docopt import docopt
 from haproxyadmin import haproxy, exceptions
 from operator import methodcaller
+from haproxyadmin.exceptions import (SocketApplicationError,
+                                     SocketConnectionError,
+                                     SocketPermissionError)
 
 
 def build_frontend_list(hap, names=None):
@@ -149,7 +152,13 @@ def list_metrics():
 def main():
     arguments = docopt(__doc__)
 
-    hap = haproxy.HAProxy(socket_dir=arguments['--socket-dir'])
+    try:
+        hap = haproxy.HAProxy(socket_dir=arguments['--socket-dir'])
+    except (SocketApplicationError,
+            SocketConnectionError,
+            SocketPermissionError) as error:
+        print(error, error.socket_file)
+        exit(1)
     frontends = build_frontend_list(hap, arguments['NAME'])
 
     if arguments['--list']:

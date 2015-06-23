@@ -22,6 +22,9 @@ Options:
 """
 from docopt import docopt
 from haproxyadmin import haproxy
+from haproxyadmin.exceptions import (SocketApplicationError,
+                                     SocketConnectionError,
+                                     SocketPermissionError)
 
 
 def get_backends(hap):
@@ -56,7 +59,13 @@ def main():
     arguments = docopt(__doc__)
     args_passed = False
 
-    hap = haproxy.HAProxy(socket_dir=arguments['--socket-dir'])
+    try:
+        hap = haproxy.HAProxy(socket_dir=arguments['--socket-dir'])
+    except (SocketApplicationError,
+            SocketConnectionError,
+            SocketPermissionError) as error:
+        print(error, error.socket_file)
+        exit(1)
 
     if arguments['--frontends']:
         args_passed = True

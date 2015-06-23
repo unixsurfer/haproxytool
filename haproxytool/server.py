@@ -43,6 +43,9 @@ Options:
 from docopt import docopt
 from haproxyadmin import haproxy, exceptions
 from operator import methodcaller
+from haproxyadmin.exceptions import (SocketApplicationError,
+                                     SocketConnectionError,
+                                     SocketPermissionError)
 
 
 def build_server_list(hap, names=None, backends=None):
@@ -198,7 +201,13 @@ def list_metrics():
 
 def main():
     arguments = docopt(__doc__)
-    hap = haproxy.HAProxy(socket_dir=arguments['--socket-dir'])
+    try:
+        hap = haproxy.HAProxy(socket_dir=arguments['--socket-dir'])
+    except (SocketApplicationError,
+            SocketConnectionError,
+            SocketPermissionError) as error:
+        print(error, error.socket_file)
+        exit(1)
 
     servers = build_server_list(hap, arguments['NAME'], arguments['--backend'])
 

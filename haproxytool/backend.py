@@ -33,6 +33,9 @@ Options:
 """
 from docopt import docopt
 from haproxyadmin import haproxy
+from haproxyadmin.exceptions import (SocketApplicationError,
+                                     SocketConnectionError,
+                                     SocketPermissionError)
 
 
 def build_backend_list(hap, names=None):
@@ -109,7 +112,13 @@ def list_metrics():
 
 def main():
     arguments = docopt(__doc__)
-    hap = haproxy.HAProxy(socket_dir=arguments['--socket-dir'])
+    try:
+        hap = haproxy.HAProxy(socket_dir=arguments['--socket-dir'])
+    except (SocketApplicationError,
+            SocketConnectionError,
+            SocketPermissionError) as error:
+        print(error, error.socket_file)
+        exit(1)
 
     # Build a list of backend objects
     backends = build_backend_list(hap, arguments['NAME'])
