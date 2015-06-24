@@ -6,15 +6,11 @@
 #
 """A tool to manage HAProxy via the stats socket.
 
-Usage: haproxytool [-v | -h | --socket-dir DIR] <command> [<args>...]
+Usage: haproxytool [-v | -h] <command> [<args>...]
 
 Options:
   -h, --help                show this screen.
   -v, --version             show version.
-  -D DIR, --socket-dir=DIR  directory with HAProxy socket files [default: /var/lib/haproxy]
-
-Arguments:
-    DIR  a directory path
 
 Available haproxytool commands are:
     frontend  Frontend operations
