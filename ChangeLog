@@ -1,6 +1,16 @@
 CHANGES
 =======
 
+0.2.0
+-----
+
+* RELEASE 0.2.0 version
+* add a note about not adding new MAPs
+* include examples of usage for MAPs in README
+* remove print statement from map.py
+* don't force python3.4 in the shebang
+* add support for managing MAPs
+
 0.1.1
 -----
 
