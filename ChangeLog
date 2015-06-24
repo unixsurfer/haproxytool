@@ -1,6 +1,14 @@
 CHANGES
 =======
 
+0.2.1
+-----
+
+* RELEASE 0.2.1 version
+* add an extra line between function to make pylint happy
+* Implicitly import sys rather using it from docopt space
+* catch the error when socket_dir doesn't exist
+
 0.2.0
 -----
 
