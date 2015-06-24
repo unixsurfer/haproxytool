@@ -24,7 +24,7 @@ Arguments:
 
 Options:
     -h, --help                show this screen
-    -A, --add                 add an <KEY> entry into the map <MAPID>
+    -A, --add                 add a <KEY> entry into the map <MAPID>
     -s, --show                show map
     -g, --get                 lookup the value of a key in the map
     -c, --clear               clear all entries for a map

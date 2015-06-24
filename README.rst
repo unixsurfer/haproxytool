@@ -45,6 +45,7 @@ Here is the basic syntax to start with::
         backend   Backend operations
         server    Server operations
         dump      Dumps all informations
+        map       Manage MAPs
 
     See 'haproxytool help <command>' for more information on a specific command.
 
@@ -404,7 +405,7 @@ description.
     backend_proc1                  bck_all_srv1                               DOWN
 
 Dump command
-~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~
 
 * Usage
 
@@ -423,6 +424,105 @@ Dump command
         -s, --servers             show server
         -D DIR, --socket-dir=DIR  directory with HAProxy socket files
         [default: /var/lib/haproxy]
+
+Map command
+~~~~~~~~~~~~
+
+* Usage
+
+::
+
+    % haproxytool dump --help
+    Manage MAPs
+
+    Usage:
+        haproxytool map [-D DIR | -h] -l
+        haproxytool map [-D DIR | -h] (-s | -c ) MAPID
+        haproxytool map [-D DIR | -h] -g MAPID KEY
+        haproxytool map [-D DIR | -h] (-S | -A) MAPID KEY VALUE
+        haproxytool map [-D DIR | -h] -d MAPID KEY
+
+
+    Arguments:
+        DIR     Directory path
+        MAPID   ID of the map or file returned by show map
+        KEY     ID of key
+        VALUE   Value to set
+
+    Options:
+        -h, --help                show this screen
+        -A, --add                 add a <KEY> entry into the map <MAPID>
+        -s, --show                show map
+        -g, --get                 lookup the value of a key in the map
+        -c, --clear               clear all entries for a map
+        -l, --list                list all map ids
+        -S, --set                 set a new value for a key in a map
+        -d, --delete              delete all the map entries from the map <MAPID>
+                                  corresponding to the key <KEY>
+        -D DIR, --socket-dir=DIR  directory with HAProxy socket files
+        [default: /var/lib/haproxy]
+
+* List all MAPIDs
+
+::
+
+    % haproxytool -D /run/haproxy map -l
+    # id (file) description
+    4 (/etc/haproxy/v-m1-bk) pattern loaded from file '/etc/haproxy/v-m1-bk'
+    used by map at file '/etc/haproxy/haproxy.cfg' line 87
+
+* Show the content of a map
+
+::
+
+    % haproxytool -D /run/haproxy map -s 4
+    0xb743f0 0 www.foo.com-0
+    0xb74460 1 www.foo.com-1
+
+* Add a key to a map
+
+::
+
+    % haproxytool -D /run/haproxy map -A 4 3 www.goo.com
+    key was added successfully
+
+    % haproxytool -D /run/haproxy map -s 4
+    0xb743f0 0 www.foo.com-0
+    0xb74460 1 www.foo.com-1
+    0x28f0f50 3 www.goo.com
+
+* Delete an entry from a map
+
+::
+
+    % haproxytool -D /run/haproxy map -d 4 3
+    key was deleted successfully
+
+    % haproxytool -D /run/haproxy map -s 4
+    0xb743f0 0 www.foo.com-0
+    0xb74460 1 www.foo.com-1
+
+* Set a value for a key in a map
+
+::
+
+    % haproxytool -D /run/haproxy map -S 4 1 bar.com
+    value was set successfully
+
+    % haproxytool -D /run/haproxy map -s 4
+    0xb743f0 0 www.foo.com-0
+    0xb74460 1 bar.com
+
+* Clear all entries of a map
+
+::
+
+    % haproxytool -D /run/haproxy map -c 4
+    all entries of map were cleared successfully
+
+    % haproxytool -D /run/haproxy map -s 4
+
+    %
 
 Release
 -------
