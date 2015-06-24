@@ -31,6 +31,7 @@ Options:
     [default: /var/lib/haproxy]
 
 """
+import sys
 from docopt import docopt
 from haproxyadmin import haproxy
 from haproxyadmin.exceptions import (SocketApplicationError,
@@ -51,7 +52,7 @@ def build_backend_list(hap, names=None):
                 print("{} was not found".format(name))
 
     if not backends:
-        exit(1)
+        sys.exit(1)
 
     return backends
 
@@ -98,7 +99,7 @@ def get_metric(backends, metric):
     :return: value of given metric
     """
     if metric not in haproxy.BACKEND_METRICS:
-        exit("{} no valid metric".format(metric))
+        sys.exit("{} no valid metric".format(metric))
 
     for backend in backends:
         print("{} {}".format(backend.name, backend.metric(metric)))
@@ -119,10 +120,10 @@ def main():
             SocketConnectionError,
             SocketPermissionError) as error:
         print(error, error.socket_file)
-        exit(1)
+        sys.exit(1)
     except ValueError as error:
         print(error)
-        exit(1)
+        sys.exit(1)
 
     # Build a list of backend objects
     backends = build_backend_list(hap, arguments['NAME'])

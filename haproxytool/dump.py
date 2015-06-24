@@ -20,6 +20,7 @@ Options:
     [default: /var/lib/haproxy]
 
 """
+import sys
 from docopt import docopt
 from haproxyadmin import haproxy
 from haproxyadmin.exceptions import (SocketApplicationError,
@@ -65,10 +66,10 @@ def main():
             SocketConnectionError,
             SocketPermissionError) as error:
         print(error, error.socket_file)
-        exit(1)
+        sys.exit(1)
     except ValueError as error:
         print(error)
-        exit(1)
+        sys.exit(1)
 
     if arguments['--frontends']:
         args_passed = True

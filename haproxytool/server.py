@@ -40,6 +40,7 @@ Options:
     [default: /var/lib/haproxy]
 
 """
+import sys
 from docopt import docopt
 from haproxyadmin import haproxy, exceptions
 from operator import methodcaller
@@ -76,7 +77,7 @@ def build_server_list(hap, names=None, backends=None):
                         print("{} was not found".format(name))
 
     if not servers:
-        exit(1)
+        sys.exit(1)
 
     return servers
 
@@ -181,12 +182,12 @@ def weight(servers, value):
                 print("{} failed to change weight:{}".format(server.name,
                                                              error))
     except ValueError as error:
-        exit("{}".format(error))
+        sys.exit("{}".format(error))
 
 
 def get_metric(servers, metric):
     if metric not in haproxy.SERVER_METRICS:
-        exit("{} no valid metric".format(metric))
+        sys.exit("{} no valid metric".format(metric))
 
     print("# backendname servername")
     for server in servers:
@@ -207,10 +208,10 @@ def main():
             SocketConnectionError,
             SocketPermissionError) as error:
         print(error, error.socket_file)
-        exit(1)
+        sys.exit(1)
     except ValueError as error:
         print(error)
-        exit(1)
+        sys.exit(1)
 
     servers = build_server_list(hap, arguments['NAME'], arguments['--backend'])
 

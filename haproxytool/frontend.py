@@ -39,6 +39,7 @@ Options:
     [default: /var/lib/haproxy]
 
 """
+import sys
 from docopt import docopt
 from haproxyadmin import haproxy, exceptions
 from operator import methodcaller
@@ -60,7 +61,7 @@ def build_frontend_list(hap, names=None):
                 print("{} was not found".format(name))
 
     if not frontends:
-        exit(1)
+        sys.exit(1)
 
     return frontends
 
@@ -133,12 +134,12 @@ def set_option(frontends, setting, value):
                 print("{} failed to set maxconn to {}".format(frontend.name,
                                                               value))
     except ValueError:
-        exit("You need to pass a number, got {}".format(value))
+        sys.exit("You need to pass a number, got {}".format(value))
 
 
 def get_metric(frontends, metric):
     if metric not in haproxy.FRONTEND_METRICS:
-        exit("{} no valid metric".format(metric))
+        sys.exit("{} no valid metric".format(metric))
 
     for frontend in frontends:
         print("{} {}".format(frontend.name, frontend.metric(metric)))
@@ -158,10 +159,10 @@ def main():
             SocketConnectionError,
             SocketPermissionError) as error:
         print(error, error.socket_file)
-        exit(1)
+        sys.exit(1)
     except ValueError as error:
         print(error)
-        exit(1)
+        sys.exit(1)
     frontends = build_frontend_list(hap, arguments['NAME'])
 
     if arguments['--list']:

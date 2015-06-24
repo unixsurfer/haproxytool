@@ -36,6 +36,7 @@ Options:
     [default: /var/lib/haproxy]
 
 """
+import sys
 from docopt import docopt
 from haproxyadmin import haproxy
 from haproxyadmin.exceptions import (CommandFailed,
@@ -50,7 +51,7 @@ def show_map(hap, mapid):
             print(line)
     except CommandFailed as error:
         print(error)
-        exit(1)
+        sys.exit(1)
 
 def clear_map(hap, mapid):
     try:
@@ -58,17 +59,17 @@ def clear_map(hap, mapid):
             print("all entries of map were cleared successfully")
         else:
             print("failed to clear entries")
-            exit(1)
+            sys.exit(1)
     except CommandFailed as error:
         print(error)
-        exit(1)
+        sys.exit(1)
 
 def get_map(hap, mapid, key):
     try:
         print(hap.get_map(mapid, key))
     except CommandFailed as error:
         print(error)
-        exit(1)
+        sys.exit(1)
 
 def del_map(hap, mapid, key):
     try:
@@ -76,10 +77,10 @@ def del_map(hap, mapid, key):
             print("key was deleted successfully")
         else:
             print("failed to delete key")
-            exit(1)
+            sys.exit(1)
     except CommandFailed as error:
         print(error)
-        exit(1)
+        sys.exit(1)
 
 def add_map(hap, mapid, key, value):
     try:
@@ -87,10 +88,10 @@ def add_map(hap, mapid, key, value):
             print("key was added successfully")
         else:
             print("failed to add key in the map")
-            exit(1)
+            sys.exit(1)
     except CommandFailed as error:
         print(error)
-        exit(1)
+        sys.exit(1)
 
 def set_map(hap, mapid, key, value):
     try:
@@ -98,10 +99,10 @@ def set_map(hap, mapid, key, value):
             print("value was set successfully")
         else:
             print("failed to set value")
-            exit(1)
+            sys.exit(1)
     except CommandFailed as error:
         print(error)
-        exit(1)
+        sys.exit(1)
 
 def main():
     arguments = docopt(__doc__)
@@ -111,10 +112,10 @@ def main():
             SocketConnectionError,
             SocketPermissionError) as error:
         print(error, error.socket_file)
-        exit(1)
+        sys.exit(1)
     except ValueError as error:
         print(error)
-        exit(1)
+        sys.exit(1)
 
     if arguments['--list']:
         show_map(hap, None)

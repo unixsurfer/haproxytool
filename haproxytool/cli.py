@@ -26,6 +26,7 @@ Available haproxytool commands are:
 See 'haproxytool help <command>' for more information on a specific command.
 
 """
+import sys
 from docopt import docopt
 from operator import methodcaller
 
@@ -49,10 +50,10 @@ def main():
             module_object = getattr(module, '%s' % args['<args>'][0])
             call_main(module_object)
         else:
-            exit("use one of {} in help command".format(','.join(our_cmds)))
+            sys.exit("use one of {} in help command".format(','.join(our_cmds)))
     else:
-        exit("{} isn't a haproxytool command. See 'haproxytool --help'."
-             .format(args['<command>']))
+        sys.exit("{} isn't a haproxytool command. See 'haproxytool --help'."
+                 .format(args['<command>']))
 
 # This is the standard boilerplate that calls the main() function.
 if __name__ == '__main__':
