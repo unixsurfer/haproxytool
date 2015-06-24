@@ -21,6 +21,7 @@ Available haproxytool commands are:
     backend   Backend operations
     server    Server operations
     dump      Dumps all informations
+    map       Manage MAPs
 
 See 'haproxytool help <command>' for more information on a specific command.
 
@@ -34,7 +35,7 @@ def main():
 
     call_main = methodcaller('main')
 
-    our_cmds = ['frontend', 'backend', 'server', 'dump', 'haproxy']
+    our_cmds = ['frontend', 'backend', 'server', 'dump', 'haproxy', 'map']
     if args['<command>'] in our_cmds:
         # get module path
         module = __import__('haproxytool.%s' % args['<command>'])
