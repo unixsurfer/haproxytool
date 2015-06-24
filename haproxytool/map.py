@@ -113,7 +113,6 @@ def main():
         print(error, error.socket_file)
         exit(1)
 
-    print(arguments)
     if arguments['--list']:
         show_map(hap, None)
     elif arguments['--show']:
