@@ -208,6 +208,9 @@ def main():
             SocketPermissionError) as error:
         print(error, error.socket_file)
         exit(1)
+    except ValueError as error:
+        print(error)
+        exit(1)
 
     servers = build_server_list(hap, arguments['NAME'], arguments['--backend'])
 

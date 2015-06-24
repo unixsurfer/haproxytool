@@ -112,12 +112,16 @@ def list_metrics():
 
 def main():
     arguments = docopt(__doc__)
+
     try:
         hap = haproxy.HAProxy(socket_dir=arguments['--socket-dir'])
     except (SocketApplicationError,
             SocketConnectionError,
             SocketPermissionError) as error:
         print(error, error.socket_file)
+        exit(1)
+    except ValueError as error:
+        print(error)
         exit(1)
 
     # Build a list of backend objects

@@ -112,6 +112,9 @@ def main():
             SocketPermissionError) as error:
         print(error, error.socket_file)
         exit(1)
+    except ValueError as error:
+        print(error)
+        exit(1)
 
     if arguments['--list']:
         show_map(hap, None)
