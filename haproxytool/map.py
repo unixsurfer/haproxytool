@@ -44,6 +44,7 @@ from haproxyadmin.exceptions import (CommandFailed,
                                      SocketConnectionError,
                                      SocketPermissionError)
 
+
 def show_map(hap, mapid):
 
     try:
@@ -52,6 +53,7 @@ def show_map(hap, mapid):
     except CommandFailed as error:
         print(error)
         sys.exit(1)
+
 
 def clear_map(hap, mapid):
     try:
@@ -64,12 +66,14 @@ def clear_map(hap, mapid):
         print(error)
         sys.exit(1)
 
+
 def get_map(hap, mapid, key):
     try:
         print(hap.get_map(mapid, key))
     except CommandFailed as error:
         print(error)
         sys.exit(1)
+
 
 def del_map(hap, mapid, key):
     try:
@@ -82,6 +86,7 @@ def del_map(hap, mapid, key):
         print(error)
         sys.exit(1)
 
+
 def add_map(hap, mapid, key, value):
     try:
         if hap.add_map(mapid, key, value):
@@ -93,6 +98,7 @@ def add_map(hap, mapid, key, value):
         print(error)
         sys.exit(1)
 
+
 def set_map(hap, mapid, key, value):
     try:
         if hap.set_map(mapid, key, value):
@@ -103,6 +109,7 @@ def set_map(hap, mapid, key, value):
     except CommandFailed as error:
         print(error)
         sys.exit(1)
+
 
 def main():
     arguments = docopt(__doc__)
