@@ -524,6 +524,8 @@ Map command
 
     %
 
+:NOTE: Currently, HAProxy doesn't allow to create new MAPs via the stats socket.
+
 Release
 -------
 
