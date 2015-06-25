@@ -7,6 +7,12 @@ import re
 from operator import attrgetter
 
 
+def get_arg_option(args):
+    for key, value in args.items():
+        if key.startswith('--') and isinstance(value, bool) and value:
+            return key.replace('-', '')
+
+
 def sorted_nicely(l):
     """Sort the given iterable in the way that humans expect."""
     convert = lambda text: int(text) if text.isdigit() else text
