@@ -17,7 +17,7 @@ Options:
     -b, --backends            show backends
     -s, --servers             show servers
     -D DIR, --socket-dir=DIR  directory with HAProxy socket files
-    [default: /var/lib/haproxy]
+                              [default: /var/lib/haproxy]
 
 """
 import sys

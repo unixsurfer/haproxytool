@@ -30,13 +30,14 @@ Options:
     -p, --process             show process number
     -i, --iid                 show proxy ID number
     -s, --status              show status
-    -o, --options             show value of options that can be changed with '-w'
+    -o, --options             show value of options that can be changed with
+                              '-w' option
     -m, --metric              show value of a metric
     -M, --list-metrics        show all metrics
     -l, --list                show all frontends
     -w, --write               change a frontend option
     -D DIR, --socket-dir=DIR  directory with HAProxy socket files
-    [default: /var/lib/haproxy]
+                              [default: /var/lib/haproxy]
 
 """
 import sys

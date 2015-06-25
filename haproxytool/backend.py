@@ -28,7 +28,7 @@ Options:
     -M, --list-metrics        show all metrics
     -l, --list                show all backends
     -D DIR, --socket-dir=DIR  directory with HAProxy socket files
-    [default: /var/lib/haproxy]
+                              [default: /var/lib/haproxy]
 
 """
 import sys

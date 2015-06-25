@@ -37,7 +37,7 @@ Options:
     -w, --weight              change weight for server
     -W, --get-weight          show weight of server
     -D DIR, --socket-dir=DIR  directory with HAProxy socket files
-    [default: /var/lib/haproxy]
+                              [default: /var/lib/haproxy]
 
 """
 import sys

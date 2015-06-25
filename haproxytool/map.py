@@ -33,7 +33,7 @@ Options:
     -d, --delete              delete all the map entries from the map <MAPID>
                               corresponding to the key <KEY>
     -D DIR, --socket-dir=DIR  directory with HAProxy socket files
-    [default: /var/lib/haproxy]
+                              [default: /var/lib/haproxy]
 
 """
 import sys
