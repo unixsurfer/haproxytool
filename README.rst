@@ -25,20 +25,16 @@ the tools available in the Linux land. The `docopt Python module
 Here is the basic syntax to start with::
 
     % haproxytool
-    Usage: haproxytool [-v | -h | --socket-dir DIR] <command> [<args>...]
+    Usage: haproxytool [-v | -h] <command> [<args>...]
 
     % haproxytool -h
     A tool to manage HAProxy via the stats socket.
 
-    Usage: haproxytool [-v | -h | --socket-dir DIR] <command> [<args>...]
+    Usage: haproxytool [-v | -h] <command> [<args>...]
 
     Options:
     -h, --help                show this screen.
     -v, --version             show version.
-    -D DIR, --socket-dir=DIR  directory with HAProxy socket files [default: /var/lib/haproxy]
-
-    Arguments:
-        DIR  a directory path
 
     Available haproxytool commands are:
         frontend  Frontend operations
@@ -87,34 +83,34 @@ Commands for frontends
         -l, --list                show all frontends
         -w, --write               change a frontend option
         -D DIR, --socket-dir=DIR  directory with HAProxy socket files
-        [default: /var/lib/haproxy]
+                                  [default: /var/lib/haproxy]
 
 * Show status of frontend(s)
 
 ::
 
-    % haproxytool -D /run/haproxy frontend -s
+    % haproxytool frontend -s
     frontend_proc1 OPEN
     frontend2_proc34 OPEN
     haproxy OPEN
     frontend1_proc34 OPEN
     frontend_proc2 OPEN
 
-    % haproxytool -D /run/haproxy frontend -s frontend2_proc34
+    % haproxytool frontend -s frontend2_proc34
     frontend2_proc34 OPEN
 
 * Show requests
 
 ::
 
-    % haproxytool -D /run/haproxy frontend -r frontend2_proc34
+    % haproxytool frontend -r frontend2_proc34
     frontend2_proc34 10
 
 * Show in which HAProxy process a frontend is used
 
 ::
 
-    % haproxytool -D /run/haproxy frontend -p frontend2_proc34
+    % haproxytool frontend -p frontend2_proc34
     frontend2_proc34 [4, 3]
 
 * Show option(s) that can be changed
@@ -123,33 +119,33 @@ Commands for frontends
 
 ::
 
-    % haproxytool -D /run/haproxy frontend -o frontend_proc1
+    % haproxytool frontend -o frontend_proc1
     frontend_proc1 maxconn=1000000
 
 * Change an option
 
 ::
 
-    % haproxytool -D /run/haproxy frontend -w maxconn 100000 frontend_proc1
+    % haproxytool frontend -w maxconn 100000 frontend_proc1
     frontend_proc1 set maxconn to 100000
 
-    % haproxytool -D /run/haproxy frontend -o frontend_proc1
+    % haproxytool frontend -o frontend_proc1
     frontend_proc1 maxconn=100000
 
 * Changing an option for a frontend assigned to multiple HAProxy process
 
 ::
 
-    % haproxytool -D /run/haproxy frontend -o frontend1_proc34
+    % haproxytool frontend -o frontend1_proc34
     frontend1_proc34 maxconn=2000000
 
-    % haproxytool -D /run/haproxy frontend -w maxconn 40000 frontend1_proc34
+    % haproxytool frontend -w maxconn 40000 frontend1_proc34
     frontend1_proc34 set maxconn to 40000
 
-    % haproxytool -D /run/haproxy frontend -o frontend1_proc34
+    % haproxytool frontend -o frontend1_proc34
     frontend1_proc34 maxconn=80000
 
-    % haproxytool -D /run/haproxy frontend -p frontend1_proc34
+    % haproxytool frontend -p frontend1_proc34
     frontend1_proc34 [4, 3]
 
 :NOTE: It is not supported to change a option only to one of the HAProxy
@@ -187,7 +183,7 @@ Commands for backends
         -M, --list-metrics        show all metrics
         -l, --list                show all backends
         -D DIR, --socket-dir=DIR  directory with HAProxy socket files
-        [default: /var/lib/haproxy]
+                                  [default: /var/lib/haproxy]
 
 Commands for servers
 ~~~~~~~~~~~~~~~~~~~~
@@ -227,13 +223,13 @@ Commands for servers
         -w, --weight              change weight for server
         -W, --get-weight          show weight of server
         -D DIR, --socket-dir=DIR  directory with HAProxy socket files
-        [default: /var/lib/haproxy]
+                                  [default: /var/lib/haproxy]
 
 * List all servers
 
 ::
 
-    % haproxytool -D /run/haproxy server -l
+    % haproxytool server -l
     # backendname servername
     backend1_proc34                bck1_proc34_srv1
     backend1_proc34                bck1_proc34_srv2
@@ -253,14 +249,14 @@ Commands for servers
 
 ::
 
-    % haproxytool -D /run/haproxy server -s --backend=backend_proc1
+    % haproxytool server -s --backend=backend_proc1
     # backendname servername
     backend_proc1                  bck_all_srv1                               DOWN
     backend_proc1                  member1_proc1                              no check
     backend_proc1                  member2_proc1                              no check
 
 
-    % haproxytool -D /run/haproxy server -s --backend=backend_proc1 --backend=backend2_proc34
+    % haproxytool server -s --backend=backend_proc1 --backend=backend2_proc34
     # backendname servername
     backend_proc1                  member1_proc1                              no check
     backend_proc1                  bck_all_srv1                               DOWN
@@ -273,14 +269,14 @@ Commands for servers
 
 ::
 
-    % haproxytool -D /run/haproxy server -W bck_all_srv1
+    % haproxytool server -W bck_all_srv1
     # backendname servername
     backend1_proc34                bck_all_srv1                               1
     backend2_proc34                bck_all_srv1                               1
     backend_proc1                  bck_all_srv1                               100
     pparissis at axilleas in ~/bin
 
-    % haproxytool -D /run/haproxy server -W bck_all_srv1 --backend=backend_proc1 --backend=backend2_proc34
+    % haproxytool server -W bck_all_srv1 --backend=backend_proc1 --backend=backend2_proc34
     # backendname servername
     backend_proc1                  bck_all_srv1                               100
     backend2_proc34                bck_all_srv1                               1
@@ -290,12 +286,12 @@ Commands for servers
 
 ::
 
-    % haproxytool -D /run/haproxy server -w 10 bck_all_srv1
+    % haproxytool server -w 10 bck_all_srv1
     bck_all_srv1 backend set weight to 10 in backend2_proc34 backend
     bck_all_srv1 backend set weight to 10 in backend1_proc34 backend
     bck_all_srv1 backend set weight to 10 in backend_proc1 backend
 
-    % haproxytool -D /run/haproxy server -w 50 bck_all_srv1 --backend=backend_proc1 --backend=backend2_proc34
+    % haproxytool server -w 50 bck_all_srv1 --backend=backend_proc1 --backend=backend2_proc34
     bck_all_srv1 backend set weight to 50 in backend_proc1 backend
     bck_all_srv1 backend set weight to 50 in backend2_proc34 backend
     pparissis at axilleas in ~/bin
@@ -304,7 +300,7 @@ Commands for servers
 
 ::
 
-    % haproxytool -D /run/haproxy server -r bck_all_srv1
+    % haproxytool server -r bck_all_srv1
     # backendname servername
     backend_proc1                  bck_all_srv1                               0
     backend2_proc34                bck_all_srv1                               2
@@ -314,7 +310,7 @@ Commands for servers
 
 ::
 
-    % haproxytool -D /run/haproxy server -M
+    % haproxytool server -M
     qcur
     qmax
     scur
@@ -362,7 +358,7 @@ description.
 ::
 
 
-    % haproxytool -D /run/haproxy server -m bin bck_all_srv1
+    % haproxytool server -m bin bck_all_srv1
     # backendname servername
     backend1_proc34                bck_all_srv1                               760
     backend2_proc34                bck_all_srv1                               152
@@ -372,7 +368,7 @@ description.
 
 ::
 
-    % haproxytool -D /run/haproxy server -p bck_all_srv1
+    % haproxytool server -p bck_all_srv1
     # backendname servername
     backend2_proc34                bck_all_srv1                               [4, 3]
     backend_proc1                  bck_all_srv1                               [1]
@@ -382,23 +378,23 @@ description.
 
 ::
 
-    % haproxytool -D /run/haproxy server -d bck_all_srv1
+    % haproxytool server -d bck_all_srv1
     bck_all_srv1 disabled in backend1_proc34 backend
     bck_all_srv1 disabled in backend_proc1 backend
     bck_all_srv1 disabled in backend2_proc34 backend
 
-    % haproxytool -D /run/haproxy server -s bck_all_srv1
+    % haproxytool server -s bck_all_srv1
     # backendname servername
     backend_proc1                  bck_all_srv1                               MAINT
     backend2_proc34                bck_all_srv1                               MAINT
     backend1_proc34                bck_all_srv1                               MAINT
 
-    % haproxytool -D /run/haproxy server -e bck_all_srv1
+    % haproxytool server -e bck_all_srv1
     bck_all_srv1 enabled in backend2_proc34 backend
     bck_all_srv1 enabled in backend1_proc34 backend
     bck_all_srv1 enabled in backend_proc1 backend
 
-    % haproxytool -D /run/haproxy server -s bck_all_srv1
+    % haproxytool server -s bck_all_srv1
     # backendname servername
     backend1_proc34                bck_all_srv1                               UP
     backend2_proc34                bck_all_srv1                               no check
@@ -423,7 +419,7 @@ Dump command
         -b, --backends            show backend
         -s, --servers             show server
         -D DIR, --socket-dir=DIR  directory with HAProxy socket files
-        [default: /var/lib/haproxy]
+                                  [default: /var/lib/haproxy]
 
 Map command
 ~~~~~~~~~~~~
@@ -460,13 +456,13 @@ Map command
         -d, --delete              delete all the map entries from the map <MAPID>
                                   corresponding to the key <KEY>
         -D DIR, --socket-dir=DIR  directory with HAProxy socket files
-        [default: /var/lib/haproxy]
+                                  [default: /var/lib/haproxy]
 
 * List all MAPIDs
 
 ::
 
-    % haproxytool -D /run/haproxy map -l
+    % haproxytool map -l
     # id (file) description
     4 (/etc/haproxy/v-m1-bk) pattern loaded from file '/etc/haproxy/v-m1-bk'
     used by map at file '/etc/haproxy/haproxy.cfg' line 87
@@ -475,7 +471,7 @@ Map command
 
 ::
 
-    % haproxytool -D /run/haproxy map -s 4
+    % haproxytool map -s 4
     0xb743f0 0 www.foo.com-0
     0xb74460 1 www.foo.com-1
 
@@ -483,10 +479,10 @@ Map command
 
 ::
 
-    % haproxytool -D /run/haproxy map -A 4 3 www.goo.com
+    % haproxytool map -A 4 3 www.goo.com
     key was added successfully
 
-    % haproxytool -D /run/haproxy map -s 4
+    % haproxytool map -s 4
     0xb743f0 0 www.foo.com-0
     0xb74460 1 www.foo.com-1
     0x28f0f50 3 www.goo.com
@@ -495,10 +491,10 @@ Map command
 
 ::
 
-    % haproxytool -D /run/haproxy map -d 4 3
+    % haproxytool map -d 4 3
     key was deleted successfully
 
-    % haproxytool -D /run/haproxy map -s 4
+    % haproxytool map -s 4
     0xb743f0 0 www.foo.com-0
     0xb74460 1 www.foo.com-1
 
@@ -506,10 +502,10 @@ Map command
 
 ::
 
-    % haproxytool -D /run/haproxy map -S 4 1 bar.com
+    % haproxytool map -S 4 1 bar.com
     value was set successfully
 
-    % haproxytool -D /run/haproxy map -s 4
+    % haproxytool map -s 4
     0xb743f0 0 www.foo.com-0
     0xb74460 1 bar.com
 
@@ -517,10 +513,10 @@ Map command
 
 ::
 
-    % haproxytool -D /run/haproxy map -c 4
+    % haproxytool map -c 4
     all entries of map were cleared successfully
 
-    % haproxytool -D /run/haproxy map -s 4
+    % haproxytool map -s 4
 
     %
 
