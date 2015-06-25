@@ -4,22 +4,21 @@
 #
 # pylint: disable=superfluous-parens
 #
-# Created by: Pavlos Parissis <pavlos.parissis@gmail.com>
 #
 """Manage ACLs
 
 Usage:
     haproxytool acl [-D DIR | -h] -l
     haproxytool acl [-D DIR | -h] (-c | -s) ACLID
-    haproxytool acl [-D DIR | -h] (-g | -d) ACLID KEY
-    haproxytool acl [-D DIR | -h] -A ACLID VALUE
+    haproxytool acl [-D DIR | -h] (-A | -g ) ACLID VALUE
+    haproxytool acl [-D DIR | -h] -d ACLID KEY
 
 
 Arguments:
     DIR     Directory path
     ACLID   ID of the acl or file returned by show acl
-    KEY     ID of key
     VALUE   Value to set
+    KEY     Key ID of ACL value/pattern
 
 Options:
     -h, --help                show this screen
@@ -75,14 +74,14 @@ class ServerCommand(object):
 
     def get(self):
         aclid = self.args['ACLID']
-        key = self.args['KEY']
+        value = self.args['VALUE']
         try:
-            print(self.hap.get_acl(aclid, key))
+            print(self.hap.get_acl(aclid, value))
         except CommandFailed as error:
             print(error)
             sys.exit(1)
 
-    def delele(self):
+    def delete(self):
         aclid = self.args['ACLID']
         key = self.args['KEY']
         try:
@@ -97,13 +96,12 @@ class ServerCommand(object):
 
     def add(self):
         aclid = self.args['ACLID']
-        key = self.args['KEY']
         value = self.args['VALUE']
         try:
-            if self.hap.add_acl(aclid, key, value):
-                print("key was added successfully")
+            if self.hap.add_acl(aclid, value):
+                print("value was added successfully")
             else:
-                print("failed to add key in the acl")
+                print("failed to add value into the acl")
                 sys.exit(1)
         except CommandFailed as error:
             print(error)
@@ -126,20 +124,6 @@ def main():
     cmd = ServerCommand(hap, arguments)
     method = get_arg_option(arguments)
     getattr(cmd, method)()
-    # if arguments['--list']:
-    #     show_acl(hap, None)
-    # elif arguments['--show']:
-    #     show_acl(hap, arguments['ACLID'])
-    # elif arguments['--set']:
-    #     set_acl(hap, arguments['ACLID'], arguments['KEY'], arguments['VALUE'])
-    # elif arguments['--add']:
-    #     add_acl(hap, arguments['ACLID'], arguments['KEY'], arguments['VALUE'])
-    # elif arguments['--clear']:
-    #     clear_acl(hap, arguments['ACLID'])
-    # elif arguments['--delete']:
-    #     del_acl(hap, arguments['ACLID'], arguments['KEY'])
-    # elif arguments['--get']:
-    #     get_acl(hap, arguments['ACLID'], arguments['KEY'])
 
 # This is the standard boilerplate that calls the main() function.
 if __name__ == '__main__':
