@@ -37,78 +37,66 @@ from haproxyadmin import haproxy
 from haproxyadmin.exceptions import (SocketApplicationError,
                                      SocketConnectionError,
                                      SocketPermissionError)
+from .utils import get_arg_option
 
 
-def build_backend_list(hap, names=None):
-    backends = []
-    if not names:
-        for backend in hap.backends():
-            backends.append(backend)
-    else:
-        for name in names:
-            try:
-                backends.append(hap.backend(name))
-            except ValueError:
-                print("{} was not found".format(name))
+class BackendCommand(object):
+    def __init__(self, hap, args):
+        self.hap = hap
+        self.args = args
+        self.backends = self.build_backend_list(args['NAME'])
 
-    if not backends:
-        sys.exit(1)
+    def build_backend_list(self, names=None):
+        backends = []
+        if not names:
+            for backend in self.hap.backends():
+                backends.append(backend)
+        else:
+            for name in names:
+                try:
+                    backends.append(self.hap.backend(name))
+                except ValueError:
+                    print("{} was not found".format(name))
 
-    return backends
+        return backends
 
+    def list(self):
+        for backend in self.backends:
+            print("{}".format(backend.name))
 
-def list_backends(backends):
-    for backend in backends:
-        print("{}".format(backend.name))
+    def status(self):
+        for backend in self.backends:
+            print("{} {}".format(backend.name, backend.status))
 
+    def requests(self):
+        for backend in self.backends:
+            print("{} {}".format(backend.name, backend.requests))
 
-def status(backends):
-    for backend in backends:
-        print("{} {}".format(backend.name, backend.status))
+    def iid(self):
+        for backend in self.backends:
+            print("{} {}".format(backend.name, backend.iid))
 
+    def process(self):
+        for backend in self.backends:
+            print("{} {}".format(backend.name, backend.process_nb))
 
-def requests(backends):
-    for backend in backends:
-        print("{} {}".format(backend.name, backend.requests))
+    def servers(self):
+        for backend in self.backends:
+            print("{}".format(backend.name))
+            for server in backend.servers():
+                print("{:<3} {}".format(' ', server.name))
 
+    def metric(self):
+        metric = self.args['METRIC']
+        if metric not in haproxy.BACKEND_METRICS:
+            sys.exit("{} no valid metric".format(metric))
 
-def iid(backends):
-    for backend in backends:
-        print("{} {}".format(backend.name, backend.iid))
+        for backend in self.backends:
+            print("{} {}".format(backend.name, backend.metric(metric)))
 
-
-def process(backends):
-    for backend in backends:
-        print("{} {}".format(backend.name, backend.process_nb))
-
-
-def servers(backends):
-    for backend in backends:
-        print("{}".format(backend.name))
-        for server in backend.servers():
-            print("{:<3} {}".format(' ', server.name))
-
-
-def get_metric(backends, metric):
-    """Retrieve the value of a metric.
-
-    :param backends: A list of :class:`haproxy.Backend` objects
-    :type backends: list
-    :param metric: metric name
-    :type metric: string
-    :return: value of given metric
-    """
-    if metric not in haproxy.BACKEND_METRICS:
-        sys.exit("{} no valid metric".format(metric))
-
-    for backend in backends:
-        print("{} {}".format(backend.name, backend.metric(metric)))
-
-
-def list_metrics():
-    """List all valid metric names."""
-    for name in haproxy.SERVER_METRICS:
-        print(name)
+    def listmetrics(self):
+        for metric in haproxy.SERVER_METRICS:
+            print(metric)
 
 
 def main():
@@ -125,25 +113,9 @@ def main():
         print(error)
         sys.exit(1)
 
-    # Build a list of backend objects
-    backends = build_backend_list(hap, arguments['NAME'])
-
-    if arguments['--list']:
-        list_backends(backends)
-    elif arguments['--status']:
-        status(backends)
-    elif arguments['--requests']:
-        requests(backends)
-    elif arguments['--iid']:
-        iid(backends)
-    elif arguments['METRIC']:
-        get_metric(backends, arguments['METRIC'])
-    elif arguments['--process']:
-        process(backends)
-    elif arguments['--list-metrics']:
-        list_metrics()
-    elif arguments['--servers']:
-        servers(backends)
+    cmd = BackendCommand(hap, arguments)
+    method = get_arg_option(arguments)
+    getattr(cmd, method)()
 
 # This is the standard boilerplate that calls the main() function.
 if __name__ == '__main__':

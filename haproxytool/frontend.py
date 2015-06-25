@@ -47,108 +47,108 @@ from operator import methodcaller
 from haproxyadmin.exceptions import (SocketApplicationError,
                                      SocketConnectionError,
                                      SocketPermissionError)
+from .utils import get_arg_option
 
 
-def build_frontend_list(hap, names=None):
-    frontends = []
-    if not names:
-        for frontend in hap.frontends():
-            frontends.append(frontend)
-    else:
-        for name in names:
+class FrontendCommand(object):
+    def __init__(self, hap, args):
+        self.hap = hap
+        self.args = args
+        self.frontends = self.build_frontend_list(args['NAME'])
+
+    def build_frontend_list(self, names=None):
+        frontends = []
+        if not names:
+            for frontend in self.hap.frontends():
+                frontends.append(frontend)
+        else:
+            for name in names:
+                try:
+                    frontends.append(self.hap.frontend(name))
+                except ValueError:
+                    print("{} was not found".format(name))
+
+        return frontends
+
+    def list(self):
+        for frontend in self.frontends:
+            print("{}".format(frontend.name))
+
+    def status(self):
+        for frontend in self.frontends:
+            print("{} {}".format(frontend.name, frontend.status))
+
+    def requests(self):
+        for frontend in self.frontends:
+            print("{} {}".format(frontend.name, frontend.requests))
+
+    def iid(self):
+        for frontend in self.frontends:
+            print("{} {}".format(frontend.name, frontend.iid))
+
+    def process(self):
+        for frontend in self.frontends:
+            print("{} {}".format(frontend.name, frontend.process_nb))
+
+    def options(self):
+        for frontend in self.frontends:
+            print("{} maxconn={}".format(frontend.name, frontend.maxconn))
+
+    def enable(self):
+        for frontend in self.frontends:
             try:
-                frontends.append(hap.frontend(name))
-            except ValueError:
-                print("{} was not found".format(name))
+                frontend.enable()
+                print("{} enabled".format(frontend.name))
+            except exceptions.CommandFailed as error:
+                print("{} failed to be enabled:{}".format(frontend.name,
+                                                          error))
 
-    if not frontends:
-        sys.exit(1)
+    def disable(self):
+        for frontend in self.frontends:
+            try:
+                frontend.disable()
+                print("{} disabled".format(frontend.name))
+            except exceptions.CommandFailed as error:
+                print("{} failed to be disabled:{}".format(frontend.name,
+                                                           error))
 
-    return frontends
+    def shutdown(self):
+        for frontend in self.frontends:
+            try:
+                frontend.shutdown()
+                print("{} shutdown".format(frontend.name))
+            except exceptions.CommandFailed as error:
+                print("{} failed to be shutdown:{}".format(frontend.name,
+                                                           error))
 
-
-def list_frontends(frontends):
-    for frontend in frontends:
-        print("{}".format(frontend.name))
-
-
-def status(frontends):
-    for frontend in frontends:
-        print("{} {}".format(frontend.name, frontend.status))
-
-
-def requests(frontends):
-    for frontend in frontends:
-        print("{} {}".format(frontend.name, frontend.requests))
-
-
-def iid(frontends):
-    for frontend in frontends:
-        print("{} {}".format(frontend.name, frontend.iid))
-
-
-def process(frontends):
-    for frontend in frontends:
-        print("{} {}".format(frontend.name, frontend.process_nb))
-
-
-def options(frontends):
-    for frontend in frontends:
-        print("{} maxconn={}".format(frontend.name, frontend.maxconn))
-
-
-def enable(frontends):
-    for frontend in frontends:
+    def write(self):
+        setting = self.args['OPTION']
+        value = self.args['VALUE']
         try:
-            frontend.enable()
-            print("{} enabled".format(frontend.name))
-        except exceptions.CommandFailed as error:
-            print("{} failed to be enabled:{}".format(frontend.name, error))
+            value = int(value)
+            call_method = methodcaller('setmaxconn', value, die=False)
+            for frontend in self.frontends:
+                if call_method(frontend):
+                    print("{} set {} to {}".format(frontend.name,
+                                                   setting,
+                                                   value))
+                else:
+                    print("{} failed to set maxconn on {}".format(frontend.name,
+                                                                  value))
+        except ValueError:
+            sys.exit("You need to pass a number, got {}".format(value))
 
+    def metric(self):
+        metric = self.args['METRIC']
+        if metric not in haproxy.FRONTEND_METRICS:
+            sys.exit("{} no valid metric".format(metric))
 
-def disable(frontends):
-    for frontend in frontends:
-        try:
-            frontend.disable()
-            print("{} disabled".format(frontend.name))
-        except exceptions.CommandFailed as error:
-            print("{} failed to be disabled:{}".format(frontend.name, error))
+        for frontend in self.frontends:
+            print("{} {}".format(frontend.name, frontend.metric(metric)))
 
-
-def shutdown(frontends):
-    for frontend in frontends:
-        try:
-            frontend.shutdown()
-            print("{} shutdown".format(frontend.name))
-        except exceptions.CommandFailed as error:
-            print("{} failed to be shutdown:{}".format(frontend.name, error))
-
-
-def set_option(frontends, setting, value):
-    try:
-        value = int(value)
-        call_method = methodcaller('setmaxconn', value, die=False)
-        for frontend in frontends:
-            if call_method(frontend):
-                print("{} set {} to {}".format(frontend.name, setting, value))
-            else:
-                print("{} failed to set maxconn to {}".format(frontend.name,
-                                                              value))
-    except ValueError:
-        sys.exit("You need to pass a number, got {}".format(value))
-
-
-def get_metric(frontends, metric):
-    if metric not in haproxy.FRONTEND_METRICS:
-        sys.exit("{} no valid metric".format(metric))
-
-    for frontend in frontends:
-        print("{} {}".format(frontend.name, frontend.metric(metric)))
-
-
-def list_metrics():
-    for metric in haproxy.FRONTEND_METRICS:
-        print(metric)
+    def listmetrics(self):
+        for metric in haproxy.FRONTEND_METRICS:
+            print(metric)
 
 
 def main():
@@ -164,32 +164,10 @@ def main():
     except ValueError as error:
         print(error)
         sys.exit(1)
-    frontends = build_frontend_list(hap, arguments['NAME'])
 
-    if arguments['--list']:
-        list_frontends(frontends)
-    elif arguments['--status']:
-        status(frontends)
-    elif arguments['--requests']:
-        requests(frontends)
-    elif arguments['--iid']:
-        iid(frontends)
-    elif arguments['--options']:
-        options(frontends)
-    elif arguments['--enable']:
-        enable(frontends)
-    elif arguments['--disable']:
-        disable(frontends)
-    elif arguments['--process']:
-        process(frontends)
-    elif arguments['--shutdown']:
-        shutdown(frontends)
-    elif arguments['OPTION'] and arguments['VALUE']:
-        set_option(frontends, arguments['OPTION'], arguments['VALUE'])
-    elif arguments['METRIC']:
-        get_metric(frontends, arguments['METRIC'])
-    elif arguments['--list-metrics']:
-        list_metrics()
+    cmd = FrontendCommand(hap, arguments)
+    method = get_arg_option(arguments)
+    getattr(cmd, method)()
 
 # This is the standard boilerplate that calls the main() function.
 if __name__ == '__main__':
