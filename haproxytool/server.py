@@ -47,157 +47,161 @@ from operator import methodcaller
 from haproxyadmin.exceptions import (SocketApplicationError,
                                      SocketConnectionError,
                                      SocketPermissionError)
+from .utils import get_arg_option
 
 
-def build_server_list(hap, names=None, backends=None):
-    servers = []
-    if not names:
-        if not backends:
-            for server in hap.servers():
-                servers.append(server)
-        else:
-            for backend in backends:
-                for server in hap.servers(backend):
+class ServerCommand(object):
+    def __init__(self, hap, args):
+        self.hap = hap
+        self.args = args
+        self.servers = self.build_server_list(
+            args['NAME'],
+            args['--backend'])
+
+    def build_server_list(self, names=None, backends=None):
+        servers = []
+        if not names:
+            if not backends:
+                for server in self.hap.servers():
                     servers.append(server)
-    else:
-        if not backends:
-            for name in names:
-                try:
-                    for server in hap.server(name):
+            else:
+                for backend in backends:
+                    for server in self.hap.servers(backend):
                         servers.append(server)
-                except ValueError:
-                    print("{} was not found".format(name))
         else:
-            for backend in backends:
+            if not backends:
                 for name in names:
                     try:
-                        for server in hap.server(name, backend):
+                        for server in self.hap.server(name):
                             servers.append(server)
                     except ValueError:
                         print("{} was not found".format(name))
+            else:
+                for backend in backends:
+                    for name in names:
+                        try:
+                            for server in self.hap.server(name, backend):
+                                servers.append(server)
+                        except ValueError:
+                            print("{} was not found".format(name))
 
-    if not servers:
-        sys.exit(1)
+        return servers
 
-    return servers
+    def list(self):
+        print("# backendname servername")
+        for server in self.servers:
+            print("{:<30} {}".format(server.backendname, server.name))
 
+    def status(self):
+        print("# backendname servername")
+        for server in self.servers:
+            print("{:<30} {:<42} {}".format(server.backendname, server.name,
+                                            server.status))
 
-def list_servers(servers):
-    print("# backendname servername")
-    for server in servers:
-        print("{:<30} {}".format(server.backendname, server.name))
+    def requests(self):
+        print("# backendname servername")
+        for server in self.servers:
+            print("{:<30} {:<42} {}".format(server.backendname, server.name,
+                                            server.requests))
 
+    def sid(self):
+        print("# backendname servername")
+        for server in self.servers:
+            print("{:<30} {:<42} {}".format(server.backendname, server.name,
+                                            server.sid))
 
-def status(servers):
-    print("# backendname servername")
-    for server in servers:
-        print("{:<30} {:<42} {}".format(server.backendname, server.name,
-                                        server.status))
+    def process(self):
+        print("# backendname servername")
+        for server in self.servers:
+            print("{:<30} {:<42} {}".format(server.backendname, server.name,
+                                            server.process_nb))
 
-
-def requests(servers):
-    print("# backendname servername")
-    for server in servers:
-        print("{:<30} {:<42} {}".format(server.backendname, server.name,
-                                        server.requests))
-
-
-def sid(servers):
-    print("# backendname servername")
-    for server in servers:
-        print("{:<30} {:<42} {}".format(server.backendname, server.name,
-                                        server.sid))
-
-
-def process(servers):
-    print("# backendname servername")
-    for server in servers:
-        print("{:<30} {:<42} {}".format(server.backendname, server.name,
-                                        server.process_nb))
-
-
-def enable(servers):
-    for server in servers:
-        try:
-            server.setstate(haproxy.STATE_ENABLE)
-            print("{} enabled in {} backend".format(server.name,
-                                                    server.backendname))
-        except exceptions.CommandFailed as error:
-            print("{} failed to be enabled:{}".format(server.name, error))
-
-
-def disable(servers):
-    for server in servers:
-        try:
-            server.setstate(haproxy.STATE_DISABLE)
-            print("{} disabled in {} backend".format(server.name,
-                                                     server.backendname))
-        except exceptions.CommandFailed as error:
-            print("{} failed to be disabled:{}".format(server.name, error))
-
-
-def ready(servers):
-    for server in servers:
-        try:
-            server.setstate(haproxy.STATE_READY)
-            print("{} set to ready in {} backend".format(server.name,
-                                                         server.backendname))
-        except exceptions.CommandFailed as error:
-            print("{} failed to set normal state:{}".format(server.name,
-                                                            error))
-
-
-def drain(servers):
-    for server in servers:
-        try:
-            server.setstate(haproxy.STATE_DRAIN)
-            print("{} set to drain in {} backend".format(server.name,
-                                                         server.backendname))
-        except exceptions.CommandFailed as error:
-            print("{} failed to set in drain state:{}".format(server.name,
-                                                              error))
-
-
-def maintenance(servers):
-    for server in servers:
-        try:
-            server.setstate(haproxy.STATE_READY)
-            print("{} set to ready in {} backend".format(server.name,
-                                                         server.backendname))
-        except exceptions.CommandFailed as error:
-            print("{} failed to set to maintenance state:{}".format(server.name,
-                                                                    error))
-
-
-def weight(servers, value):
-    try:
-        value = int(value)
-        method_caller = methodcaller('setweight', value)
-        for server in servers:
+    def enable(self):
+        for server in self.servers:
             try:
-                method_caller(server)
-                print("{} backend set weight to {} in {} backend".format(
-                    server.name, value, server.backendname))
+                server.setstate(haproxy.STATE_ENABLE)
+                print("{} enabled in {} backend".format(server.name,
+                                                        server.backendname))
             except exceptions.CommandFailed as error:
-                print("{} failed to change weight:{}".format(server.name,
-                                                             error))
-    except ValueError as error:
-        sys.exit("{}".format(error))
+                print("{} failed to be enabled:{}".format(server.name, error))
 
+    def disable(self):
+        for server in self.servers:
+            try:
+                server.setstate(haproxy.STATE_DISABLE)
+                print("{} disabled in {} backend".format(server.name,
+                                                         server.backendname))
+            except exceptions.CommandFailed as error:
+                print("{} failed to be disabled:{}".format(server.name, error))
 
-def get_metric(servers, metric):
-    if metric not in haproxy.SERVER_METRICS:
-        sys.exit("{} no valid metric".format(metric))
+    def ready(self):
+        for server in self.servers:
+            try:
+                server.setstate(haproxy.STATE_READY)
+                print("{} set to ready in {} backend".format(
+                    server.name, server.backendname)
+                )
+            except exceptions.CommandFailed as error:
+                print("{} failed to set normal state:{}".format(server.name,
+                                                                error))
 
-    print("# backendname servername")
-    for server in servers:
-        print("{:<30} {:<42} {}".format(server.backendname, server.name,
-                                        server.metric(metric)))
+    def drain(self):
+        for server in self.servers:
+            try:
+                server.setstate(haproxy.STATE_DRAIN)
+                print("{} set to drain in {} backend".format(
+                    server.name, server.backendname)
+                )
+            except exceptions.CommandFailed as error:
+                print("{} failed to set in drain state:{}".format(server.name,
+                                                                  error))
 
+    def maintenance(self):
+        for server in self.servers:
+            try:
+                server.setstate(haproxy.STATE_READY)
+                print("{} set to ready in {} backend".format(
+                    server.name, server.backendname)
+                )
+            except exceptions.CommandFailed as error:
+                print("{} failed to set to maintenance state:{}".format(
+                    server.name, error))
 
-def list_metrics():
-    for metric in haproxy.SERVER_METRICS:
-        print(metric)
+    def weight(self):
+        value = self.args['VALUE']
+        try:
+            value = int(value)
+            method_caller = methodcaller('setweight', value)
+            for server in self.servers:
+                try:
+                    method_caller(server)
+                    print("{} backend set weight to {} in {} backend".format(
+                        server.name, value, server.backendname))
+                except exceptions.CommandFailed as error:
+                    print("{} failed to change weight:{}".format(server.name,
+                                                                 error))
+        except ValueError as error:
+            sys.exit("{}".format(error))
+
+    def metric(self):
+        metric = self.args['METRIC']
+        if metric not in haproxy.SERVER_METRICS:
+            sys.exit("{} no valid metric".format(metric))
+
+        print("# backendname servername")
+        for server in self.servers:
+            print("{:<30} {:<42} {}".format(server.backendname, server.name,
+                                            server.metric(metric)))
+
+    def getweight(self):
+        print("# backendname servername")
+        for server in self.servers:
+            print("{:<30} {:<42} {}".format(server.backendname, server.name,
+                                            server.weight))
+
+    def listmetrics(self):
+        for metric in haproxy.SERVER_METRICS:
+            print(metric)
 
 
 def main():
@@ -213,36 +217,9 @@ def main():
         print(error)
         sys.exit(1)
 
-    servers = build_server_list(hap, arguments['NAME'], arguments['--backend'])
-
-    if arguments['--list']:
-        list_servers(servers)
-    elif arguments['--status']:
-        status(servers)
-    elif arguments['--requests']:
-        requests(servers)
-    elif arguments['--sid']:
-        sid(servers)
-    elif arguments['--enable']:
-        enable(servers)
-    elif arguments['--disable']:
-        disable(servers)
-    elif arguments['--ready']:
-        ready(servers)
-    elif arguments['--drain']:
-        drain(servers)
-    elif arguments['--maintenance']:
-        maintenance(servers)
-    elif arguments['--process']:
-        process(servers)
-    elif arguments['--weight'] and arguments['VALUE']:
-        weight(servers, arguments['VALUE'])
-    elif arguments['--get-weight']:
-        get_metric(servers, 'weight')
-    elif arguments['METRIC']:
-        get_metric(servers, arguments['METRIC'])
-    elif arguments['--list-metrics']:
-        list_metrics()
+    cmd = ServerCommand(hap, arguments)
+    method = get_arg_option(arguments)
+    getattr(cmd, method)()
 
 # This is the standard boilerplate that calls the main() function.
 if __name__ == '__main__':
