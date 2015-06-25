@@ -1,6 +1,18 @@
 CHANGES
 =======
 
+0.2.2
+-----
+
+* RELEASE 0.2.2 version
+* Introduce class also for server command as we did with dad1424
+* add requirements file
+* introduce classes for each command to avoid long conditional statements
+* fix incorrect indentation for -D in the usage
+* add a helper function to parse arguments
+* update README to reflect to the fact that -D is only part of command args
+* cli.py does not need to parse socket_dir
+
 0.2.1
 -----
 
