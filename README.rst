@@ -42,6 +42,7 @@ Here is the basic syntax to start with::
         server    Server operations
         dump      Dumps all informations
         map       Manage MAPs
+        acl       Manage ACLs
 
     See 'haproxytool help <command>' for more information on a specific command.
 
@@ -521,6 +522,113 @@ Map command
     %
 
 :NOTE: Currently, HAProxy doesn't allow to create new MAPs via the stats socket.
+
+ACL command
+~~~~~~~~~~~
+
+* Usage
+
+::
+
+    % haproxytool acl --help
+    Manage ACLs
+
+    Usage:
+        haproxytool acl [-D DIR | -h] -l
+        haproxytool acl [-D DIR | -h] (-c | -s) ACLID
+        haproxytool acl [-D DIR | -h] (-A | -g ) ACLID VALUE
+        haproxytool acl [-D DIR | -h] -d ACLID KEY
+
+
+    Arguments:
+        DIR     Directory path
+        ACLID   ID of the acl or file returned by show acl
+        VALUE   Value to set
+        KEY     Key ID of ACL value/pattern
+
+    Options:
+        -h, --help                show this screen
+        -A, --add                 add a <KEY> entry into the acl <ACLID>
+        -s, --show                show acl
+        -g, --get                 lookup the value of a key in the acl
+        -c, --clear               clear all entries for a acl
+        -l, --list                list all acl ids
+        -d, --delete              delete all the acl entries from the acl <ACLID>
+                                corresponding to the key <KEY>
+        -D DIR, --socket-dir=DIR  directory with HAProxy socket files
+                                [default: /var/lib/haproxy]
+
+* List all ACLIDs
+
+::
+
+
+    % haproxytool acl -D /run/haproxy -l
+    # id (file) description
+    0 (/etc/haproxy/wl_stats) pattern loaded from file '/etc/haproxy/wl_stats' used by acl at file '/etc/haproxy/haproxy.cfg' line 55
+    1 () acl 'src' file '/etc/haproxy/haproxy.cfg' line 55
+    2 (/etc/haproxy/bl_frontend) pattern loaded from file '/etc/haproxy/bl_frontend' used by acl at file '/etc/haproxy/haproxy.cfg' line 85
+    3 () acl 'src' file '/etc/haproxy/haproxy.cfg' line 85
+    5 () acl 'ssl_fc' file '/etc/haproxy/haproxy.cfg' line 88
+    6 () acl 'req.cook' file '/etc/haproxy/haproxy.cfg' line 101
+    7 () acl 'req.cook' file '/etc/haproxy/haproxy.cfg' line 102
+    8 () acl 'req.cook' file '/etc/haproxy/haproxy.cfg' line 103
+
+* Show the content of a acl
+
+::
+
+    % haproxytool acl -D /run/haproxy -s 2
+    0x2115c90 11.155.183.41
+    0x3e92f80 10.10.10.10
+
+* Add an entry in a acl
+
+::
+
+    % haproxytool acl -D /run/haproxy --add 2 12.12.12.0
+    value was added successfully
+
+    % haproxytool acl -D /run/haproxy -s 2
+    0x2115c90 11.155.183.41
+    0x3e92f80 10.10.10.10
+    0x21341e0 12.12.12.0
+
+* Delete an entry from acl
+
+::
+
+    % haproxytool acl -D /run/haproxy --delete 2 12.12.12.0
+    key was deleted successfully
+
+    % haproxytool acl -D /run/haproxy -s 2
+    0x2115c90 11.155.183.41
+    0x3e92f80 10.10.10.10
+
+* Lookup entries in acl for debugging purposes
+
+::
+
+    % haproxytool acl -D /run/haproxy -g 2 11.155.183.41
+    type=ip, case=sensitive, match=yes, idx=tree, pattern="11.155.183.41"
+
+    %haproxytool acl -D /run/haproxy -g 2 11.155.183.0
+    type=ip, case=sensitive, match=no
+
+* Clear all entries from a acl
+
+::
+
+    % haproxytool acl -D /run/haproxy -s 2
+    0x2115c90 11.155.183.41
+    0x3e92f80 10.10.10.10
+
+    % haproxytool acl -D /run/haproxy -c 2
+    all entries of acl were cleared successfully
+
+    % haproxytool acl -D /run/haproxy -s 2
+
+    %
 
 Release
 -------
