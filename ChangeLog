@@ -1,6 +1,14 @@
 CHANGES
 =======
 
+0.3.0
+-----
+
+* RELEASE 0.3.0
+* add examples for ACL in README
+* fixes in acl support for delete and add functions
+* add support for ACLs
+
 0.2.2
 -----
 
