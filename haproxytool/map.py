@@ -43,72 +43,80 @@ from haproxyadmin.exceptions import (CommandFailed,
                                      SocketApplicationError,
                                      SocketConnectionError,
                                      SocketPermissionError)
+from .utils import get_arg_option
 
 
-def show_map(hap, mapid):
+class MapCommand(object):
+    def __init__(self, hap, args):
+        self.hap = hap
+        self.args = args
 
-    try:
-        for line in hap.show_map(mapid=mapid):
-            print(line)
-    except CommandFailed as error:
-        print(error)
-        sys.exit(1)
-
-
-def clear_map(hap, mapid):
-    try:
-        if hap.clear_map(mapid):
-            print("all entries of map were cleared successfully")
-        else:
-            print("failed to clear entries")
+    def list(self, mapid=None):
+        try:
+            for line in self.hap.show_map(mapid=mapid):
+                print(line)
+        except CommandFailed as error:
+            print(error)
             sys.exit(1)
-    except CommandFailed as error:
-        print(error)
-        sys.exit(1)
 
+    def show(self):
+        mapid = self.args['MAPID']
+        self.list(mapid)
 
-def get_map(hap, mapid, key):
-    try:
-        print(hap.get_map(mapid, key))
-    except CommandFailed as error:
-        print(error)
-        sys.exit(1)
-
-
-def del_map(hap, mapid, key):
-    try:
-        if hap.del_map(mapid, key):
-            print("key was deleted successfully")
-        else:
-            print("failed to delete key")
+    def clear(self):
+        try:
+            if self.hap.clear_map(self.args['MAPID']):
+                print("all entries of map were cleared successfully")
+            else:
+                print("failed to clear entries")
+                sys.exit(1)
+        except CommandFailed as error:
+            print(error)
             sys.exit(1)
-    except CommandFailed as error:
-        print(error)
-        sys.exit(1)
 
-
-def add_map(hap, mapid, key, value):
-    try:
-        if hap.add_map(mapid, key, value):
-            print("key was added successfully")
-        else:
-            print("failed to add key in the map")
+    def get(self):
+        try:
+            print(self.hap.get_map(self.args['MAPID'], self.args['KEY']))
+        except CommandFailed as error:
+            print(error)
             sys.exit(1)
-    except CommandFailed as error:
-        print(error)
-        sys.exit(1)
 
-
-def set_map(hap, mapid, key, value):
-    try:
-        if hap.set_map(mapid, key, value):
-            print("value was set successfully")
-        else:
-            print("failed to set value")
+    def delete(self):
+        try:
+            if self.hap.del_map(self.args['MAPID'], self.args['KEY']):
+                print("key was deleted successfully")
+            else:
+                print("failed to delete key")
+                sys.exit(1)
+        except CommandFailed as error:
+            print(error)
             sys.exit(1)
-    except CommandFailed as error:
-        print(error)
-        sys.exit(1)
+
+    def add(self):
+        try:
+            if self.hap.add_map(self.args['MAPID'],
+                                self.args['KEY'],
+                                self.args['VALUE']):
+                print("key was added successfully")
+            else:
+                print("failed to add key in the map")
+                sys.exit(1)
+        except CommandFailed as error:
+            print(error)
+            sys.exit(1)
+
+    def set(self):
+        try:
+            if self.hap.set_map(self.args['MAPID'],
+                                self.args['KEY'],
+                                self.args['VALUE']):
+                print("value was set successfully")
+            else:
+                print("failed to set value")
+                sys.exit(1)
+        except CommandFailed as error:
+            print(error)
+            sys.exit(1)
 
 
 def main():
@@ -124,20 +132,9 @@ def main():
         print(error)
         sys.exit(1)
 
-    if arguments['--list']:
-        show_map(hap, None)
-    elif arguments['--show']:
-        show_map(hap, arguments['MAPID'])
-    elif arguments['--set']:
-        set_map(hap, arguments['MAPID'], arguments['KEY'], arguments['VALUE'])
-    elif arguments['--add']:
-        add_map(hap, arguments['MAPID'], arguments['KEY'], arguments['VALUE'])
-    elif arguments['--clear']:
-        clear_map(hap, arguments['MAPID'])
-    elif arguments['--delete']:
-        del_map(hap, arguments['MAPID'], arguments['KEY'])
-    elif arguments['--get']:
-        get_map(hap, arguments['MAPID'], arguments['KEY'])
+    cmd = MapCommand(hap, arguments)
+    method = get_arg_option(arguments)
+    getattr(cmd, method)()
 
 # This is the standard boilerplate that calls the main() function.
 if __name__ == '__main__':
