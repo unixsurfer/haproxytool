@@ -43,7 +43,7 @@ from haproxyadmin.exceptions import (CommandFailed,
 from .utils import get_arg_option
 
 
-class ServerCommand(object):
+class AclCommand(object):
     def __init__(self, hap, args):
         self.hap = hap
         self.args = args
@@ -121,7 +121,7 @@ def main():
         print(error)
         sys.exit(1)
 
-    cmd = ServerCommand(hap, arguments)
+    cmd = AclCommand(hap, arguments)
     method = get_arg_option(arguments)
     getattr(cmd, method)()
 
