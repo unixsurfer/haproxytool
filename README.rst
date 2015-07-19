@@ -429,7 +429,7 @@ Map command
 
 ::
 
-    % haproxytool dump --help
+    % haproxytool map --help
     Manage MAPs
 
     Usage:
