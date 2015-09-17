@@ -1,6 +1,16 @@
 CHANGES
 =======
 
+0.3.1
+-----
+
+* RELEASE 0.3.1 version
+* use the correct state when set a server in maintenance mode
+* Fix typo in README.RST
+* introduce class also for MAP command as we did with dad1424
+* acl.py: use a proper name for the class which perform commands for ACL
+* include version in __init__.py
+
 0.3.0
 -----
 
