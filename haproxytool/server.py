@@ -159,8 +159,8 @@ class ServerCommand(object):
     def maintenance(self):
         for server in self.servers:
             try:
-                server.setstate(haproxy.STATE_READY)
-                print("{} set to ready in {} backend".format(
+                server.setstate(haproxy.STATE_MAINT)
+                print("{} set to maintenance in {} backend".format(
                     server.name, server.backendname)
                 )
             except exceptions.CommandFailed as error:
