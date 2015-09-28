@@ -5,6 +5,7 @@
 #
 import re
 from operator import attrgetter
+from six.moves import input
 
 
 def get_arg_option(args):
@@ -21,3 +22,18 @@ def sorted_nicely(l):
     alphanum_key = lambda key: [convert(c) for c in re.split('([0-9]+)', g(key))]
 
     return sorted(l, key=alphanum_key)
+
+
+def read_user(msg):
+    """Read user input.
+
+    :param msg: A message to prompt
+    :type msg: ``str``
+    :return: ``True`` if user gives 'y' otherwhise False.
+    :rtype: ``bool``
+    """
+    user_input = input("{msg} [y]/n?: ".format(msg=msg))
+    if user_input == 'y':
+        return True
+    else:
+        return False
