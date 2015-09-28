@@ -32,7 +32,7 @@ def read_user(msg):
     :return: ``True`` if user gives 'y' otherwhise False.
     :rtype: ``bool``
     """
-    user_input = input("{msg} [y]/n?: ".format(msg=msg))
+    user_input = input("{msg} y/n?: ".format(msg=msg))
     if user_input == 'y':
         return True
     else:
