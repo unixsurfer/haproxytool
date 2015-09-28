@@ -47,7 +47,7 @@ from operator import methodcaller
 from haproxyadmin.exceptions import (SocketApplicationError,
                                      SocketConnectionError,
                                      SocketPermissionError)
-from .utils import get_arg_option
+from .utils import get_arg_option, read_user
 
 
 class ServerCommand(object):
@@ -126,6 +126,12 @@ class ServerCommand(object):
                 print("{} failed to be enabled:{}".format(server.name, error))
 
     def disable(self):
+        nbservers = len(self.servers)
+        msg = "Are you sure we want to disable {n} servers".format(n=nbservers)
+        if nbservers > 1:
+            if not read_user(msg):
+                sys.exit('Aborted by user')
+
         for server in self.servers:
             try:
                 server.setstate(haproxy.STATE_DISABLE)
