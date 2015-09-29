@@ -10,7 +10,8 @@ from six.moves import input
 
 def get_arg_option(args):
     for key, value in args.items():
-        if key.startswith('--') and isinstance(value, bool) and value:
+        if (key != '--force' and key.startswith('--') and
+                isinstance(value, bool) and value):
             return key.replace('-', '')
 
 

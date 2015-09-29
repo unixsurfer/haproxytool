@@ -9,10 +9,10 @@
 """Manage servers
 
 Usage:
-    haproxytool server [-D DIR | -h] (-r | -s | -e | -d | -R | -n | -t | -p | -W | -i) [--backend=<name>...] [NAME...]
-    haproxytool server [-D DIR | -h] -w VALUE [--backend=<name>...] [NAME...]
-    haproxytool server [-D DIR | -h] (-l | -M)
-    haproxytool server [-D DIR | -h] -m METRIC [--backend=<name>...] [NAME...]
+    haproxytool server [-D DIR -f ] (-r | -s | -e | -d | -R | -n | -t | -p | -W | -i) [--backend=<name>...] [NAME...]
+    haproxytool server [-D DIR ] -w VALUE [--backend=<name>...] [NAME...]
+    haproxytool server [-D DIR ] (-l | -M)
+    haproxytool server [-D DIR ] -m METRIC [--backend=<name>...] [NAME...]
 
 
 Arguments:
@@ -36,6 +36,7 @@ Options:
     -l, --list                show all servers
     -w, --weight              change weight for server
     -W, --get-weight          show weight of server
+    -f, --force               force the disabling a server
     -D DIR, --socket-dir=DIR  directory with HAProxy socket files
                               [default: /var/lib/haproxy]
 
@@ -128,7 +129,7 @@ class ServerCommand(object):
     def disable(self):
         nbservers = len(self.servers)
         msg = "Are you sure we want to disable {n} servers".format(n=nbservers)
-        if nbservers > 1:
+        if not self.args['--force'] and nbservers > 1:
             if not read_user(msg):
                 sys.exit('Aborted by user')
 
