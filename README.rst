@@ -197,10 +197,10 @@ Commands for servers
     Manage servers
 
     Usage:
-        haproxytool server [-D DIR | -h] (-r | -s | -e | -d | -R | -n | -t | -p | -W) [--backend=<name>...] [NAME...]
-        haproxytool server [-D DIR | -h] -w VALUE [--backend=<name>...] [NAME...]
-        haproxytool server [-D DIR | -h] (-l | -M)
-        haproxytool server [-D DIR | -h] -m METRIC [--backend=<name>...] [NAME...]
+        haproxytool server [-D DIR -f ] (-r | -s | -e | -d | -R | -n | -t | -p | -W | -i) [--backend=<name>...] [NAME...]
+        haproxytool server [-D DIR ] -w VALUE [--backend=<name>...] [NAME...]
+        haproxytool server [-D DIR ] (-l | -M)
+        haproxytool server [-D DIR ] -m METRIC [--backend=<name>...] [NAME...]
 
 
     Arguments:
@@ -217,15 +217,16 @@ Commands for servers
         -t, --maintenance         set server in maintenance mode
         -r, --requests            show requests
         -p, --process             show process number
+        -i, --sid                 show server ID
         -s, --status              show status
         -m, --metric              show value of a metric
         -M, --list-metrics        show all metrics
         -l, --list                show all servers
         -w, --weight              change weight for server
         -W, --get-weight          show weight of server
+        -f, --force               force the disabling a server
         -D DIR, --socket-dir=DIR  directory with HAProxy socket files
-                                  [default: /var/lib/haproxy]
-
+                                [default: /var/lib/haproxy]
 * List all servers
 
 ::
@@ -380,9 +381,15 @@ description.
 ::
 
     % haproxytool server -d bck_all_srv1
+    Are you sure we want to disable 3 servers y/n?: y
     bck_all_srv1 disabled in backend1_proc34 backend
     bck_all_srv1 disabled in backend_proc1 backend
     bck_all_srv1 disabled in backend2_proc34 backend
+
+:NOTE: When more than 1 server is about to be disabled, user is prompt to
+       confirm the action. Use -f to force disabling servers.
+
+::
 
     % haproxytool server -s bck_all_srv1
     # backendname servername
