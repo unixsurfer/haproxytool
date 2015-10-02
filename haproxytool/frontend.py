@@ -10,10 +10,10 @@
 """Manage frontends
 
 Usage:
-    haproxytool frontend [-D DIR | -h] (-r | -s | -o | -e | -d | -t | -p | -i) [NAME...]
-    haproxytool frontend [-D DIR | -h] -w OPTION VALUE [NAME...]
-    haproxytool frontend [-D DIR | -h] (-l | -M)
-    haproxytool frontend [-D DIR | -h] -m METRIC [NAME...]
+    haproxytool frontend [-D DIR ] (-r | -s | -o | -e | -d | -t | -p | -i) [NAME...]
+    haproxytool frontend [-D DIR ] -w OPTION VALUE [NAME...]
+    haproxytool frontend [-D DIR ] (-l | -M)
+    haproxytool frontend [-D DIR ] -m METRIC [NAME...]
 
 Arguments:
     DIR     Directory path

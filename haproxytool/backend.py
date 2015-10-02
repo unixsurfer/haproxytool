@@ -9,9 +9,9 @@
 """Manage backends
 
 Usage:
-    haproxytool backend [-D DIR | -h] (-S | -r | -p | -s | -i) [NAME...]
-    haproxytool backend [-D DIR | -h] (-l | -M)
-    haproxytool backend [-D DIR | -h] -m METRIC [NAME...]
+    haproxytool backend [-D DIR ] (-S | -r | -p | -s | -i) [NAME...]
+    haproxytool backend [-D DIR ] (-l | -M)
+    haproxytool backend [-D DIR ] -m METRIC [NAME...]
 
 Arguments:
     DIR     Directory path
