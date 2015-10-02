@@ -1,9 +1,19 @@
 CHANGES
 =======
 
-0.3.1
+0.3.2
 -----
 
+* RELEASE 0.3.2 version
+* update README for the new usage on server command
+* remove unused sorted_nicely function
+* support for abort also when we drain servers or set them in maintenance
+* update README for the new option(f) in server subcommand
+* add six module in requirements as it was introduced by 2819db4f
+* add -f option to force disabling servers
+* prompt user when he disables server
+* remove unnecessary brackets
+* add a read_user input function
 * RELEASE 0.3.1 version
 * use the correct state when set a server in maintenance mode
 * Fix typo in README.RST
