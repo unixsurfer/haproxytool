@@ -38,3 +38,14 @@ def read_user(msg):
         return True
     else:
         return False
+
+
+def abort_command(command, object_type, objects, force):
+    nbobjects = len(objects)
+    msg = "Are you sure we want to {cmd} {n} {obg_type}".format(
+        cmd=command, n=nbobjects, obg_type=object_type)
+    if not force and nbobjects > 1:
+        if not read_user(msg):
+            return True
+
+    return False

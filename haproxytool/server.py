@@ -9,8 +9,9 @@
 """Manage servers
 
 Usage:
-    haproxytool server [-D DIR -f ] (-r | -s | -e | -d | -R | -n | -t | -p | -W | -i) [--backend=<name>...] [NAME...]
+    haproxytool server [-D DIR ] (-r | -s | -e | -R | -p | -W | -i) [--backend=<name>...] [NAME...]
     haproxytool server [-D DIR ] -w VALUE [--backend=<name>...] [NAME...]
+    haproxytool server [-D DIR -f ] (-d | -t | -n) [--backend=<name>...] [NAME...]
     haproxytool server [-D DIR ] (-l | -M)
     haproxytool server [-D DIR ] -m METRIC [--backend=<name>...] [NAME...]
 
@@ -48,7 +49,7 @@ from operator import methodcaller
 from haproxyadmin.exceptions import (SocketApplicationError,
                                      SocketConnectionError,
                                      SocketPermissionError)
-from .utils import get_arg_option, read_user
+from .utils import get_arg_option, abort_command
 
 
 class ServerCommand(object):
@@ -127,11 +128,9 @@ class ServerCommand(object):
                 print("{} failed to be enabled:{}".format(server.name, error))
 
     def disable(self):
-        nbservers = len(self.servers)
-        msg = "Are you sure we want to disable {n} servers".format(n=nbservers)
-        if not self.args['--force'] and nbservers > 1:
-            if not read_user(msg):
-                sys.exit('Aborted by user')
+        if abort_command('disable', 'servers', self.servers,
+                         self.args['--force']):
+            sys.exit('Aborted by user')
 
         for server in self.servers:
             try:
@@ -153,6 +152,10 @@ class ServerCommand(object):
                                                                 error))
 
     def drain(self):
+        if abort_command('drain', 'servers', self.servers,
+                         self.args['--force']):
+            sys.exit('Aborted by user')
+
         for server in self.servers:
             try:
                 server.setstate(haproxy.STATE_DRAIN)
@@ -164,6 +167,10 @@ class ServerCommand(object):
                                                                   error))
 
     def maintenance(self):
+        if abort_command('maintenance', 'servers', self.servers,
+                         self.args['--force']):
+            sys.exit('Aborted by user')
+
         for server in self.servers:
             try:
                 server.setstate(haproxy.STATE_MAINT)
