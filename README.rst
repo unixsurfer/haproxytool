@@ -196,9 +196,11 @@ Commands for servers
     % haproxytool server --help
     Manage servers
 
+
     Usage:
-        haproxytool server [-D DIR -f ] (-r | -s | -e | -d | -R | -n | -t | -p | -W | -i) [--backend=<name>...] [NAME...]
+        haproxytool server [-D DIR ] (-r | -s | -e | -R | -p | -W | -i) [--backend=<name>...] [NAME...]
         haproxytool server [-D DIR ] -w VALUE [--backend=<name>...] [NAME...]
+        haproxytool server [-D DIR -f ] (-d | -t | -n) [--backend=<name>...] [NAME...]
         haproxytool server [-D DIR ] (-l | -M)
         haproxytool server [-D DIR ] -m METRIC [--backend=<name>...] [NAME...]
 
@@ -224,9 +226,10 @@ Commands for servers
         -l, --list                show all servers
         -w, --weight              change weight for server
         -W, --get-weight          show weight of server
-        -f, --force               force the disabling a server
+        -f, --force               force an operation
         -D DIR, --socket-dir=DIR  directory with HAProxy socket files
                                 [default: /var/lib/haproxy]
+
 * List all servers
 
 ::
