@@ -22,19 +22,19 @@ Arguments:
     METRIC  Name of a metric, use '-M' to get metric names
 
 Options:
-    -h, --help                show this screen
-    -e, --enable              enable frontend
     -d, --disable             disable frontend
-    -t, --shutdown            shutdown frontend
-    -r, --requests            show requests
-    -p, --process             show process number
+    -e, --enable              enable frontend
+    -h, --help                show this screen
     -i, --iid                 show proxy ID number
-    -s, --status              show status
-    -o, --options             show value of options that can be changed with
-                              '-w' option
+    -l, --list                show all frontends
     -m, --metric              show value of a metric
     -M, --list-metrics        show all metrics
-    -l, --list                show all frontends
+    -o, --options             show value of options that can be changed with
+                              '-w' option
+    -p, --process             show process number
+    -r, --requests            show requests
+    -s, --status              show status
+    -t, --shutdown            shutdown frontend
     -w, --write               change a frontend option
     -D DIR, --socket-dir=DIR  directory with HAProxy socket files
                               [default: /var/lib/haproxy]
