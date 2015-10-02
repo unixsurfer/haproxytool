@@ -19,14 +19,14 @@ Arguments:
 
 Options:
     -h, --help                show this screen
-    -S, --servers             show servers
-    -r, --requests            show requests
-    -p, --process             show process number
     -i, --iid                 show proxy ID number
-    -s, --status              show status
+    -l, --list                show all backends
     -m, --metric              show value of a metric
     -M, --list-metrics        show all metrics
-    -l, --list                show all backends
+    -p, --process             show process number
+    -r, --requests            show requests
+    -s, --status              show status
+    -S, --servers             show servers
     -D DIR, --socket-dir=DIR  directory with HAProxy socket files
                               [default: /var/lib/haproxy]
 
