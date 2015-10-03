@@ -10,8 +10,9 @@
 """Manage frontends
 
 Usage:
-    haproxytool frontend [-D DIR ] (-r | -s | -o | -e | -d | -t | -p | -i) [NAME...]
+    haproxytool frontend [-D DIR ] (-r | -s | -o | -e | -p | -i) [NAME...]
     haproxytool frontend [-D DIR ] -w OPTION VALUE [NAME...]
+    haproxytool frontend [-D DIR -f ] (-d | -t) [NAME...]
     haproxytool frontend [-D DIR ] (-l | -M)
     haproxytool frontend [-D DIR ] -m METRIC [NAME...]
 
@@ -24,6 +25,7 @@ Arguments:
 Options:
     -d, --disable             disable frontend
     -e, --enable              enable frontend
+    -f, --force               force an operation
     -h, --help                show this screen
     -i, --iid                 show proxy ID number
     -l, --list                show all frontends
@@ -47,7 +49,7 @@ from operator import methodcaller
 from haproxyadmin.exceptions import (SocketApplicationError,
                                      SocketConnectionError,
                                      SocketPermissionError)
-from .utils import get_arg_option
+from .utils import get_arg_option, abort_command
 
 
 class FrontendCommand(object):
@@ -104,6 +106,10 @@ class FrontendCommand(object):
                                                           error))
 
     def disable(self):
+        if abort_command('disable', 'frontends', self.frontends,
+                         self.args['--force']):
+            sys.exit('Aborted by user')
+
         for frontend in self.frontends:
             try:
                 frontend.disable()
@@ -113,6 +119,10 @@ class FrontendCommand(object):
                                                            error))
 
     def shutdown(self):
+        if abort_command('shutdown', 'frontends', self.frontends,
+                         self.args['--force']):
+            sys.exit('Aborted by user')
+
         for frontend in self.frontends:
             try:
                 frontend.shutdown()
