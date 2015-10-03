@@ -59,32 +59,36 @@ Commands for frontends
     Manage frontends
 
     Usage:
-        haproxytool frontend [-D DIR | -h] (-r | -s | -o | -e | -d | -t | -p) [NAME...]
-        haproxytool frontend [-D DIR | -h] -w OPTION VALUE [NAME...]
-        haproxytool frontend [-D DIR | -h] (-l | -M)
-        haproxytool frontend [-D DIR | -h] -m METRIC [NAME...]
+        haproxytool frontend [-D DIR ] (-r | -s | -o | -e | -p | -i) [NAME...]
+        haproxytool frontend [-D DIR ] -w OPTION VALUE [NAME...]
+        haproxytool frontend [-D DIR -f ] (-d | -t) [NAME...]
+        haproxytool frontend [-D DIR ] (-l | -M)
+        haproxytool frontend [-D DIR ] -m METRIC [NAME...]
 
-    Arguments:
-        DIR     Directory path
-        VALUE   Value to set
-        OPTION  Setting name
-        METRIC  Name of a metric, use '-M' to get metric names
+        Arguments:
+            DIR     Directory path
+            VALUE   Value to set
+            OPTION  Setting name
+            METRIC  Name of a metric, use '-M' to get metric names
 
-    Options:
-        -h, --help                show this screen
-        -e, --enable              enable frontend
-        -d, --disable             disable frontend
-        -t, --shutdown            shutdown frontend
-        -r, --requests            show requests
-        -p, --process             show process number
-        -s, --status              show status
-        -o, --options             show value of options that can be changed with '-w'
-        -m, --metric              show value of a metric
-        -M, --list-metrics        show all metrics
-        -l, --list                show all frontends
-        -w, --write               change a frontend option
-        -D DIR, --socket-dir=DIR  directory with HAProxy socket files
-                                  [default: /var/lib/haproxy]
+        Options:
+            -d, --disable             disable frontend
+            -e, --enable              enable frontend
+            -f, --force               force an operation
+            -h, --help                show this screen
+            -i, --iid                 show proxy ID number
+            -l, --list                show all frontends
+            -m, --metric              show value of a metric
+            -M, --list-metrics        show all metrics
+            -o, --options             show value of options that can be changed with
+                                    '-w' option
+            -p, --process             show process number
+            -r, --requests            show requests
+            -s, --status              show status
+            -t, --shutdown            shutdown frontend
+            -w, --write               change a frontend option
+            -D DIR, --socket-dir=DIR  directory with HAProxy socket files
+                                    [default: /var/lib/haproxy]
 
 * Show status of frontend(s)
 
