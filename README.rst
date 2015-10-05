@@ -37,6 +37,7 @@ Here is the basic syntax to start with::
     -v, --version             show version.
 
     Available haproxytool commands are:
+        haproxy   HAProxy operations
         frontend  Frontend operations
         backend   Backend operations
         server    Server operations
@@ -47,6 +48,43 @@ Here is the basic syntax to start with::
     See 'haproxytool help <command>' for more information on a specific command.
 
 Keep reading for more details about each command.
+
+Commands for HAProxy
+~~~~~~~~~~~~~~~~~~~~~~
+
+* Usage
+
+::
+
+    % haproxytool haproxy --help
+    Manage haproxy
+
+    Usage:
+        haproxytool haproxy [-D DIR ] [-a | -c | -C | -e | -i | -o | -r]
+        haproxytool haproxy [-D DIR ] -m METRIC [-w OPTION VALUE]
+        haproxytool haproxy [-D DIR ] -w OPTION VALUE
+
+    Arguments:
+        DIR     Directory path
+        OPTION  Option name to set a VALUE
+        VALUE   Value to set
+        METRIC  Name of a metric, use '-M' to get metric names
+
+    Options:
+        -a, --all                   clear all statistics counters
+        -c, --clear                 clear max values of statistics counters
+        -C, --maxconn               show configured maximum connection limit
+        -e, --errors                show last know request and response errors
+        -i, --info                  show haproxy stats
+        -m, --metric                show value of a METRIC
+        -M, --list-metrics          show all metrics
+        -o, --options               show value of options that can be changed with
+                                    '-w' option
+        -r, --requests              show total cumulative number of requests
+                                    processed by all processes
+        -w, --write                 set VALUE of a haproxy OPTION
+        -D DIR, --socket-dir=DIR    directory with HAProxy socket files
+                                    [default: /var/lib/haproxy]
 
 Commands for frontends
 ~~~~~~~~~~~~~~~~~~~~~~

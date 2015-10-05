@@ -13,6 +13,7 @@ Options:
   -v, --version             show version.
 
 Available haproxytool commands are:
+    haproxy   HAProxy operations
     frontend  Frontend operations
     backend   Backend operations
     server    Server operations
