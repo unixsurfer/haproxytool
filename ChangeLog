@@ -1,6 +1,20 @@
 CHANGES
 =======
 
+0.4.0
+-----
+
+* RELEASE 0.4.0 version
+* add in README section for haproxy command
+* add support for managing some options/metric for haproxy
+* version is set in __init__, use that one
+* update README to reflect the changes in frontend CLI
+* add support for force and abort operations in frontend
+* order frontend options alphabetically
+* we don't need help option mentioned in the usage header
+* order backend options alphabetically
+* order server options alphabetically
+
 0.3.2
 -----
 
@@ -14,6 +28,10 @@ CHANGES
 * prompt user when he disables server
 * remove unnecessary brackets
 * add a read_user input function
+
+0.3.1
+-----
+
 * RELEASE 0.3.1 version
 * use the correct state when set a server in maintenance mode
 * Fix typo in README.RST

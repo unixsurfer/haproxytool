@@ -9,6 +9,6 @@
 #             |_|                  |___/'
 __title__ = 'haproxytool'
 __author__ = 'Pavlos Parissis'
-__version__ = '0.3.2'
+__version__ = '0.4.0'
 __license__ = 'Apache 2.0'
 __copyright__ = 'Copyright 2015 Pavlos Parissis'
