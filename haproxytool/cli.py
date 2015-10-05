@@ -35,7 +35,8 @@ def main():
     call_main = methodcaller('main')
 
     our_cmds = [
-        'frontend', 'backend', 'server', 'dump', 'haproxy', 'map', 'acl'
+        'haproxy', 'frontend', 'backend', 'server', 'dump', 'haproxy', 'map',
+        'acl'
     ]
     if args['<command>'] in our_cmds:
         # get module path
