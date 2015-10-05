@@ -26,10 +26,11 @@ See 'haproxytool help <command>' for more information on a specific command.
 import sys
 from docopt import docopt
 from operator import methodcaller
+from haproxytool import __version__ as version
 
 
 def main():
-    args = docopt(__doc__, version='haproxytool 0.3.0', options_first=True)
+    args = docopt(__doc__, version=version, options_first=True)
 
     call_main = methodcaller('main')
 
