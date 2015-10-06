@@ -60,9 +60,11 @@ Commands for HAProxy
     Manage haproxy
 
     Usage:
-        haproxytool haproxy [-D DIR ] [-a | -c | -C | -e | -i | -o | -r]
+        haproxytool haproxy [-D DIR ] [ -a | -A | -C | -e | -i | -M | -o | -r]
+                            [-u | -U | -V | -R ]
         haproxytool haproxy [-D DIR ] -m METRIC [-w OPTION VALUE]
         haproxytool haproxy [-D DIR ] -w OPTION VALUE
+        haproxytool haproxy [-D DIR ] -c COMMAND
 
     Arguments:
         DIR     Directory path
@@ -72,7 +74,8 @@ Commands for HAProxy
 
     Options:
         -a, --all                   clear all statistics counters
-        -c, --clear                 clear max values of statistics counters
+        -A, --clear                 clear max values of statistics counters
+        -c, --command               send a command to HAProxy
         -C, --maxconn               show configured maximum connection limit
         -e, --errors                show last know request and response errors
         -i, --info                  show haproxy stats
@@ -82,6 +85,10 @@ Commands for HAProxy
                                     '-w' option
         -r, --requests              show total cumulative number of requests
                                     processed by all processes
+        -u, --uptime-secs           show uptime of HAProxy process in seconds
+        -U, --uptime                show uptime of HAProxy process
+        -V, --hap-version           show version of HAProxy
+        -R, --release-date          show release date
         -w, --write                 set VALUE of a haproxy OPTION
         -D DIR, --socket-dir=DIR    directory with HAProxy socket files
                                     [default: /var/lib/haproxy]
