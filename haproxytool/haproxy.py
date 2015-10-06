@@ -10,9 +10,11 @@
 """Manage haproxy
 
 Usage:
-    haproxytool haproxy [-D DIR ] [-a | -c | -C | -e | -i | -M | -o | -r]
+    haproxytool haproxy [-D DIR ] [ -a | -A | -C | -e | -i | -M | -o | -r]
+                        [-u | -U | -V | -R ]
     haproxytool haproxy [-D DIR ] -m METRIC [-w OPTION VALUE]
     haproxytool haproxy [-D DIR ] -w OPTION VALUE
+    haproxytool haproxy [-D DIR ] -c COMMAND
 
 Arguments:
     DIR     Directory path
@@ -22,7 +24,8 @@ Arguments:
 
 Options:
     -a, --all                   clear all statistics counters
-    -c, --clear                 clear max values of statistics counters
+    -A, --clear                 clear max values of statistics counters
+    -c, --command               send a command to HAProxy
     -C, --maxconn               show configured maximum connection limit
     -e, --errors                show last know request and response errors
     -i, --info                  show haproxy stats
@@ -32,6 +35,10 @@ Options:
                                 '-w' option
     -r, --requests              show total cumulative number of requests
                                 processed by all processes
+    -u, --uptime-secs           show uptime of HAProxy process in seconds
+    -U, --uptime                show uptime of HAProxy process
+    -V, --hap-version           show version of HAProxy
+    -R, --release-date          show release date
     -w, --write                 set VALUE of a haproxy OPTION
     -D DIR, --socket-dir=DIR    directory with HAProxy socket files
                                 [default: /var/lib/haproxy]
@@ -44,7 +51,7 @@ from operator import methodcaller
 from haproxyadmin.exceptions import (SocketApplicationError, CommandFailed,
                                      SocketConnectionError,
                                      SocketPermissionError)
-from .utils import get_arg_option
+from .utils import get_arg_option, print_cmd_output
 
 OPTIONS = {
     'maxconn': 'setmaxconn',
@@ -67,15 +74,17 @@ class HAProxyCommand(object):
         self.hap.clearcounters()
         print("OK")
 
+    def command(self):
+        cmd = self.args['COMMAND']
+        output = self.hap.command(cmd)
+        print_cmd_output(output)
+
     def maxconn(self):
         print(self.hap.maxconn)
 
     def errors(self):
-        _errors = self.hap.errors()
-        for error_per_proc in _errors:
-            print("Process number: {n}".format(n=error_per_proc[0]))
-            for line in error_per_proc[1]:
-                print(line)
+        errors = self.hap.errors()
+        print_cmd_output(errors)
 
     def info(self):
         _info = self.hap.info()
@@ -107,6 +116,18 @@ class HAProxyCommand(object):
         call_method = methodcaller(OPTIONS[option], value)
         call_method(self.hap)
         print("set {opt} to {val}".format(opt=option, val=value))
+
+    def uptime(self):
+        print(self.hap.uptime)
+
+    def uptimesecs(self):
+        print(self.hap.uptimesec)
+
+    def releasedate(self):
+        print(self.hap.releasedate)
+
+    def hapversion(self):
+        print(self.hap.version)
 
     def metric(self):
         metric = self.args['METRIC']
