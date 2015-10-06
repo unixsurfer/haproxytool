@@ -1,6 +1,14 @@
 CHANGES
 =======
 
+0.4.1
+-----
+
+* RELEASE 0.4.1 version
+* add more functionality to haproxy command
+* add a function to print a common structure we get from haproxyadmin
+* BUGFIX: add missing -M argument in haproxy command
+
 0.4.0
 -----
 
