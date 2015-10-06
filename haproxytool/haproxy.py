@@ -10,7 +10,7 @@
 """Manage haproxy
 
 Usage:
-    haproxytool haproxy [-D DIR ] [-a | -c | -C | -e | -i | -o | -r]
+    haproxytool haproxy [-D DIR ] [-a | -c | -C | -e | -i | -M | -o | -r]
     haproxytool haproxy [-D DIR ] -m METRIC [-w OPTION VALUE]
     haproxytool haproxy [-D DIR ] -w OPTION VALUE
 
