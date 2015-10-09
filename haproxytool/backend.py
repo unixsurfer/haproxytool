@@ -107,7 +107,7 @@ def main():
     except (SocketApplicationError,
             SocketConnectionError,
             SocketPermissionError) as error:
-        print(error, error.socket_file)
+        print(error)
         sys.exit(1)
     except ValueError as error:
         print(error)
