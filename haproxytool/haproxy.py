@@ -12,7 +12,7 @@
 Usage:
     haproxytool haproxy [-D DIR ] [ -a | -A | -C | -e | -i | -M | -o | -r]
                         [-u | -U | -V | -R ]
-    haproxytool haproxy [-D DIR ] -m METRIC [-w OPTION VALUE]
+    haproxytool haproxy [-D DIR ] -m METRIC
     haproxytool haproxy [-D DIR ] -w OPTION VALUE
     haproxytool haproxy [-D DIR ] -c COMMAND
 
@@ -39,7 +39,7 @@ Options:
     -U, --uptime                show uptime of HAProxy process
     -V, --hap-version           show version of HAProxy
     -R, --release-date          show release date
-    -w, --write                 set VALUE of a haproxy OPTION
+    -w, --write                 set VALUE for an OPTION
     -D DIR, --socket-dir=DIR    directory with HAProxy socket files
                                 [default: /var/lib/haproxy]
 
