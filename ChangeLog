@@ -1,6 +1,16 @@
 CHANGES
 =======
 
+0.4.2
+-----
+
+* RELEASE 0.4.2 version
+* update haproxy cmd usage in README
+* BUGFIX: options for haproxy command are required elements
+* BUGFIX: don't mix w and m arguments and a cosmetic change in help
+* exception message mentions socket file, so no need to print it
+* update usage section of haproxy command in README
+
 0.4.1
 -----
 
