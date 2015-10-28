@@ -737,4 +737,4 @@ Contacts
 
 **Project website**: https://github.com/unixsurfer/haproxytool
 
-**Author**: Palvos Parissis <pavlos.parissis@gmail.com>
+**Author**: Pavlos Parissis <pavlos.parissis@gmail.com>
