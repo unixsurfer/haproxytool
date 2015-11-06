@@ -61,7 +61,7 @@ Commands for HAProxy
 
     Usage:
         haproxytool haproxy [-D DIR ] (-a | -A | -C | -e | -i | -M | -o | -r | -u |
-                                       -U | -V | -R)
+                                       -U | -V | -R | -p)
         haproxytool haproxy [-D DIR ] -m METRIC
         haproxytool haproxy [-D DIR ] -w OPTION VALUE
         haproxytool haproxy [-D DIR ] -c COMMAND
@@ -83,6 +83,7 @@ Commands for HAProxy
         -M, --list-metrics          show all metrics
         -o, --options               show value of options that can be changed with
                                     '-w' option
+        -p, --pids                  show PIDs of HAProxy processes
         -r, --requests              show total cumulative number of requests
                                     processed by all processes
         -u, --uptime-secs           show uptime of HAProxy process in seconds

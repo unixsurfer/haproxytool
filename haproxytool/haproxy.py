@@ -11,7 +11,7 @@
 
 Usage:
     haproxytool haproxy [-D DIR ] (-a | -A | -C | -e | -i | -M | -o | -r | -u |
-                                   -U | -V | -R)
+                                   -U | -V | -R | -p)
     haproxytool haproxy [-D DIR ] -m METRIC
     haproxytool haproxy [-D DIR ] -w OPTION VALUE
     haproxytool haproxy [-D DIR ] -c COMMAND
@@ -33,6 +33,7 @@ Options:
     -M, --list-metrics          show all metrics
     -o, --options               show value of options that can be changed with
                                 '-w' option
+    -p, --pids                  show PIDs of HAProxy processes
     -r, --requests              show total cumulative number of requests
                                 processed by all processes
     -u, --uptime-secs           show uptime of HAProxy process in seconds
@@ -139,6 +140,10 @@ class HAProxyCommand(object):
     def listmetrics(self):
         for metric in haproxy.HAPROXY_METRICS:
             print(metric)
+
+    def pids(self):
+        for pid in self.hap.processids:
+            print(pid)
 
 
 def main():
