@@ -28,9 +28,9 @@ Options:
     -f, --force               force an operation
     -h, --help                show this screen
     -i, --iid                 show proxy ID number
-    -l, --list                show all frontends
+    -l, --show                show all frontends
     -m, --metric              show value of a metric
-    -M, --list-metrics        show all metrics
+    -M, --show-metrics        show all metrics
     -o, --options             show value of options that can be changed with
                               '-w' option
     -p, --process             show process number
@@ -72,7 +72,7 @@ class FrontendCommand(object):
 
         return frontends
 
-    def list(self):
+    def show(self):
         for frontend in self.frontends:
             print("{}".format(frontend.name))
 
@@ -156,7 +156,7 @@ class FrontendCommand(object):
         for frontend in self.frontends:
             print("{} {}".format(frontend.name, frontend.metric(metric)))
 
-    def listmetrics(self):
+    def showmetrics(self):
         for metric in haproxy.FRONTEND_METRICS:
             print(metric)
 

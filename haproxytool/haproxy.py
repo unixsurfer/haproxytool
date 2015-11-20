@@ -30,7 +30,7 @@ Options:
     -e, --errors                show last know request and response errors
     -i, --info                  show haproxy stats
     -m, --metric                show value of a METRIC
-    -M, --list-metrics          show all metrics
+    -M, --show-metrics          show all metrics
     -o, --options               show value of options that can be changed with
                                 '-w' option
     -p, --pids                  show PIDs of HAProxy processes
@@ -137,7 +137,7 @@ class HAProxyCommand(object):
 
         print("{name} = {val}".format(name=metric, val=self.hap.metric(metric)))
 
-    def listmetrics(self):
+    def showmetrics(self):
         for metric in haproxy.HAPROXY_METRICS:
             print(metric)
 

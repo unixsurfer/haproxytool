@@ -27,9 +27,9 @@ Options:
     -f, --force               force an operation
     -h, --help                show this screen
     -i, --sid                 show server ID
-    -l, --list                show all servers
+    -l, --show                show all servers
     -m, --metric              show value of a metric
-    -M, --list-metrics        show all metrics
+    -M, --show-metrics        show all metrics
     -n, --drain               drain server
     -p, --process             show process number
     -r, --requests            show requests
@@ -89,7 +89,7 @@ class ServerCommand(object):
 
         return servers
 
-    def list(self):
+    def show(self):
         print("# backendname servername")
         for server in self.servers:
             print("{:<30} {}".format(server.backendname, server.name))
@@ -213,7 +213,7 @@ class ServerCommand(object):
             print("{:<30} {:<42} {}".format(server.backendname, server.name,
                                             server.weight))
 
-    def listmetrics(self):
+    def showmetrics(self):
         for metric in haproxy.SERVER_METRICS:
             print(metric)
 

@@ -20,9 +20,9 @@ Arguments:
 Options:
     -h, --help                show this screen
     -i, --iid                 show proxy ID number
-    -l, --list                show all backends
+    -l, --show                show all backends
     -m, --metric              show value of a metric
-    -M, --list-metrics        show all metrics
+    -M, --show-metrics        show all metrics
     -p, --process             show process number
     -r, --requests            show requests
     -s, --status              show status
@@ -60,7 +60,7 @@ class BackendCommand(object):
 
         return backends
 
-    def list(self):
+    def show(self):
         for backend in self.backends:
             print("{}".format(backend.name))
 
@@ -94,7 +94,7 @@ class BackendCommand(object):
         for backend in self.backends:
             print("{} {}".format(backend.name, backend.metric(metric)))
 
-    def listmetrics(self):
+    def showmetrics(self):
         for metric in haproxy.SERVER_METRICS:
             print(metric)
 
