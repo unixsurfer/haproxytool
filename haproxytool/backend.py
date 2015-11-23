@@ -95,7 +95,7 @@ class BackendCommand(object):
             print("{} {}".format(backend.name, backend.metric(metric)))
 
     def showmetrics(self):
-        for metric in haproxy.SERVER_METRICS:
+        for metric in haproxy.BACKEND_METRICS:
             print(metric)
 
 
