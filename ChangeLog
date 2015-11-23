@@ -1,6 +1,15 @@
 CHANGES
 =======
 
+0.4.3
+-----
+
+* RELEASE 0.4.3 version
+* Use correct constant for backend metrics
+* Rename `list` CLI argument to `show`
+* add support for showing pids of HAProxy processes
+* fix typo in README
+
 0.4.2
 -----
 
