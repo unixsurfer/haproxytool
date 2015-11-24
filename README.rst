@@ -246,9 +246,9 @@ Commands for servers
     % haproxytool server --help
     Manage servers
 
-
     Usage:
-        haproxytool server [-D DIR ] (-r | -s | -e | -R | -p | -W | -i) [--backend=<name>...] [NAME...]
+        haproxytool server [-D DIR ] (-r | -s | -e | -R | -p | -W | -i | -c | -C |
+                                    -S) [--backend=<name>...] [NAME...]
         haproxytool server [-D DIR ] -w VALUE [--backend=<name>...] [NAME...]
         haproxytool server [-D DIR -f ] (-d | -t | -n) [--backend=<name>...] [NAME...]
         haproxytool server [-D DIR ] (-l | -M)
@@ -261,22 +261,25 @@ Commands for servers
         METRIC  Name of a metric, use '-M' to get metric names
 
     Options:
-        -h, --help                show this screen
-        -e, --enable              enable server
+        -c, --show-check-code     show check code
+        -C, --show-check-status   show check status
         -d, --disable             disable server
-        -R, --ready               set server in normal mode
-        -n, --drain               drain server
-        -t, --maintenance         set server in maintenance mode
-        -r, --requests            show requests
-        -p, --process             show process number
+        -e, --enable              enable server
+        -f, --force               force an operation
+        -h, --help                show this screen
         -i, --sid                 show server ID
-        -s, --status              show status
+        -l, --show                show all servers
         -m, --metric              show value of a metric
         -M, --show-metrics        show all metrics
-        -l, --show                show all servers
+        -n, --drain               drain server
+        -p, --process             show process number
+        -r, --requests            show requests
+        -R, --ready               set server in normal mode
+        -s, --status              show status
+        -S, --show-last-status    show last check status
+        -t, --maintenance         set server in maintenance mode
         -w, --weight              change weight for server
         -W, --get-weight          show weight of server
-        -f, --force               force an operation
         -D DIR, --socket-dir=DIR  directory with HAProxy socket files
                                 [default: /var/lib/haproxy]
 

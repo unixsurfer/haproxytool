@@ -9,7 +9,8 @@
 """Manage servers
 
 Usage:
-    haproxytool server [-D DIR ] (-r | -s | -e | -R | -p | -W | -i) [--backend=<name>...] [NAME...]
+    haproxytool server [-D DIR ] (-r | -s | -e | -R | -p | -W | -i | -c | -C |
+                                  -S) [--backend=<name>...] [NAME...]
     haproxytool server [-D DIR ] -w VALUE [--backend=<name>...] [NAME...]
     haproxytool server [-D DIR -f ] (-d | -t | -n) [--backend=<name>...] [NAME...]
     haproxytool server [-D DIR ] (-l | -M)
@@ -22,6 +23,8 @@ Arguments:
     METRIC  Name of a metric, use '-M' to get metric names
 
 Options:
+    -c, --show-check-code     show check code
+    -C, --show-check-status   show check status
     -d, --disable             disable server
     -e, --enable              enable server
     -f, --force               force an operation
@@ -35,6 +38,7 @@ Options:
     -r, --requests            show requests
     -R, --ready               set server in normal mode
     -s, --status              show status
+    -S, --show-last-status    show last check status
     -t, --maintenance         set server in maintenance mode
     -w, --weight              change weight for server
     -W, --get-weight          show weight of server
@@ -216,6 +220,24 @@ class ServerCommand(object):
     def showmetrics(self):
         for metric in haproxy.SERVER_METRICS:
             print(metric)
+
+    def showcheckcode(self):
+        print("# backendname servername")
+        for server in self.servers:
+            print("{:<30} {:<42} {}".format(server.backendname, server.name,
+                                            server.check_code))
+
+    def showcheckstatus(self):
+        print("# backendname servername")
+        for server in self.servers:
+            print("{:<30} {:<42} {}".format(server.backendname, server.name,
+                                            server.check_status))
+
+    def showlaststatus(self):
+        print("# backendname servername")
+        for server in self.servers:
+            print("{:<30} {:<42} {}".format(server.backendname, server.name,
+                                            server.last_status))
 
 
 def main():
