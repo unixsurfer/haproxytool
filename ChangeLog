@@ -1,6 +1,13 @@
 CHANGES
 =======
 
+0.4.4
+-----
+
+* RELEASE 0.4.4 version
+* Show configured session limit for frontends
+* Show various server's status values
+
 0.4.3
 -----
 
