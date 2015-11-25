@@ -10,7 +10,7 @@
 """Manage frontends
 
 Usage:
-    haproxytool frontend [-D DIR ] (-r | -s | -o | -e | -p | -i) [NAME...]
+    haproxytool frontend [-D DIR ] (-c | -r | -s | -o | -e | -p | -i) [NAME...]
     haproxytool frontend [-D DIR ] -w OPTION VALUE [NAME...]
     haproxytool frontend [-D DIR -f ] (-d | -t) [NAME...]
     haproxytool frontend [-D DIR ] (-l | -M)
@@ -23,6 +23,7 @@ Arguments:
     METRIC  Name of a metric, use '-M' to get metric names
 
 Options:
+    -c, --showmaxconn         show max sessions
     -d, --disable             disable frontend
     -e, --enable              enable frontend
     -f, --force               force an operation
@@ -159,6 +160,10 @@ class FrontendCommand(object):
     def showmetrics(self):
         for metric in haproxy.FRONTEND_METRICS:
             print(metric)
+
+    def showmaxconn(self):
+        for frontend in self.frontends:
+            print("{n} {s}".format(n=frontend.name, s=frontend.maxconn))
 
 
 def main():

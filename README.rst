@@ -105,7 +105,7 @@ Commands for frontends
     Manage frontends
 
     Usage:
-        haproxytool frontend [-D DIR ] (-r | -s | -o | -e | -p | -i) [NAME...]
+        haproxytool frontend [-D DIR ] (-c | -r | -s | -o | -e | -p | -i) [NAME...]
         haproxytool frontend [-D DIR ] -w OPTION VALUE [NAME...]
         haproxytool frontend [-D DIR -f ] (-d | -t) [NAME...]
         haproxytool frontend [-D DIR ] (-l | -M)
@@ -118,6 +118,7 @@ Commands for frontends
             METRIC  Name of a metric, use '-M' to get metric names
 
         Options:
+            -c, --showmaxconn         show max sessions
             -d, --disable             disable frontend
             -e, --enable              enable frontend
             -f, --force               force an operation
