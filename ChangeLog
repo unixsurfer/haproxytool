@@ -1,6 +1,13 @@
 CHANGES
 =======
 
+0.4.5
+-----
+
+* RELEASE 0.4.5 version
+* Add a module docstring
+* Make it compatible with haproxyadmin 0.2.0 version
+
 0.4.4
 -----
 
