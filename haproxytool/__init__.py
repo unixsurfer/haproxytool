@@ -7,6 +7,12 @@
 # | | | | (_| | |_) | | | (_) >  <| |_| | || (_) | (_) | |
 # |_| |_|\__,_| .__/|_|  \___/_/\_\\__, |\__\___/ \___/|_|
 #             |_|                  |___/'
+"""
+haproxytool
+~~~~~~~~~~~
+
+A tool to manage HAProxy via stats socket.
+"""
 __title__ = 'haproxytool'
 __author__ = 'Pavlos Parissis'
 __version__ = '0.4.4'
