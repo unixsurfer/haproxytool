@@ -45,7 +45,7 @@ Options:
 """
 import sys
 from docopt import docopt
-from haproxyadmin import haproxy, exceptions
+from haproxyadmin import haproxy, exceptions, FRONTEND_METRICS
 from operator import methodcaller
 from haproxyadmin.exceptions import (SocketApplicationError,
                                      SocketConnectionError,
@@ -151,14 +151,14 @@ class FrontendCommand(object):
 
     def metric(self):
         metric = self.args['METRIC']
-        if metric not in haproxy.FRONTEND_METRICS:
+        if metric not in FRONTEND_METRICS:
             sys.exit("{} no valid metric".format(metric))
 
         for frontend in self.frontends:
             print("{} {}".format(frontend.name, frontend.metric(metric)))
 
     def showmetrics(self):
-        for metric in haproxy.FRONTEND_METRICS:
+        for metric in FRONTEND_METRICS:
             print(metric)
 
     def showmaxconn(self):

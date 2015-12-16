@@ -47,7 +47,7 @@ Options:
 """
 import sys
 from docopt import docopt
-from haproxyadmin import haproxy
+from haproxyadmin import haproxy, HAPROXY_METRICS
 from operator import methodcaller
 from haproxyadmin.exceptions import (SocketApplicationError, CommandFailed,
                                      SocketConnectionError,
@@ -132,7 +132,7 @@ class HAProxyCommand(object):
 
     def metric(self):
         metric = self.args['METRIC']
-        if metric not in haproxy.HAPROXY_METRICS:
+        if metric not in HAPROXY_METRICS:
             sys.exit("{} no valid metric".format(metric))
 
         print("{name} = {val}".format(name=metric, val=self.hap.metric(metric)))
@@ -165,7 +165,7 @@ def main():
     try:
         getattr(cmd, method)()
     except CommandFailed as error:
-            sys.exit("failed with error: {err}".format(err=error))
+        sys.exit("failed with error: {err}".format(err=error))
 
 # This is the standard boilerplate that calls the main() function.
 if __name__ == '__main__':

@@ -33,7 +33,7 @@ Options:
 """
 import sys
 from docopt import docopt
-from haproxyadmin import haproxy
+from haproxyadmin import haproxy, BACKEND_METRICS
 from haproxyadmin.exceptions import (SocketApplicationError,
                                      SocketConnectionError,
                                      SocketPermissionError)
@@ -88,14 +88,14 @@ class BackendCommand(object):
 
     def metric(self):
         metric = self.args['METRIC']
-        if metric not in haproxy.BACKEND_METRICS:
+        if metric not in BACKEND_METRICS:
             sys.exit("{} no valid metric".format(metric))
 
         for backend in self.backends:
             print("{} {}".format(backend.name, backend.metric(metric)))
 
     def showmetrics(self):
-        for metric in haproxy.BACKEND_METRICS:
+        for metric in BACKEND_METRICS:
             print(metric)
 
 

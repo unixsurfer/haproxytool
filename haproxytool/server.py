@@ -3,6 +3,7 @@
 # vim:fenc=utf-8
 #
 # pylint: disable=superfluous-parens
+# pylint: disable=missing-docstring
 #
 # Created by: Pavlos Parissis <pavlos.parissis@gmail.com>
 #
@@ -48,7 +49,9 @@ Options:
 """
 import sys
 from docopt import docopt
-from haproxyadmin import haproxy, exceptions
+from haproxyadmin import (haproxy, exceptions, SERVER_METRICS, STATE_ENABLE,
+                          STATE_DISABLE, STATE_READY, STATE_DRAIN,
+                          STATE_MAINT)
 from operator import methodcaller
 from haproxyadmin.exceptions import (SocketApplicationError,
                                      SocketConnectionError,
@@ -125,7 +128,7 @@ class ServerCommand(object):
     def enable(self):
         for server in self.servers:
             try:
-                server.setstate(haproxy.STATE_ENABLE)
+                server.setstate(STATE_ENABLE)
                 print("{} enabled in {} backend".format(server.name,
                                                         server.backendname))
             except exceptions.CommandFailed as error:
@@ -138,7 +141,7 @@ class ServerCommand(object):
 
         for server in self.servers:
             try:
-                server.setstate(haproxy.STATE_DISABLE)
+                server.setstate(STATE_DISABLE)
                 print("{} disabled in {} backend".format(server.name,
                                                          server.backendname))
             except exceptions.CommandFailed as error:
@@ -147,10 +150,9 @@ class ServerCommand(object):
     def ready(self):
         for server in self.servers:
             try:
-                server.setstate(haproxy.STATE_READY)
+                server.setstate(STATE_READY)
                 print("{} set to ready in {} backend".format(
-                    server.name, server.backendname)
-                )
+                    server.name, server.backendname))
             except exceptions.CommandFailed as error:
                 print("{} failed to set normal state:{}".format(server.name,
                                                                 error))
@@ -162,10 +164,9 @@ class ServerCommand(object):
 
         for server in self.servers:
             try:
-                server.setstate(haproxy.STATE_DRAIN)
+                server.setstate(STATE_DRAIN)
                 print("{} set to drain in {} backend".format(
-                    server.name, server.backendname)
-                )
+                    server.name, server.backendname))
             except exceptions.CommandFailed as error:
                 print("{} failed to set in drain state:{}".format(server.name,
                                                                   error))
@@ -177,10 +178,9 @@ class ServerCommand(object):
 
         for server in self.servers:
             try:
-                server.setstate(haproxy.STATE_MAINT)
+                server.setstate(STATE_MAINT)
                 print("{} set to maintenance in {} backend".format(
-                    server.name, server.backendname)
-                )
+                    server.name, server.backendname))
             except exceptions.CommandFailed as error:
                 print("{} failed to set to maintenance state:{}".format(
                     server.name, error))
@@ -203,7 +203,7 @@ class ServerCommand(object):
 
     def metric(self):
         metric = self.args['METRIC']
-        if metric not in haproxy.SERVER_METRICS:
+        if metric not in SERVER_METRICS:
             sys.exit("{} no valid metric".format(metric))
 
         print("# backendname servername")
@@ -218,7 +218,7 @@ class ServerCommand(object):
                                             server.weight))
 
     def showmetrics(self):
-        for metric in haproxy.SERVER_METRICS:
+        for metric in SERVER_METRICS:
             print(metric)
 
     def showcheckcode(self):
