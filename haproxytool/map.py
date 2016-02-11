@@ -55,7 +55,7 @@ class MapCommand(object):
         try:
             for line in self.hap.show_map(mapid=mapid):
                 print(line)
-        except CommandFailed as error:
+        except (CommandFailed, ValueError) as error:
             print(error)
             sys.exit(1)
 
