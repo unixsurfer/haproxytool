@@ -55,7 +55,8 @@ from haproxyadmin import (haproxy, exceptions, SERVER_METRICS, STATE_ENABLE,
 from operator import methodcaller
 from haproxyadmin.exceptions import (SocketApplicationError,
                                      SocketConnectionError,
-                                     SocketPermissionError)
+                                     SocketPermissionError,
+                                     IncosistentData)
 from .utils import get_arg_option, abort_command
 
 
@@ -104,8 +105,12 @@ class ServerCommand(object):
     def status(self):
         print("# backendname servername")
         for server in self.servers:
+            try:
+                status = server.status
+            except IncosistentData as exc:
+                status = exc.results
             print("{:<30} {:<42} {}".format(server.backendname, server.name,
-                                            server.status))
+                                            status))
 
     def requests(self):
         print("# backendname servername")
