@@ -1,6 +1,14 @@
 CHANGES
 =======
 
+0.4.6
+-----
+
+* RELEASE 0.4.6 version
+* Catch IncosistentData exception
+* Catch the case of invalid input for map command
+* Update copyright
+
 0.4.5
 -----
 
