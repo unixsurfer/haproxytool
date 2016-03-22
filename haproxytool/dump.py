@@ -9,13 +9,14 @@
 """Dump a collection of information about frontends, backends and servers
 
 Usage:
-    haproxytool dump [-fbsh -D DIR ]
+    haproxytool dump [-fbsh (-D DIR | -F SOCK)]
 
 Options:
     -h, --help                show this screen
     -f, --frontends           show frontends
     -b, --backends            show backends
     -s, --servers             show servers
+    -F SOCK, --socket=SOCK    use specific socket file
     -D DIR, --socket-dir=DIR  directory with HAProxy socket files
                               [default: /var/lib/haproxy]
 
@@ -60,16 +61,28 @@ def main():
     arguments = docopt(__doc__)
     args_passed = False
 
-    try:
-        hap = haproxy.HAProxy(socket_dir=arguments['--socket-dir'])
-    except (SocketApplicationError,
-            SocketConnectionError,
-            SocketPermissionError) as error:
-        print(error)
-        sys.exit(1)
-    except ValueError as error:
-        print(error)
-        sys.exit(1)
+    if (arguments['--socket']):
+        try:
+            hap = haproxy.HAProxy(socket_file=arguments['--socket'])
+        except (SocketApplicationError,
+                SocketConnectionError,
+                SocketPermissionError) as error:
+            print(error)
+            sys.exit(1)
+        except ValueError as error:
+            print(error)
+            sys.exit(1)
+    else:
+        try:
+            hap = haproxy.HAProxy(socket_dir=arguments['--socket-dir'])
+        except (SocketApplicationError,
+                SocketConnectionError,
+                SocketPermissionError) as error:
+            print(error)
+            sys.exit(1)
+        except ValueError as error:
+            print(error)
+            sys.exit(1)
 
     if arguments['--frontends']:
         args_passed = True
