@@ -114,7 +114,7 @@ def main():
     arguments = docopt(__doc__)
     if (arguments['--socket']):
         try:
-            hap = haproxy.HAProxy(socket_file=arguments['--socket-file'])
+            hap = haproxy.HAProxy(socket_file=arguments['--socket'])
         except (SocketApplicationError,
                 SocketConnectionError,
                 SocketPermissionError) as error:
