@@ -9,15 +9,16 @@
 """Manage MAPs
 
 Usage:
-    haproxytool map [-D DIR | -h] -l
-    haproxytool map [-D DIR | -h] (-s | -c ) MAPID
-    haproxytool map [-D DIR | -h] -g MAPID KEY
-    haproxytool map [-D DIR | -h] (-S | -A) MAPID KEY VALUE
-    haproxytool map [-D DIR | -h] -d MAPID KEY
+    haproxytool map [(-D DIR | -F SOCK) | -h] -l
+    haproxytool map [(-D DIR | -F SOCK) | -h] (-s | -c ) MAPID
+    haproxytool map [(-D DIR | -F SOCK) | -h] -g MAPID KEY
+    haproxytool map [(-D DIR | -F SOCK) | -h] (-S | -A) MAPID KEY VALUE
+    haproxytool map [(-D DIR | -F SOCK) | -h] -d MAPID KEY
 
 
 Arguments:
     DIR     Directory path
+    SOCK    Socket file
     MAPID   ID of the map or file returned by show map
     KEY     ID of key
     VALUE   Value to set
@@ -32,6 +33,7 @@ Options:
     -S, --set                 set a new value for a key in a map
     -d, --delete              delete all the map entries from the map <MAPID>
                               corresponding to the key <KEY>
+    -F SOCK, --socket=SOCK    use specific socket file
     -D DIR, --socket-dir=DIR  directory with HAProxy socket files
                               [default: /var/lib/haproxy]
 
@@ -121,16 +123,28 @@ class MapCommand(object):
 
 def main():
     arguments = docopt(__doc__)
-    try:
-        hap = haproxy.HAProxy(socket_dir=arguments['--socket-dir'])
-    except (SocketApplicationError,
-            SocketConnectionError,
-            SocketPermissionError) as error:
-        print(error)
-        sys.exit(1)
-    except ValueError as error:
-        print(error)
-        sys.exit(1)
+    if (arguments['--socket']):
+        try:
+            hap = haproxy.HAProxy(socket_file=arguments['--socket'])
+        except (SocketApplicationError,
+                SocketConnectionError,
+                SocketPermissionError) as error:
+            print(error)
+            sys.exit(1)
+        except ValueError as error:
+            print(error)
+            sys.exit(1)
+    else:
+        try:
+            hap = haproxy.HAProxy(socket_dir=arguments['--socket-dir'])
+        except (SocketApplicationError,
+                SocketConnectionError,
+                SocketPermissionError) as error:
+            print(error)
+            sys.exit(1)
+        except ValueError as error:
+            print(error)
+            sys.exit(1)
 
     cmd = MapCommand(hap, arguments)
     method = get_arg_option(arguments)

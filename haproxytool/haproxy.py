@@ -10,14 +10,15 @@
 """Manage haproxy
 
 Usage:
-    haproxytool haproxy [-D DIR ] (-a | -A | -C | -e | -i | -M | -o | -r | -u |
-                                   -U | -V | -R | -p)
-    haproxytool haproxy [-D DIR ] -m METRIC
-    haproxytool haproxy [-D DIR ] -w OPTION VALUE
-    haproxytool haproxy [-D DIR ] -c COMMAND
+    haproxytool haproxy [(-D DIR | -F SOCK)] (-a | -A | -C | -e | -i | -M |
+                                           -o | -r | -u | -U | -V | -R | -p)
+    haproxytool haproxy [(-D DIR | -F SOCK)] -m METRIC
+    haproxytool haproxy [(-D DIR | -F SOCK)] -w OPTION VALUE
+    haproxytool haproxy [(-D DIR | -F SOCK)] -c COMMAND
 
 Arguments:
     DIR     Directory path
+    SOCK    Socket file
     OPTION  Option name to set a VALUE
     VALUE   Value to set
     METRIC  Name of a metric, use '-M' to get metric names
@@ -41,6 +42,7 @@ Options:
     -V, --hap-version           show version of HAProxy
     -R, --release-date          show release date
     -w, --write                 set VALUE for an OPTION
+    -F SOCK, --socket=SOCK      use specific socket file
     -D DIR, --socket-dir=DIR    directory with HAProxy socket files
                                 [default: /var/lib/haproxy]
 
@@ -149,16 +151,28 @@ class HAProxyCommand(object):
 def main():
     arguments = docopt(__doc__)
 
-    try:
-        hap = haproxy.HAProxy(socket_dir=arguments['--socket-dir'])
-    except (SocketApplicationError,
-            SocketConnectionError,
-            SocketPermissionError) as error:
-        print(error)
-        sys.exit(1)
-    except ValueError as error:
-        print(error)
-        sys.exit(1)
+    if (arguments['--socket']):
+        try:
+            hap = haproxy.HAProxy(socket=arguments['--socket'])
+        except (SocketApplicationError,
+                SocketConnectionError,
+                SocketPermissionError) as error:
+            print(error)
+            sys.exit(1)
+        except ValueError as error:
+            print(error)
+            sys.exit(1)
+    else:
+        try:
+            hap = haproxy.HAProxy(socket_dir=arguments['--socket-dir'])
+        except (SocketApplicationError,
+                SocketConnectionError,
+                SocketPermissionError) as error:
+            print(error)
+            sys.exit(1)
+        except ValueError as error:
+            print(error)
+            sys.exit(1)
 
     cmd = HAProxyCommand(hap, arguments)
     method = get_arg_option(arguments)

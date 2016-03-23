@@ -9,12 +9,13 @@
 """Manage backends
 
 Usage:
-    haproxytool backend [-D DIR ] (-S | -r | -p | -s | -i) [NAME...]
-    haproxytool backend [-D DIR ] (-l | -M)
-    haproxytool backend [-D DIR ] -m METRIC [NAME...]
+    haproxytool backend [(-D DIR | -F SOCK)] (-S | -r | -p | -s | -i) [NAME...]
+    haproxytool backend [(-D DIR | -F SOCK)] (-l | -M)
+    haproxytool backend [(-D DIR | -F SOCK)] -m METRIC [NAME...]
 
 Arguments:
     DIR     Directory path
+    SOCK    Socket file
     METRIC  Name of a metric, use '-M' to get metric names
 
 Options:
@@ -27,6 +28,7 @@ Options:
     -r, --requests            show requests
     -s, --status              show status
     -S, --servers             show servers
+    -F SOCK, --socket=SOCK    use specific socket file
     -D DIR, --socket-dir=DIR  directory with HAProxy socket files
                               [default: /var/lib/haproxy]
 
@@ -102,16 +104,28 @@ class BackendCommand(object):
 def main():
     arguments = docopt(__doc__)
 
-    try:
-        hap = haproxy.HAProxy(socket_dir=arguments['--socket-dir'])
-    except (SocketApplicationError,
-            SocketConnectionError,
-            SocketPermissionError) as error:
-        print(error)
-        sys.exit(1)
-    except ValueError as error:
-        print(error)
-        sys.exit(1)
+    if (arguments['--socket']):
+        try:
+            hap = haproxy.HAProxy(socket_file=arguments['--socket'])
+        except (SocketApplicationError,
+                SocketConnectionError,
+                SocketPermissionError) as error:
+            print(error)
+            sys.exit(1)
+        except ValueError as error:
+            print(error)
+            sys.exit(1)
+    else:
+        try:
+            hap = haproxy.HAProxy(socket_dir=arguments['--socket-dir'])
+        except (SocketApplicationError,
+                SocketConnectionError,
+                SocketPermissionError) as error:
+            print(error)
+            sys.exit(1)
+        except ValueError as error:
+            print(error)
+            sys.exit(1)
 
     cmd = BackendCommand(hap, arguments)
     method = get_arg_option(arguments)

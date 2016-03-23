@@ -8,14 +8,15 @@
 """Manage ACLs
 
 Usage:
-    haproxytool acl [-D DIR | -h] -l
-    haproxytool acl [-D DIR | -h] (-c | -s) ACLID
-    haproxytool acl [-D DIR | -h] (-A | -g ) ACLID VALUE
-    haproxytool acl [-D DIR | -h] -d ACLID KEY
+    haproxytool acl [(-D DIR | -F SOCK) | -h] -l
+    haproxytool acl [(-D DIR | -F SOCK) | -h] (-c | -s) ACLID
+    haproxytool acl [(-D DIR | -F SOCK) | -h] (-A | -g ) ACLID VALUE
+    haproxytool acl [(-D DIR | -F SOCK) | -h] -d ACLID KEY
 
 
 Arguments:
     DIR     Directory path
+    SOCK    Socket file
     ACLID   ID of the acl or file returned by show acl
     VALUE   Value to set
     KEY     Key ID of ACL value/pattern
@@ -29,6 +30,7 @@ Options:
     -l, --list                list all acl ids
     -d, --delete              delete all the acl entries from the acl <ACLID>
                               corresponding to the key <KEY>
+    -F SOCK, --socket=SOCK    use specific socket file
     -D DIR, --socket-dir=DIR  directory with HAProxy socket files
                               [default: /var/lib/haproxy]
 
@@ -110,16 +112,28 @@ class AclCommand(object):
 
 def main():
     arguments = docopt(__doc__)
-    try:
-        hap = haproxy.HAProxy(socket_dir=arguments['--socket-dir'])
-    except (SocketApplicationError,
-            SocketConnectionError,
-            SocketPermissionError) as error:
-        print(error, error.socket_file)
-        sys.exit(1)
-    except ValueError as error:
-        print(error)
-        sys.exit(1)
+    if (arguments['--socket']):
+        try:
+            hap = haproxy.HAProxy(socket_file=arguments['--socket'])
+        except (SocketApplicationError,
+                SocketConnectionError,
+                SocketPermissionError) as error:
+            print(error, error.socket_file)
+            sys.exit(1)
+        except ValueError as error:
+            print(error)
+            sys.exit(1)
+    else:
+        try:
+            hap = haproxy.HAProxy(socket_dir=arguments['--socket-dir'])
+        except (SocketApplicationError,
+                SocketConnectionError,
+                SocketPermissionError) as error:
+            print(error, error.socket_file)
+            sys.exit(1)
+        except ValueError as error:
+            print(error)
+            sys.exit(1)
 
     cmd = AclCommand(hap, arguments)
     method = get_arg_option(arguments)

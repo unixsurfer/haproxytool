@@ -10,14 +10,15 @@
 """Manage frontends
 
 Usage:
-    haproxytool frontend [-D DIR ] (-c | -r | -s | -o | -e | -p | -i) [NAME...]
-    haproxytool frontend [-D DIR ] -w OPTION VALUE [NAME...]
-    haproxytool frontend [-D DIR -f ] (-d | -t) [NAME...]
-    haproxytool frontend [-D DIR ] (-l | -M)
-    haproxytool frontend [-D DIR ] -m METRIC [NAME...]
+    haproxytool frontend [(-D DIR | -F SOCK)] (-c | -r | -s | -o | -e | -p | -i) [NAME...]
+    haproxytool frontend [(-D DIR | -F SOCK)] -w OPTION VALUE [NAME...]
+    haproxytool frontend [(-D DIR | -F SOCK) -f ] (-d | -t) [NAME...]
+    haproxytool frontend [(-D DIR | -F SOCK)] (-l | -M)
+    haproxytool frontend [(-D DIR | -F SOCK)] -m METRIC [NAME...]
 
 Arguments:
     DIR     Directory path
+    SOCK    Socket file
     VALUE   Value to set
     OPTION  Setting name
     METRIC  Name of a metric, use '-M' to get metric names
@@ -39,6 +40,7 @@ Options:
     -s, --status              show status
     -t, --shutdown            shutdown frontend
     -w, --write               change a frontend option
+    -F SOCK, --socket=SOCK    use specific socket file
     -D DIR, --socket-dir=DIR  directory with HAProxy socket files
                               [default: /var/lib/haproxy]
 
@@ -169,16 +171,28 @@ class FrontendCommand(object):
 def main():
     arguments = docopt(__doc__)
 
-    try:
-        hap = haproxy.HAProxy(socket_dir=arguments['--socket-dir'])
-    except (SocketApplicationError,
-            SocketConnectionError,
-            SocketPermissionError) as error:
-        print(error)
-        sys.exit(1)
-    except ValueError as error:
-        print(error)
-        sys.exit(1)
+    if (arguments['--socket']):
+        try:
+            hap = haproxy.HAProxy(socket_file=arguments['--socket'])
+        except (SocketApplicationError,
+                SocketConnectionError,
+                SocketPermissionError) as error:
+            print(error)
+            sys.exit(1)
+        except ValueError as error:
+            print(error)
+            sys.exit(1)
+    else:
+        try:
+            hap = haproxy.HAProxy(socket_dir=arguments['--socket-dir'])
+        except (SocketApplicationError,
+                SocketConnectionError,
+                SocketPermissionError) as error:
+            print(error)
+            sys.exit(1)
+        except ValueError as error:
+            print(error)
+            sys.exit(1)
 
     cmd = FrontendCommand(hap, arguments)
     method = get_arg_option(arguments)
