@@ -55,13 +55,10 @@ Options:
 import sys
 from operator import methodcaller
 from docopt import docopt
-from haproxyadmin import (haproxy, exceptions, SERVER_METRICS, STATE_ENABLE,
+from haproxyadmin import (exceptions, SERVER_METRICS, STATE_ENABLE,
                           STATE_DISABLE, STATE_READY, STATE_DRAIN,
                           STATE_MAINT)
-from haproxyadmin.exceptions import (SocketApplicationError,
-                                     SocketConnectionError,
-                                     SocketPermissionError,
-                                     IncosistentData)
+from haproxyadmin.exceptions import IncosistentData
 from .utils import get_arg_option, abort_command, haproxy_object
 
 
