@@ -37,8 +37,8 @@ def abort_command(command, object_type, objects, force):
 
 
 def print_cmd_output(output):
-        for output_per_proc in output:
-            print("Process number: {n}".format(n=output_per_proc[0]))
-            for line in output_per_proc[1]:
-                print(line)
+    for output_per_proc in output:
+        print("Process number: {n}".format(n=output_per_proc[0]))
+        for line in output_per_proc[1]:
+            print(line)
 
