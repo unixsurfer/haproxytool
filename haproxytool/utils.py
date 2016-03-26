@@ -22,10 +22,7 @@ def read_user(msg):
     :rtype: ``bool``
     """
     user_input = input("{msg} y/n?: ".format(msg=msg))
-    if user_input == 'y':
-        return True
-    else:
-        return False
+    return user_input == 'y'
 
 
 def abort_command(command, object_type, objects, force):
