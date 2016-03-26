@@ -23,12 +23,7 @@ Options:
                               [default: /var/lib/haproxy]
 
 """
-import sys
 from docopt import docopt
-from haproxyadmin import haproxy
-from haproxyadmin.exceptions import (SocketApplicationError,
-                                     SocketConnectionError,
-                                     SocketPermissionError)
 
 from .utils import haproxy_object
 

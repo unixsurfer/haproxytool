@@ -35,10 +35,8 @@ Options:
 """
 import sys
 from docopt import docopt
-from haproxyadmin import haproxy, BACKEND_METRICS
-from haproxyadmin.exceptions import (SocketApplicationError,
-                                     SocketConnectionError,
-                                     SocketPermissionError)
+from haproxyadmin import BACKEND_METRICS
+
 from .utils import get_arg_option, haproxy_object
 
 

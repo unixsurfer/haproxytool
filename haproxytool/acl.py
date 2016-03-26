@@ -37,11 +37,7 @@ Options:
 """
 import sys
 from docopt import docopt
-from haproxyadmin import haproxy
-from haproxyadmin.exceptions import (CommandFailed,
-                                     SocketApplicationError,
-                                     SocketConnectionError,
-                                     SocketPermissionError)
+from haproxyadmin.exceptions import CommandFailed
 from .utils import get_arg_option, haproxy_object
 
 

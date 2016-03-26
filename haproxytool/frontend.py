@@ -49,10 +49,7 @@ Options:
 import sys
 from operator import methodcaller
 from docopt import docopt
-from haproxyadmin import haproxy, exceptions, FRONTEND_METRICS
-from haproxyadmin.exceptions import (SocketApplicationError,
-                                     SocketConnectionError,
-                                     SocketPermissionError)
+from haproxyadmin import exceptions, FRONTEND_METRICS
 
 from .utils import get_arg_option, abort_command, haproxy_object
 
