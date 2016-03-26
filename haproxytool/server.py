@@ -10,16 +10,20 @@
 """Manage servers
 
 Usage:
-    haproxytool server [-D DIR ] (-r | -s | -e | -R | -p | -W | -i | -c | -C |
-                                  -S) [--backend=<name>...] [NAME...]
-    haproxytool server [-D DIR ] -w VALUE [--backend=<name>...] [NAME...]
-    haproxytool server [-D DIR -f ] (-d | -t | -n) [--backend=<name>...] [NAME...]
-    haproxytool server [-D DIR ] (-l | -M)
-    haproxytool server [-D DIR ] -m METRIC [--backend=<name>...] [NAME...]
+    haproxytool server [-D DIR | -F SOCKET] (-r | -s | -e | -R | -p | -W | -i |
+                       -c | -C | -S) [--backend=<name>...] [NAME...]
+    haproxytool server [-D DIR | -F SOCKET] -w VALUE [--backend=<name>...]
+                       [NAME...]
+    haproxytool server [-D DIR | -F SOCKET] [-f ] (-d | -t | -n)
+                       [--backend=<name>...] [NAME...]
+    haproxytool server [-D DIR | -F SOCKET] (-l | -M)
+    haproxytool server [-D DIR | -F SOCKET] -m METRIC [--backend=<name>...]
+                       [NAME...]
 
 
 Arguments:
-    DIR     Directory path
+    DIR     Directory path with socket files
+    SOCKET  Socket file
     VALUE   Value to set
     METRIC  Name of a metric, use '-M' to get metric names
 
@@ -29,6 +33,7 @@ Options:
     -d, --disable             disable server
     -e, --enable              enable server
     -f, --force               force an operation
+    -F SOCKET, --file SOCKET  socket file
     -h, --help                show this screen
     -i, --sid                 show server ID
     -l, --show                show all servers
@@ -48,16 +53,16 @@ Options:
 
 """
 import sys
+from operator import methodcaller
 from docopt import docopt
 from haproxyadmin import (haproxy, exceptions, SERVER_METRICS, STATE_ENABLE,
                           STATE_DISABLE, STATE_READY, STATE_DRAIN,
                           STATE_MAINT)
-from operator import methodcaller
 from haproxyadmin.exceptions import (SocketApplicationError,
                                      SocketConnectionError,
                                      SocketPermissionError,
                                      IncosistentData)
-from .utils import get_arg_option, abort_command
+from .utils import get_arg_option, abort_command, haproxy_object
 
 
 class ServerCommand(object):
@@ -247,16 +252,7 @@ class ServerCommand(object):
 
 def main():
     arguments = docopt(__doc__)
-    try:
-        hap = haproxy.HAProxy(socket_dir=arguments['--socket-dir'])
-    except (SocketApplicationError,
-            SocketConnectionError,
-            SocketPermissionError) as error:
-        print(error)
-        sys.exit(1)
-    except ValueError as error:
-        print(error)
-        sys.exit(1)
+    hap = haproxy_object(arguments)
 
     cmd = ServerCommand(hap, arguments)
     method = get_arg_option(arguments)

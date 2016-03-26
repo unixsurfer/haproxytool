@@ -9,22 +9,24 @@
 """Manage MAPs
 
 Usage:
-    haproxytool map [-D DIR | -h] -l
-    haproxytool map [-D DIR | -h] (-s | -c ) MAPID
-    haproxytool map [-D DIR | -h] -g MAPID KEY
-    haproxytool map [-D DIR | -h] (-S | -A) MAPID KEY VALUE
-    haproxytool map [-D DIR | -h] -d MAPID KEY
+    haproxytool map [-D DIR | -F SOCKET] -l
+    haproxytool map [-D DIR | -F SOCKET] (-s | -c ) MAPID
+    haproxytool map [-D DIR | -F SOCKET] -g MAPID KEY
+    haproxytool map [-D DIR | -F SOCKET] (-S | -A) MAPID KEY VALUE
+    haproxytool map [-D DIR | -F SOCKET] -d MAPID KEY
 
 
 Arguments:
-    DIR     Directory path
+    DIR     Directory path with socket files
     MAPID   ID of the map or file returned by show map
     KEY     ID of key
+    SOCKET  Socket file
     VALUE   Value to set
 
 Options:
-    -h, --help                show this screen
     -A, --add                 add a <KEY> entry into the map <MAPID>
+    -F SOCKET, --file SOCKET  socket file
+    -h, --help                show this screen
     -s, --show                show map
     -g, --get                 lookup the value of a key in the map
     -c, --clear               clear all entries for a map
@@ -43,7 +45,7 @@ from haproxyadmin.exceptions import (CommandFailed,
                                      SocketApplicationError,
                                      SocketConnectionError,
                                      SocketPermissionError)
-from .utils import get_arg_option
+from .utils import get_arg_option, haproxy_object
 
 
 class MapCommand(object):
@@ -121,16 +123,7 @@ class MapCommand(object):
 
 def main():
     arguments = docopt(__doc__)
-    try:
-        hap = haproxy.HAProxy(socket_dir=arguments['--socket-dir'])
-    except (SocketApplicationError,
-            SocketConnectionError,
-            SocketPermissionError) as error:
-        print(error)
-        sys.exit(1)
-    except ValueError as error:
-        print(error)
-        sys.exit(1)
+    hap = haproxy_object(arguments)
 
     cmd = MapCommand(hap, arguments)
     method = get_arg_option(arguments)

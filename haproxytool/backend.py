@@ -9,15 +9,17 @@
 """Manage backends
 
 Usage:
-    haproxytool backend [-D DIR ] (-S | -r | -p | -s | -i) [NAME...]
-    haproxytool backend [-D DIR ] (-l | -M)
-    haproxytool backend [-D DIR ] -m METRIC [NAME...]
+    haproxytool backend [-D DIR | -F SOCKET] (-S | -r | -p | -s | -i) [NAME...]
+    haproxytool backend [-D DIR | -F SOCKET] (-l | -M)
+    haproxytool backend [-D DIR | -F SOCKET] -m METRIC [NAME...]
 
 Arguments:
-    DIR     Directory path
+    DIR     Directory path with socket files
+    SOCKET  Socket file
     METRIC  Name of a metric, use '-M' to get metric names
 
 Options:
+    -F SOCKET, --file SOCKET  socket file
     -h, --help                show this screen
     -i, --iid                 show proxy ID number
     -l, --show                show all backends
@@ -37,7 +39,7 @@ from haproxyadmin import haproxy, BACKEND_METRICS
 from haproxyadmin.exceptions import (SocketApplicationError,
                                      SocketConnectionError,
                                      SocketPermissionError)
-from .utils import get_arg_option
+from .utils import get_arg_option, haproxy_object
 
 
 class BackendCommand(object):
@@ -101,17 +103,7 @@ class BackendCommand(object):
 
 def main():
     arguments = docopt(__doc__)
-
-    try:
-        hap = haproxy.HAProxy(socket_dir=arguments['--socket-dir'])
-    except (SocketApplicationError,
-            SocketConnectionError,
-            SocketPermissionError) as error:
-        print(error)
-        sys.exit(1)
-    except ValueError as error:
-        print(error)
-        sys.exit(1)
+    hap = haproxy_object(arguments)
 
     cmd = BackendCommand(hap, arguments)
     method = get_arg_option(arguments)

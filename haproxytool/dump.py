@@ -9,11 +9,14 @@
 """Dump a collection of information about frontends, backends and servers
 
 Usage:
-    haproxytool dump [-fbsh -D DIR ]
+    haproxytool dump [-D DIR | -F SOCKET] [-fbsh]
+
+Arguments:
+    SOCKET  Socket file
 
 Options:
-    -h, --help                show this screen
     -f, --frontends           show frontends
+    -F SOCKET, --file SOCKET  socket file
     -b, --backends            show backends
     -s, --servers             show servers
     -D DIR, --socket-dir=DIR  directory with HAProxy socket files
@@ -26,6 +29,8 @@ from haproxyadmin import haproxy
 from haproxyadmin.exceptions import (SocketApplicationError,
                                      SocketConnectionError,
                                      SocketPermissionError)
+
+from .utils import haproxy_object
 
 
 def get_backends(hap):
@@ -59,17 +64,7 @@ def dump(hap):
 def main():
     arguments = docopt(__doc__)
     args_passed = False
-
-    try:
-        hap = haproxy.HAProxy(socket_dir=arguments['--socket-dir'])
-    except (SocketApplicationError,
-            SocketConnectionError,
-            SocketPermissionError) as error:
-        print(error)
-        sys.exit(1)
-    except ValueError as error:
-        print(error)
-        sys.exit(1)
+    hap = haproxy_object(arguments)
 
     if arguments['--frontends']:
         args_passed = True

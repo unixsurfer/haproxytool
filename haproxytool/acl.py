@@ -8,21 +8,23 @@
 """Manage ACLs
 
 Usage:
-    haproxytool acl [-D DIR | -h] -l
-    haproxytool acl [-D DIR | -h] (-c | -s) ACLID
-    haproxytool acl [-D DIR | -h] (-A | -g ) ACLID VALUE
-    haproxytool acl [-D DIR | -h] -d ACLID KEY
+    haproxytool acl [-D DIR | -F SOCKET] -l
+    haproxytool acl [-D DIR | -F SOCKET] (-c | -s) ACLID
+    haproxytool acl [-D DIR | -F SOCKET] (-A | -g ) ACLID VALUE
+    haproxytool acl [-D DIR | -F SOCKET] -d ACLID KEY
 
 
 Arguments:
-    DIR     Directory path
+    DIR     Directory path with socket files
     ACLID   ID of the acl or file returned by show acl
+    SOCKET  Socket file
     VALUE   Value to set
     KEY     Key ID of ACL value/pattern
 
 Options:
     -h, --help                show this screen
     -A, --add                 add a <KEY> entry into the acl <ACLID>
+    -F SOCKET, --file SOCKET  socket file
     -s, --show                show acl
     -g, --get                 lookup the value of a key in the acl
     -c, --clear               clear all entries for a acl
@@ -40,7 +42,7 @@ from haproxyadmin.exceptions import (CommandFailed,
                                      SocketApplicationError,
                                      SocketConnectionError,
                                      SocketPermissionError)
-from .utils import get_arg_option
+from .utils import get_arg_option, haproxy_object
 
 
 class AclCommand(object):
@@ -110,16 +112,7 @@ class AclCommand(object):
 
 def main():
     arguments = docopt(__doc__)
-    try:
-        hap = haproxy.HAProxy(socket_dir=arguments['--socket-dir'])
-    except (SocketApplicationError,
-            SocketConnectionError,
-            SocketPermissionError) as error:
-        print(error, error.socket_file)
-        sys.exit(1)
-    except ValueError as error:
-        print(error)
-        sys.exit(1)
+    hap = haproxy_object(arguments)
 
     cmd = AclCommand(hap, arguments)
     method = get_arg_option(arguments)

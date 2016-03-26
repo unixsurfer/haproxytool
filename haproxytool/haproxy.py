@@ -10,14 +10,14 @@
 """Manage haproxy
 
 Usage:
-    haproxytool haproxy [-D DIR ] (-a | -A | -C | -e | -i | -M | -o | -r | -u |
-                                   -U | -V | -R | -p)
-    haproxytool haproxy [-D DIR ] -m METRIC
-    haproxytool haproxy [-D DIR ] -w OPTION VALUE
-    haproxytool haproxy [-D DIR ] -c COMMAND
+    haproxytool haproxy [-D DIR | -F SOCKET] (-a | -A | -C | -e | -i | -M |
+                                             -o | -r | -u | -U | -V | -R | -p)
+    haproxytool haproxy [-D DIR | -F SOCKET] -m METRIC
+    haproxytool haproxy [-D DIR | -F SOCKET] -w OPTION VALUE
+    haproxytool haproxy [-D DIR | -F SOCKET] -c COMMAND
 
 Arguments:
-    DIR     Directory path
+    DIR     Directory path with socket files
     OPTION  Option name to set a VALUE
     VALUE   Value to set
     METRIC  Name of a metric, use '-M' to get metric names
@@ -28,6 +28,7 @@ Options:
     -c, --command               send a command to HAProxy
     -C, --maxconn               show configured maximum connection limit
     -e, --errors                show last know request and response errors
+    -F SOCKET, --file SOCKET    socket file
     -i, --info                  show haproxy stats
     -m, --metric                show value of a METRIC
     -M, --show-metrics          show all metrics
@@ -52,7 +53,7 @@ from operator import methodcaller
 from haproxyadmin.exceptions import (SocketApplicationError, CommandFailed,
                                      SocketConnectionError,
                                      SocketPermissionError)
-from .utils import get_arg_option, print_cmd_output
+from .utils import get_arg_option, print_cmd_output, haproxy_object
 
 OPTIONS = {
     'maxconn': 'setmaxconn',
@@ -148,17 +149,7 @@ class HAProxyCommand(object):
 
 def main():
     arguments = docopt(__doc__)
-
-    try:
-        hap = haproxy.HAProxy(socket_dir=arguments['--socket-dir'])
-    except (SocketApplicationError,
-            SocketConnectionError,
-            SocketPermissionError) as error:
-        print(error)
-        sys.exit(1)
-    except ValueError as error:
-        print(error)
-        sys.exit(1)
+    hap = haproxy_object(arguments)
 
     cmd = HAProxyCommand(hap, arguments)
     method = get_arg_option(arguments)
