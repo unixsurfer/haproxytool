@@ -47,9 +47,9 @@ Options:
 
 """
 import sys
+from operator import methodcaller
 from docopt import docopt
 from haproxyadmin import haproxy, HAPROXY_METRICS
-from operator import methodcaller
 from haproxyadmin.exceptions import CommandFailed
 
 from .utils import get_arg_option, print_cmd_output, haproxy_object
