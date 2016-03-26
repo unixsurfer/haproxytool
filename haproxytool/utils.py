@@ -3,7 +3,12 @@
 #
 # Created by: Pavlos Parissis <pavlos.parissis@gmail.com>
 #
+import sys
 from six.moves import input
+from haproxyadmin import haproxy
+from haproxyadmin.exceptions import (SocketApplicationError,
+                                     SocketConnectionError,
+                                     SocketPermissionError)
 
 
 def get_arg_option(args):
@@ -42,3 +47,25 @@ def print_cmd_output(output):
         for line in output_per_proc[1]:
             print(line)
 
+def haproxy_object(arguments):
+    """Return a HAProxy object.
+
+    :param arguments: Arguments of the progam
+    :type arguments: ``dict``
+    :return: A HAProxy object or exit main program in case of failure
+    :rtype: ``haproxy.HAProxy``
+    """
+    if arguments['--file'] is not None:
+        arguments['--socket-dir'] = None
+    try:
+        hap = haproxy.HAProxy(socket_file=arguments['--file'],
+                              socket_dir=arguments['--socket-dir'])
+    except (SocketApplicationError,
+            SocketConnectionError,
+            SocketPermissionError) as error:
+        sys.exit(1)
+    except ValueError as error:
+        print(error)
+        sys.exit(1)
+    else:
+        return hap
