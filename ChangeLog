@@ -1,6 +1,18 @@
 CHANGES
 =======
 
+0.5.0
+-----
+
+* RELEASE 0.5.0 version
+* Reorder loading of modules
+* Remove unused classes and exceptions part 2
+* Remove unused classes and exceptions
+* Add support for accepting a socket file
+* Add haproxy_object function
+* Fix indentation issues
+* Simplify conditional statement
+
 0.4.6
 -----
 
