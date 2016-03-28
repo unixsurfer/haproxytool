@@ -41,6 +41,12 @@ from .utils import get_arg_option, haproxy_object
 
 
 class BackendCommand(object):
+    """Parse and run input from CLI
+
+    Argument:
+        hap (object): A haproxy.HAProxy object
+        args (dict): A dictionary returned by docopt afte CLI is parsed
+    """
     def __init__(self, hap, args):
         self.hap = hap
         self.args = args
@@ -61,32 +67,39 @@ class BackendCommand(object):
         return backends
 
     def show(self):
+        "report backend name"
         for backend in self.backends:
             print("{}".format(backend.name))
 
     def status(self):
+        "report status of backends"
         for backend in self.backends:
             print("{} {}".format(backend.name, backend.status))
 
     def requests(self):
+        "report traffic for backends"
         for backend in self.backends:
             print("{} {}".format(backend.name, backend.requests))
 
     def iid(self):
+        "report proxy iid of backends"
         for backend in self.backends:
             print("{} {}".format(backend.name, backend.iid))
 
     def process(self):
+        "report which HAProxy process manage which backends"
         for backend in self.backends:
             print("{} {}".format(backend.name, backend.process_nb))
 
     def servers(self):
+        "report backend memberhips"
         for backend in self.backends:
             print("{}".format(backend.name))
             for server in backend.servers():
                 print("{:<3} {}".format(' ', server.name))
 
     def metric(self):
+        "report value of a metric"
         metric = self.args['METRIC']
         if metric not in BACKEND_METRICS:
             sys.exit("{} no valid metric".format(metric))
@@ -95,11 +108,13 @@ class BackendCommand(object):
             print("{} {}".format(backend.name, backend.metric(metric)))
 
     def showmetrics(self):
+        "report all valid metrics for a backend"
         for metric in BACKEND_METRICS:
             print(metric)
 
 
 def main():
+    "Parse CLI"
     arguments = docopt(__doc__)
     hap = haproxy_object(arguments)
 

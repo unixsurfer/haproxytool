@@ -63,6 +63,12 @@ from .utils import get_arg_option, abort_command, haproxy_object
 
 
 class ServerCommand(object):
+    """Parse and run input from CLI
+
+    Argument:
+        hap (object): A haproxy.HAProxy object
+        args (dict): A dictionary returned by docopt afte CLI is parsed
+    """
     def __init__(self, hap, args):
         self.hap = hap
         self.args = args
@@ -248,6 +254,7 @@ class ServerCommand(object):
 
 
 def main():
+    "Parse CLI"
     arguments = docopt(__doc__)
     hap = haproxy_object(arguments)
 
