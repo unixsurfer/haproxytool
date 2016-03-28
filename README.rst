@@ -60,14 +60,14 @@ Commands for HAProxy
     Manage haproxy
 
     Usage:
-        haproxytool haproxy [-D DIR ] (-a | -A | -C | -e | -i | -M | -o | -r | -u |
-                                       -U | -V | -R | -p)
-        haproxytool haproxy [-D DIR ] -m METRIC
-        haproxytool haproxy [-D DIR ] -w OPTION VALUE
-        haproxytool haproxy [-D DIR ] -c COMMAND
+        haproxytool haproxy [-D DIR | -F SOCKET] (-a | -A | -C | -e | -i | -M |
+                                                -o | -r | -u | -U | -V | -R | -p)
+        haproxytool haproxy [-D DIR | -F SOCKET] -m METRIC
+        haproxytool haproxy [-D DIR | -F SOCKET] -w OPTION VALUE
+        haproxytool haproxy [-D DIR | -F SOCKET] -c COMMAND
 
     Arguments:
-        DIR     Directory path
+        DIR     Directory path with socket files
         OPTION  Option name to set a VALUE
         VALUE   Value to set
         METRIC  Name of a metric, use '-M' to get metric names
@@ -78,6 +78,7 @@ Commands for HAProxy
         -c, --command               send a command to HAProxy
         -C, --maxconn               show configured maximum connection limit
         -e, --errors                show last know request and response errors
+        -F SOCKET, --file SOCKET    socket file
         -i, --info                  show haproxy stats
         -m, --metric                show value of a METRIC
         -M, --show-metrics          show all metrics
@@ -90,7 +91,7 @@ Commands for HAProxy
         -U, --uptime                show uptime of HAProxy process
         -V, --hap-version           show version of HAProxy
         -R, --release-date          show release date
-        -w, --write                 set VALUE of a haproxy OPTION
+        -w, --write                 set VALUE for an OPTION
         -D DIR, --socket-dir=DIR    directory with HAProxy socket files
                                     [default: /var/lib/haproxy]
 
@@ -105,37 +106,40 @@ Commands for frontends
     Manage frontends
 
     Usage:
-        haproxytool frontend [-D DIR ] (-c | -r | -s | -o | -e | -p | -i) [NAME...]
-        haproxytool frontend [-D DIR ] -w OPTION VALUE [NAME...]
-        haproxytool frontend [-D DIR -f ] (-d | -t) [NAME...]
-        haproxytool frontend [-D DIR ] (-l | -M)
-        haproxytool frontend [-D DIR ] -m METRIC [NAME...]
+        haproxytool frontend [-D DIR -F SOCKET] (-c | -r | -s | -o | -e | -p | -i)
+                             [NAME...]
+        haproxytool frontend [-D DIR -F SOCKET] -w OPTION VALUE [NAME...]
+        haproxytool frontend [-D DIR -F SOCKET] [-f ] (-d | -t) [NAME...]
+        haproxytool frontend [-D DIR -F SOCKET] (-l | -M)
+        haproxytool frontend [-D DIR -F SOCKET] -m METRIC [NAME...]
 
-        Arguments:
-            DIR     Directory path
-            VALUE   Value to set
-            OPTION  Setting name
-            METRIC  Name of a metric, use '-M' to get metric names
+    Arguments:
+        DIR     Directory path with socket files
+        SOCKET  Socket file
+        VALUE   Value to set
+        OPTION  Setting name
+        METRIC  Name of a metric, use '-M' to get metric names
 
-        Options:
-            -c, --showmaxconn         show max sessions
-            -d, --disable             disable frontend
-            -e, --enable              enable frontend
-            -f, --force               force an operation
-            -h, --help                show this screen
-            -i, --iid                 show proxy ID number
-            -l, --show                show all frontends
-            -m, --metric              show value of a metric
-            -M, --show-metrics        show all metrics
-            -o, --options             show value of options that can be changed with
-                                    '-w' option
-            -p, --process             show process number
-            -r, --requests            show requests
-            -s, --status              show status
-            -t, --shutdown            shutdown frontend
-            -w, --write               change a frontend option
-            -D DIR, --socket-dir=DIR  directory with HAProxy socket files
-                                    [default: /var/lib/haproxy]
+    Options:
+        -c, --showmaxconn         show max sessions
+        -d, --disable             disable frontend
+        -e, --enable              enable frontend
+        -f, --force               force an operation
+        -F SOCKET, --file SOCKET  socket file
+        -h, --help                show this screen
+        -i, --iid                 show proxy ID number
+        -l, --show                show all frontends
+        -m, --metric              show value of a metric
+        -M, --show-metrics        show all metrics
+        -o, --options             show value of options that can be changed with
+                                '-w' option
+        -p, --process             show process number
+        -r, --requests            show requests
+        -s, --status              show status
+        -t, --shutdown            shutdown frontend
+        -w, --write               change a frontend option
+        -D DIR, --socket-dir=DIR  directory with HAProxy socket files
+                                [default: /var/lib/haproxy]
 
 * Show status of frontend(s)
 
@@ -207,7 +211,7 @@ Commands for frontends
     HAProxy processes
 
 Commands for backends
-~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
 
 * Usage
 
@@ -217,23 +221,26 @@ Commands for backends
     Manage backends
 
     Usage:
-        haproxytool backend [-D DIR | -h] (-S | -r | -p | -s) [NAME...]
-        haproxytool backend [-D DIR | -h] (-l | -M)
-        haproxytool backend [-D DIR | -h] -m METRIC [NAME...]
+        haproxytool backend [-D DIR | -F SOCKET] (-S | -r | -p | -s | -i) [NAME...]
+        haproxytool backend [-D DIR | -F SOCKET] (-l | -M)
+        haproxytool backend [-D DIR | -F SOCKET] -m METRIC [NAME...]
 
     Arguments:
-        DIR     Directory path
-        METRIC   Name of a metric, use '-M' to get metric names
+        DIR     Directory path with socket files
+        SOCKET  Socket file
+        METRIC  Name of a metric, use '-M' to get metric names
 
     Options:
+        -F SOCKET, --file SOCKET  socket file
         -h, --help                show this screen
-        -S, --servers             show servers
-        -r, --requests            show requests
-        -p, --process             show process number
-        -s, --status              show status
+        -i, --iid                 show proxy ID number
+        -l, --show                show all backends
         -m, --metric              show value of a metric
         -M, --show-metrics        show all metrics
-        -l, --show                show all backends
+        -p, --process             show process number
+        -r, --requests            show requests
+        -s, --status              show status
+        -S, --servers             show servers
         -D DIR, --socket-dir=DIR  directory with HAProxy socket files
                                   [default: /var/lib/haproxy]
 
@@ -248,16 +255,20 @@ Commands for servers
     Manage servers
 
     Usage:
-        haproxytool server [-D DIR ] (-r | -s | -e | -R | -p | -W | -i | -c | -C |
-                                    -S) [--backend=<name>...] [NAME...]
-        haproxytool server [-D DIR ] -w VALUE [--backend=<name>...] [NAME...]
-        haproxytool server [-D DIR -f ] (-d | -t | -n) [--backend=<name>...] [NAME...]
-        haproxytool server [-D DIR ] (-l | -M)
-        haproxytool server [-D DIR ] -m METRIC [--backend=<name>...] [NAME...]
+        haproxytool server [-D DIR | -F SOCKET] (-r | -s | -e | -R | -p | -W | -i |
+                        -c | -C | -S) [--backend=<name>...] [NAME...]
+        haproxytool server [-D DIR | -F SOCKET] -w VALUE [--backend=<name>...]
+                        [NAME...]
+        haproxytool server [-D DIR | -F SOCKET] [-f ] (-d | -t | -n)
+                        [--backend=<name>...] [NAME...]
+        haproxytool server [-D DIR | -F SOCKET] (-l | -M)
+        haproxytool server [-D DIR | -F SOCKET] -m METRIC [--backend=<name>...]
+                        [NAME...]
 
 
     Arguments:
-        DIR     Directory path
+        DIR     Directory path with socket files
+        SOCKET  Socket file
         VALUE   Value to set
         METRIC  Name of a metric, use '-M' to get metric names
 
@@ -267,6 +278,7 @@ Commands for servers
         -d, --disable             disable server
         -e, --enable              enable server
         -f, --force               force an operation
+        -F SOCKET, --file SOCKET  socket file
         -h, --help                show this screen
         -i, --sid                 show server ID
         -l, --show                show all servers
@@ -282,7 +294,7 @@ Commands for servers
         -w, --weight              change weight for server
         -W, --get-weight          show weight of server
         -D DIR, --socket-dir=DIR  directory with HAProxy socket files
-                                [default: /var/lib/haproxy]
+                                  [default: /var/lib/haproxy]
 
 * List all servers
 
@@ -476,13 +488,16 @@ Dump command
     Dump a collection of information about frontends, backends and servers
 
     Usage:
-        haproxytool dump [-fpsh -D DIR ]
+        haproxytool dump [-D DIR | -F SOCKET] [-fbsh]
+
+    Arguments:
+        SOCKET  Socket file
 
     Options:
-        -h, --help                show this screen
         -f, --frontends           show frontends
-        -b, --backends            show backend
-        -s, --servers             show server
+        -F SOCKET, --file SOCKET  socket file
+        -b, --backends            show backends
+        -s, --servers             show servers
         -D DIR, --socket-dir=DIR  directory with HAProxy socket files
                                   [default: /var/lib/haproxy]
 
@@ -497,22 +512,24 @@ Map command
     Manage MAPs
 
     Usage:
-        haproxytool map [-D DIR | -h] -l
-        haproxytool map [-D DIR | -h] (-s | -c ) MAPID
-        haproxytool map [-D DIR | -h] -g MAPID KEY
-        haproxytool map [-D DIR | -h] (-S | -A) MAPID KEY VALUE
-        haproxytool map [-D DIR | -h] -d MAPID KEY
+        haproxytool map [-D DIR | -F SOCKET] -l
+        haproxytool map [-D DIR | -F SOCKET] (-s | -c ) MAPID
+        haproxytool map [-D DIR | -F SOCKET] -g MAPID KEY
+        haproxytool map [-D DIR | -F SOCKET] (-S | -A) MAPID KEY VALUE
+        haproxytool map [-D DIR | -F SOCKET] -d MAPID KEY
 
 
     Arguments:
-        DIR     Directory path
+        DIR     Directory path with socket files
         MAPID   ID of the map or file returned by show map
         KEY     ID of key
+        SOCKET  Socket file
         VALUE   Value to set
 
     Options:
-        -h, --help                show this screen
         -A, --add                 add a <KEY> entry into the map <MAPID>
+        -F SOCKET, --file SOCKET  socket file
+        -h, --help                show this screen
         -s, --show                show map
         -g, --get                 lookup the value of a key in the map
         -c, --clear               clear all entries for a map
@@ -598,29 +615,31 @@ ACL command
     Manage ACLs
 
     Usage:
-        haproxytool acl [-D DIR | -h] -l
-        haproxytool acl [-D DIR | -h] (-c | -s) ACLID
-        haproxytool acl [-D DIR | -h] (-A | -g ) ACLID VALUE
-        haproxytool acl [-D DIR | -h] -d ACLID KEY
+        haproxytool acl [-D DIR | -F SOCKET] -l
+        haproxytool acl [-D DIR | -F SOCKET] (-c | -s) ACLID
+        haproxytool acl [-D DIR | -F SOCKET] (-A | -g ) ACLID VALUE
+        haproxytool acl [-D DIR | -F SOCKET] -d ACLID KEY
 
 
     Arguments:
-        DIR     Directory path
+        DIR     Directory path with socket files
         ACLID   ID of the acl or file returned by show acl
+        SOCKET  Socket file
         VALUE   Value to set
         KEY     Key ID of ACL value/pattern
 
     Options:
         -h, --help                show this screen
         -A, --add                 add a <KEY> entry into the acl <ACLID>
+        -F SOCKET, --file SOCKET  socket file
         -s, --show                show acl
         -g, --get                 lookup the value of a key in the acl
         -c, --clear               clear all entries for a acl
         -l, --list                list all acl ids
         -d, --delete              delete all the acl entries from the acl <ACLID>
-                                corresponding to the key <KEY>
+                                  corresponding to the key <KEY>
         -D DIR, --socket-dir=DIR  directory with HAProxy socket files
-                                [default: /var/lib/haproxy]
+                                  [default: /var/lib/haproxy]
 
 * List all ACLIDs
 
@@ -697,14 +716,33 @@ ACL command
 Release
 -------
 
-To make a release you should first create a signed tag, pbr will use this for the version number::
+#. Bump version in haproxytool/__init__.py
 
-   git tag -s 0.0.9 -m 'bump release'
-   git push --tags
+#. Commit above change with::
 
-Create the source distribution archive (the archive will be placed in the **dist** directory)::
+      git commit -av -m'RELEASE 0.1.3 version'
 
-   python setup.py sdist
+#. Create a signed tag, pbr will use this for the version number::
+
+      git tag -s 0.1.3 -m 'bump release'
+
+#. Create the source distribution archive (the archive will be placed in the
+   **dist** directory)::
+
+      python setup.py sdist
+
+#. pbr updates ChangeLog file and we want to squeeze this change to the
+   previous commit, thus run::
+
+      git commit -av --amend
+
+#. Move current tag to the last commit::
+
+      git tag -fs 0.1.3 -m 'bump release'
+
+#. Push changes::
+
+      git push;git push --tags
 
 Installation
 ------------
