@@ -19,7 +19,7 @@ Usage:
 
 Arguments:
     DIR     Directory path with socket files
-    SOCKET    Socket file
+    SOCKET  Socket file
     VALUE   Value to set
     OPTION  Setting name
     METRIC  Name of a metric, use '-M' to get metric names
