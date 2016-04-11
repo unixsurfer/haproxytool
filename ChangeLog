@@ -1,6 +1,21 @@
 CHANGES
 =======
 
+0.5.2
+-----
+
+* RELEASE 0.5.2
+* Update setup.cfg
+
+0.5.1
+-----
+
+* RELEASE 0.5.1
+* Update setup.cfg
+* Fix indentation issue in CLI
+* Add docstrings in methods/functions
+* Update all usage sections in README
+
 0.5.0
 -----
 
