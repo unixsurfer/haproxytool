@@ -747,18 +747,17 @@ Release
 Installation
 ------------
 
+Use pip::
+
+    pip install haproxytool
+
 From Source::
 
-   sudo python setup.py install
+   python setup.py install
 
 Build (source) RPMs::
 
    python setup.py clean --all; python setup.py bdist_rpm
-
-Booking.com instructions::
-
-   python setup.py clean --all
-   python setup.py sdist
 
 Build a source archive for manual installation::
 
