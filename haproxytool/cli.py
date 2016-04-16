@@ -1,9 +1,6 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 # vim:fenc=utf-8
-#
-# Created by: Pavlos Parissis <pavlos.parissis@gmail.com>
-#
 """A tool to manage HAProxy via the stats socket.
 
 Usage: haproxytool [-v | -h] <command> [<args>...]
@@ -32,6 +29,9 @@ from haproxytool import OUR_CMDS
 
 
 def main():
+    """
+    Parse top level CLI interface and invoke subcommand
+    """
     args = docopt(__doc__, version=version, options_first=True)
 
     call_main = methodcaller('main')
@@ -52,7 +52,7 @@ def main():
             msg = "use any of {c} in help command".format(c=','.join(OUR_CMDS))
             sys.exit(msg)
     else:
-        sys.exit("{} isn't a haproxytool command. See 'haproxytool --help'."
+        sys.exit("<{}> isn't a haproxytool command. See 'haproxytool --help'."
                  .format(args['<command>']))
 
 # This is the standard boilerplate that calls the main() function.
