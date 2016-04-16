@@ -22,8 +22,8 @@ See 'haproxytool help <command>' for more information on a specific command.
 
 """
 import sys
-from docopt import docopt
 from operator import methodcaller
+from docopt import docopt
 from haproxytool import __version__ as version
 from haproxytool import OUR_CMDS
 
