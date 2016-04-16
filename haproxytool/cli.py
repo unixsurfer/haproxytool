@@ -12,7 +12,7 @@ Options:
   -h, --help                show this screen.
   -v, --version             show version.
 
-Available haproxytool commands are:
+Available haproxytool commands:
     haproxy   HAProxy operations
     frontend  Frontend operations
     backend   Backend operations
@@ -28,6 +28,7 @@ import sys
 from docopt import docopt
 from operator import methodcaller
 from haproxytool import __version__ as version
+from haproxytool import OUR_CMDS
 
 
 def main():
@@ -35,11 +36,7 @@ def main():
 
     call_main = methodcaller('main')
 
-    our_cmds = [
-        'haproxy', 'frontend', 'backend', 'server', 'dump', 'haproxy', 'map',
-        'acl'
-    ]
-    if args['<command>'] in our_cmds:
+    if args['<command>'] in OUR_CMDS:
         # get module path
         module = __import__('haproxytool.%s' % args['<command>'])
         # get the module object
@@ -47,12 +44,13 @@ def main():
         # run the main from the module object
         call_main(module_object)
     elif args['<command>'] == 'help':
-        if len(args['<args>']) == 1 and args['<args>'][0] in our_cmds:
+        if len(args['<args>']) == 1 and args['<args>'][0] in OUR_CMDS:
             module = __import__('haproxytool.%s' % args['<args>'][0])
             module_object = getattr(module, '%s' % args['<args>'][0])
             call_main(module_object)
         else:
-            sys.exit("use one of {} in help command".format(','.join(our_cmds)))
+            msg = "use any of {c} in help command".format(c=','.join(OUR_CMDS))
+            sys.exit(msg)
     else:
         sys.exit("{} isn't a haproxytool command. See 'haproxytool --help'."
                  .format(args['<command>']))

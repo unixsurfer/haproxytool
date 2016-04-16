@@ -18,3 +18,14 @@ __author__ = 'Pavlos Parissis'
 __version__ = '0.5.2'
 __license__ = 'Apache 2.0'
 __copyright__ = 'Copyright 2015-2016 Pavlos Parissis'
+
+OUR_CMDS = [
+    'haproxy',
+    'frontend',
+    'backend',
+    'server',
+    'dump',
+    'haproxy',
+    'map',
+    'acl'
+]
