@@ -1,6 +1,18 @@
 CHANGES
 =======
 
+0.5.3
+-----
+
+* RELEASE 0.5.3 version
+* Remove redundant call to print(
+* Simplify the call of sub commands
+* Remove redundant header
+* Fix ordering of module so pylint is happy
+* Add docstring and polish a bit the output
+* Move the list of valid cmds in __init__
+* Update installation instructions
+
 0.5.2
 -----
 
