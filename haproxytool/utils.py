@@ -62,7 +62,6 @@ def haproxy_object(arguments):
             SocketPermissionError) as error:
         sys.exit(1)
     except ValueError as error:
-        print(error)
-        sys.exit(1)
+        sys.exit(error)
     else:
         return hap
