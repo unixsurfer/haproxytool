@@ -4,9 +4,6 @@
 #
 # pylint: disable=superfluous-parens
 # pylint: disable=missing-docstring
-#
-# Created by: Pavlos Parissis <pavlos.parissis@gmail.com>
-#
 """Manage servers
 
 Usage:

@@ -3,10 +3,6 @@
 # vim:fenc=utf-8
 #
 # pylint: disable=superfluous-parens
-#
-#
-# Created by: Pavlos Parissis <pavlos.parissis@gmail.com>
-#
 """Manage frontends
 
 Usage:
