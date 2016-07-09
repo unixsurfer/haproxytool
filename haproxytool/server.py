@@ -234,20 +234,32 @@ class ServerCommand(object):
     def showcheckcode(self):
         print("# backendname servername")
         for server in self.servers:
+            try:
+                check_code = server.check_code
+            except IncosistentData as exc:
+                check_code = exc.results
             print("{:<30} {:<42} {}".format(server.backendname, server.name,
-                                            server.check_code))
+                                            check_code))
 
     def showcheckstatus(self):
         print("# backendname servername")
         for server in self.servers:
+            try:
+                check_status = server.check_status
+            except IncosistentData as exc:
+                check_status = exc.results
             print("{:<30} {:<42} {}".format(server.backendname, server.name,
-                                            server.check_status))
+                                            check_status))
 
     def showlaststatus(self):
         print("# backendname servername")
         for server in self.servers:
+            try:
+                last_status = server.last_status
+            except IncosistentData as exc:
+                last_status = exc.results
             print("{:<30} {:<42} {}".format(server.backendname, server.name,
-                                            server.last_status))
+                                            last_status))
 
 
 def main():
