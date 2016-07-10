@@ -15,7 +15,7 @@ A tool to manage HAProxy via stats socket.
 """
 __title__ = 'haproxytool'
 __author__ = 'Pavlos Parissis'
-__version__ = '0.5.3'
+__version__ = '0.5.4'
 __license__ = 'Apache 2.0'
 __copyright__ = 'Copyright 2015-2016 Pavlos Parissis'
 

@@ -1,11 +1,18 @@
 CHANGES
 =======
 
+0.5.4
+-----
+
+* RELEASE 0.5.4 version
+* Catch IncosistentData exception in server command
+* Add more keywords in setup.cfg
+
 0.5.3
 -----
 
 * RELEASE 0.5.3 version
-* Remove redundant call to print(
+* Remove redundant call to print()
 * Simplify the call of sub commands
 * Remove redundant header
 * Fix ordering of module so pylint is happy
