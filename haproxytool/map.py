@@ -3,6 +3,7 @@
 # vim:fenc=utf-8
 #
 # pylint: disable=superfluous-parens
+# pylint: disable=missing-docstring
 """Manage MAPs
 
 Usage:
@@ -52,8 +53,7 @@ class MapCommand(object):
             for line in self.hap.show_map(mapid=mapid):
                 print(line)
         except (CommandFailed, ValueError) as error:
-            print(error)
-            sys.exit(1)
+            sys.exit(error)
 
     def show(self):
         mapid = self.args['MAPID']
@@ -64,29 +64,24 @@ class MapCommand(object):
             if self.hap.clear_map(self.args['MAPID']):
                 print("all entries of map were cleared successfully")
             else:
-                print("failed to clear entries")
-                sys.exit(1)
-        except CommandFailed as error:
-            print(error)
-            sys.exit(1)
+                sys.exit("failed to clear entries")
+        except (CommandFailed, ValueError) as error:
+            sys.exit(error)
 
     def get(self):
         try:
             print(self.hap.get_map(self.args['MAPID'], self.args['KEY']))
-        except CommandFailed as error:
-            print(error)
-            sys.exit(1)
+        except (CommandFailed, ValueError) as error:
+            sys.exit(error)
 
     def delete(self):
         try:
             if self.hap.del_map(self.args['MAPID'], self.args['KEY']):
                 print("key was deleted successfully")
             else:
-                print("failed to delete key")
-                sys.exit(1)
-        except CommandFailed as error:
-            print(error)
-            sys.exit(1)
+                sys.exit("failed to delete key")
+        except (CommandFailed, ValueError) as error:
+            sys.exit(error)
 
     def add(self):
         try:
@@ -95,11 +90,9 @@ class MapCommand(object):
                                 self.args['VALUE']):
                 print("key was added successfully")
             else:
-                print("failed to add key in the map")
-                sys.exit(1)
-        except CommandFailed as error:
-            print(error)
-            sys.exit(1)
+                sys.exit("failed to add key in the map")
+        except (CommandFailed, ValueError) as error:
+            sys.exit(error)
 
     def set(self):
         try:
@@ -108,11 +101,9 @@ class MapCommand(object):
                                 self.args['VALUE']):
                 print("value was set successfully")
             else:
-                print("failed to set value")
-                sys.exit(1)
-        except CommandFailed as error:
-            print(error)
-            sys.exit(1)
+                sys.exit("failed to set value")
+        except (CommandFailed, ValueError) as error:
+            sys.exit(error)
 
 
 def main():

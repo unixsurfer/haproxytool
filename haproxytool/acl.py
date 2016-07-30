@@ -50,9 +50,8 @@ class AclCommand(object):
         try:
             for line in self.hap.show_acl(aclid=aclid):
                 print(line)
-        except CommandFailed as error:
-            print(error)
-            sys.exit(1)
+        except (CommandFailed, ValueError) as error:
+            sys.exit(error)
 
     def show(self):
         aclid = self.args['ACLID']
@@ -64,20 +63,17 @@ class AclCommand(object):
             if self.hap.clear_acl(aclid):
                 print("all entries of acl were cleared successfully")
             else:
-                print("failed to clear entries")
-                sys.exit(1)
-        except CommandFailed as error:
-            print(error)
-            sys.exit(1)
+                sys.exit("failed to clear entries")
+        except (CommandFailed, ValueError) as error:
+            sys.exit(error)
 
     def get(self):
         aclid = self.args['ACLID']
         value = self.args['VALUE']
         try:
             print(self.hap.get_acl(aclid, value))
-        except CommandFailed as error:
-            print(error)
-            sys.exit(1)
+        except (CommandFailed, ValueError) as error:
+            sys.exit(error)
 
     def delete(self):
         aclid = self.args['ACLID']
@@ -86,11 +82,9 @@ class AclCommand(object):
             if self.hap.del_acl(aclid, key):
                 print("key was deleted successfully")
             else:
-                print("failed to delete key")
-                sys.exit(1)
-        except CommandFailed as error:
-            print(error)
-            sys.exit(1)
+                sys.exit("failed to delete key")
+        except (CommandFailed, ValueError) as error:
+            sys.exit(error)
 
     def add(self):
         aclid = self.args['ACLID']
@@ -99,11 +93,9 @@ class AclCommand(object):
             if self.hap.add_acl(aclid, value):
                 print("value was added successfully")
             else:
-                print("failed to add value into the acl")
-                sys.exit(1)
-        except CommandFailed as error:
-            print(error)
-            sys.exit(1)
+                sys.exit("failed to add value into the acl")
+        except (CommandFailed, ValueError) as error:
+            sys.exit(error)
 
 
 def main():
