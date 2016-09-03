@@ -345,13 +345,11 @@ Commands for servers
     backend1_proc34                bck_all_srv1                               1
     backend2_proc34                bck_all_srv1                               1
     backend_proc1                  bck_all_srv1                               100
-    pparissis at axilleas in ~/bin
 
     % haproxytool server -W bck_all_srv1 --backend=backend_proc1 --backend=backend2_proc34
     # backendname servername
     backend_proc1                  bck_all_srv1                               100
     backend2_proc34                bck_all_srv1                               1
-    pparissis at axilleas in ~/bin
 
 * Set weight on servers across all backends and per backend
 
@@ -365,7 +363,6 @@ Commands for servers
     % haproxytool server -w 50 bck_all_srv1 --backend=backend_proc1 --backend=backend2_proc34
     bck_all_srv1 backend set weight to 50 in backend_proc1 backend
     bck_all_srv1 backend set weight to 50 in backend2_proc34 backend
-    pparissis at axilleas in ~/bin
 
 * Show requests
 
@@ -455,8 +452,8 @@ description.
     bck_all_srv1 disabled in backend_proc1 backend
     bck_all_srv1 disabled in backend2_proc34 backend
 
-:NOTE: When more than 1 server is about to be disabled, user is prompt to
-       confirm the action. Use -f to force disabling servers.
+:NOTE: When more than one server are about to be disabled, user is prompted to
+       confirm the action. Use -f to skip this confirmation.
 
 ::
 
