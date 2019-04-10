@@ -50,10 +50,15 @@ class MapCommand(object):
 
     def list(self, mapid=None):
         try:
-            for line in self.hap.show_map(mapid=mapid):
-                print(line)
+            map_entries = self.hap.show_map(mapid=mapid)
         except (CommandFailed, ValueError) as error:
             sys.exit(error)
+        else:
+            if not map_entries:
+                print("map doesn't have any entries")
+            else:
+                for entry in map_entries:
+                    print(entry)
 
     def show(self):
         mapid = self.args['MAPID']
