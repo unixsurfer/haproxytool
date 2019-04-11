@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # vim:fenc=utf-8
 import sys
 from six.moves import input
