@@ -2,7 +2,7 @@
 """haproxytool a tool to manage HAProxy via stats socket."""
 __title__ = 'haproxytool'
 __author__ = 'Pavlos Parissis'
-__version__ = '0.5.4'
+__version__ = '0.5.5'
 __license__ = 'Apache 2.0'
 __copyright__ = 'Copyright 2015-2019 Pavlos Parissis'
 
