@@ -48,10 +48,15 @@ class AclCommand(object):
 
     def list(self, aclid=None):
         try:
-            for line in self.hap.show_acl(aclid=aclid):
-                print(line)
+            acl_entries = self.hap.show_acl(aclid=aclid)
         except (CommandFailed, ValueError) as error:
             sys.exit(error)
+        else:
+            if not acl_entries:
+                print("acl doesn't have any entries")
+            else:
+                for entry in acl_entries:
+                    print(entry)
 
     def show(self):
         aclid = self.args['ACLID']
