@@ -58,11 +58,10 @@ Options:
 import sys
 from operator import methodcaller
 from docopt import docopt
-from haproxyadmin import (exceptions, SERVER_METRICS, STATE_ENABLE,
-                          STATE_DISABLE, STATE_READY, STATE_DRAIN,
-                          STATE_MAINT)
+from haproxyadmin import (SERVER_METRICS, STATE_ENABLE, STATE_DISABLE,
+                          STATE_READY, STATE_DRAIN, STATE_MAINT)
 from haproxyadmin.exceptions import (CommandFailed, IncosistentData,
-                                    MultipleCommandResults)
+                                     MultipleCommandResults)
 from .utils import get_arg_option, abort_command, haproxy_object
 
 
@@ -89,7 +88,7 @@ class ServerCommand(object):
                 print("{} changing address may have failed due to  "
                         "different results received per haproxy process:{}"
                         .format(server.name, error.results))
-            except exceptions.CommandFailed as error:
+            except CommandFailed as error:
                 sys.exit("{} failed to change address:{}"
                         .format(server.name,error))
             else:
@@ -170,7 +169,7 @@ class ServerCommand(object):
                 sys.exit("{} changing port may have failed due to  "
                          "different results received per haproxy process:{}"
                          .format(server.name, error.results))
-            except exceptions.CommandFailed as error:
+            except CommandFailed as error:
                 sys.exit("{} failed to change port:{}"
                          .format(server.name, error))
             else:
@@ -183,7 +182,7 @@ class ServerCommand(object):
                 server.setstate(STATE_ENABLE)
                 print("{} enabled in {} backend".format(server.name,
                                                         server.backendname))
-            except exceptions.CommandFailed as error:
+            except CommandFailed as error:
                 print("{} failed to be enabled:{}".format(server.name, error))
 
     def disable(self):
@@ -196,7 +195,7 @@ class ServerCommand(object):
                 server.setstate(STATE_DISABLE)
                 print("{} disabled in {} backend".format(server.name,
                                                          server.backendname))
-            except exceptions.CommandFailed as error:
+            except CommandFailed as error:
                 print("{} failed to be disabled:{}".format(server.name, error))
 
     def ready(self):
@@ -205,7 +204,7 @@ class ServerCommand(object):
                 server.setstate(STATE_READY)
                 print("{} set to ready in {} backend".format(
                     server.name, server.backendname))
-            except exceptions.CommandFailed as error:
+            except CommandFailed as error:
                 print("{} failed to set normal state:{}".format(server.name,
                                                                 error))
 
@@ -219,7 +218,7 @@ class ServerCommand(object):
                 server.setstate(STATE_DRAIN)
                 print("{} set to drain in {} backend".format(
                     server.name, server.backendname))
-            except exceptions.CommandFailed as error:
+            except CommandFailed as error:
                 print("{} failed to set in drain state:{}".format(server.name,
                                                                   error))
 
@@ -233,7 +232,7 @@ class ServerCommand(object):
                 server.setstate(STATE_MAINT)
                 print("{} set to maintenance in {} backend".format(
                     server.name, server.backendname))
-            except exceptions.CommandFailed as error:
+            except CommandFailed as error:
                 print("{} failed to set to maintenance state:{}".format(
                     server.name, error))
 
@@ -247,7 +246,7 @@ class ServerCommand(object):
                     method_caller(server)
                     print("{} backend set weight to {} in {} backend".format(
                         server.name, value, server.backendname))
-                except exceptions.CommandFailed as error:
+                except CommandFailed as error:
                     print("{} failed to change weight:{}".format(server.name,
                                                                  error))
         except ValueError as error:

@@ -45,7 +45,8 @@ Options:
 import sys
 from operator import methodcaller
 from docopt import docopt
-from haproxyadmin import exceptions, FRONTEND_METRICS
+from haproxyadmin import FRONTEND_METRICS
+from haproxyadmin.exceptions import CommandFailed
 
 from .utils import get_arg_option, abort_command, haproxy_object
 
@@ -99,7 +100,7 @@ class FrontendCommand(object):
             try:
                 frontend.enable()
                 print("{} enabled".format(frontend.name))
-            except exceptions.CommandFailed as error:
+            except CommandFailed as error:
                 print("{} failed to be enabled:{}".format(frontend.name,
                                                           error))
 
@@ -112,7 +113,7 @@ class FrontendCommand(object):
             try:
                 frontend.disable()
                 print("{} disabled".format(frontend.name))
-            except exceptions.CommandFailed as error:
+            except CommandFailed as error:
                 print("{} failed to be disabled:{}".format(frontend.name,
                                                            error))
 
@@ -125,7 +126,7 @@ class FrontendCommand(object):
             try:
                 frontend.shutdown()
                 print("{} shutdown".format(frontend.name))
-            except exceptions.CommandFailed as error:
+            except CommandFailed as error:
                 print("{} failed to be shutdown:{}".format(frontend.name,
                                                            error))
 
