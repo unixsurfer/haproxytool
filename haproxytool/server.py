@@ -86,11 +86,11 @@ class ServerCommand():
                 server.address = value
             except MultipleCommandResults as error:
                 print("{} changing address may have failed due to  "
-                        "different results received per haproxy process:{}"
-                        .format(server.name, error.results))
+                      "different results received per haproxy process:{}"
+                      .format(server.name, error.results))
             except CommandFailed as error:
                 sys.exit("{} failed to change address:{}"
-                        .format(server.name,error))
+                         .format(server.name, error))
             else:
                 print("set address for {} server to {} in {} backend"
                       .format(server.name, value, server.backendname))
