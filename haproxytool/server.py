@@ -7,10 +7,12 @@
 """Manage servers
 
 Usage:
-    haproxytool server [-D DIR | -F SOCKET] (-r | -s | -e | -R | -p | -W | -i |
-                       -c | -C | -S) [--backend=<name>...] [NAME...]
+    haproxytool server [-D DIR | -F SOCKET] (-A | -r | -s | -e | -R | -p | -W |
+                       -i | -c | -C | -S | -X) [--backend=<name>...] [NAME...]
     haproxytool server [-D DIR | -F SOCKET] -w VALUE [--backend=<name>...]
                        [NAME...]
+    haproxytool server [-D DIR | -F SOCKET] -a VALUE [--backend=<name>...] NAME
+    haproxytool server [-D DIR | -F SOCKET] -x VALUE [--backend=<name>...] NAME
     haproxytool server [-D DIR | -F SOCKET] [-f ] (-d | -t | -n)
                        [--backend=<name>...] [NAME...]
     haproxytool server [-D DIR | -F SOCKET] (-l | -M)
@@ -25,6 +27,8 @@ Arguments:
     METRIC  Name of a metric, use '-M' to get metric names
 
 Options:
+    -a, --address             set server's address
+    -A, --show-address        show server's address
     -c, --show-check-code     show check code
     -C, --show-check-status   show check status
     -d, --disable             disable server
@@ -45,6 +49,8 @@ Options:
     -t, --maintenance         set server in maintenance mode
     -w, --weight              change weight for server
     -W, --get-weight          show weight of server
+    -x --port                 set servers's port
+    -X, --show-port           show servers's port
     -D DIR, --socket-dir=DIR  directory with HAProxy socket files
                               [default: /var/lib/haproxy]
 
@@ -55,7 +61,8 @@ from docopt import docopt
 from haproxyadmin import (exceptions, SERVER_METRICS, STATE_ENABLE,
                           STATE_DISABLE, STATE_READY, STATE_DRAIN,
                           STATE_MAINT)
-from haproxyadmin.exceptions import IncosistentData
+from haproxyadmin.exceptions import (CommandFailed, IncosistentData,
+                                    MultipleCommandResults)
 from .utils import get_arg_option, abort_command, haproxy_object
 
 
@@ -72,6 +79,22 @@ class ServerCommand(object):
         self.servers = self.build_server_list(
             args['NAME'],
             args['--backend'])
+
+    def address(self):
+        value = self.args['VALUE']
+        for server in self.servers:
+            try:
+                server.address = value
+            except MultipleCommandResults as error:
+                print("{} changing address may have failed due to  "
+                        "different results received per haproxy process:{}"
+                        .format(server.name, error.results))
+            except exceptions.CommandFailed as error:
+                sys.exit("{} failed to change address:{}"
+                        .format(server.name,error))
+            else:
+                print("set address for {} server to {} in {} backend"
+                      .format(server.name, value, server.backendname))
 
     def build_server_list(self, names=None, backends=None):
         servers = []
@@ -134,6 +157,25 @@ class ServerCommand(object):
         for server in self.servers:
             print("{:<30} {:<42} {}".format(server.backendname, server.name,
                                             server.process_nb))
+
+    def port(self):
+        value = self.args['VALUE']
+        for server in self.servers:
+            try:
+                server.port = value
+            except IncosistentData as error:
+                sys.exit("retrieving address for {} returned error:{} {}"
+                         .format(server.name, error, error.results))
+            except MultipleCommandResults as error:
+                sys.exit("{} changing port may have failed due to  "
+                         "different results received per haproxy process:{}"
+                         .format(server.name, error.results))
+            except exceptions.CommandFailed as error:
+                sys.exit("{} failed to change port:{}"
+                         .format(server.name, error))
+            else:
+                print("set port for {} server to {} in {} backend"
+                      .format(server.name, value, server.backendname))
 
     def enable(self):
         for server in self.servers:
@@ -226,6 +268,22 @@ class ServerCommand(object):
         for server in self.servers:
             print("{:<30} {:<42} {}".format(server.backendname, server.name,
                                             server.weight))
+
+    def showaddress(self):
+        for server in self.servers:
+            try:
+                print("{:<30} {:<42} {}".format(server.backendname, server.name,
+                                                server.address))
+            except IncosistentData as exc:
+                sys.exit("{}:{}".format(exc, exc.results))
+
+    def showport(self):
+        for server in self.servers:
+            try:
+                print("{:<30} {:<42} {}".format(server.backendname, server.name,
+                                                server.port))
+            except IncosistentData as exc:
+                sys.exit("{}:{}".format(exc, exc.results))
 
     def showmetrics(self):
         for metric in SERVER_METRICS:
