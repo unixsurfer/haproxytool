@@ -255,10 +255,12 @@ Commands for servers
     Manage servers
 
     Usage:
-        haproxytool server [-D DIR | -F SOCKET] (-r | -s | -e | -R | -p | -W | -i |
-                        -c | -C | -S) [--backend=<name>...] [NAME...]
+        haproxytool server [-D DIR | -F SOCKET] (-A | -r | -s | -e | -R | -p | -W |
+                        -i | -c | -C | -S | -X) [--backend=<name>...] [NAME...]
         haproxytool server [-D DIR | -F SOCKET] -w VALUE [--backend=<name>...]
                         [NAME...]
+        haproxytool server [-D DIR | -F SOCKET] -a VALUE [--backend=<name>...] NAME
+        haproxytool server [-D DIR | -F SOCKET] -x VALUE [--backend=<name>...] NAME
         haproxytool server [-D DIR | -F SOCKET] [-f ] (-d | -t | -n)
                         [--backend=<name>...] [NAME...]
         haproxytool server [-D DIR | -F SOCKET] (-l | -M)
@@ -273,6 +275,8 @@ Commands for servers
         METRIC  Name of a metric, use '-M' to get metric names
 
     Options:
+        -a, --address             set server's address
+        -A, --show-address        show server's address
         -c, --show-check-code     show check code
         -C, --show-check-status   show check status
         -d, --disable             disable server
@@ -293,6 +297,8 @@ Commands for servers
         -t, --maintenance         set server in maintenance mode
         -w, --weight              change weight for server
         -W, --get-weight          show weight of server
+        -x --port                 set servers's port
+        -X, --show-port           show servers's port
         -D DIR, --socket-dir=DIR  directory with HAProxy socket files
                                   [default: /var/lib/haproxy]
 
@@ -373,6 +379,21 @@ Commands for servers
     backend_proc1                  bck_all_srv1                               0
     backend2_proc34                bck_all_srv1                               2
     backend1_proc34                bck_all_srv1                               10
+
+* Show/change address of a server
+
+::
+
+    % haproxytool server -D /run/haproxy --show-port srv1
+    backend_dynamic                srv1                                       7777
+    % haproxytool server -D /run/haproxy --port 8888 srv1
+    set port for srv1 server to 8888 in backend_dynamic backend
+
+    % haproxytool server -D /run/haproxy --show-address srv1
+    backend_dynamic                srv1                                        127.0.0.9
+    % haproxytool server -D /run/haproxy --address 127.0.0.10 srv1
+    set address for srv1 server to 127.0.0.10 in backend_dynamic backend
+
 
 * List metric names available from the statistics
 
