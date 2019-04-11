@@ -51,7 +51,7 @@ from haproxyadmin.exceptions import CommandFailed
 from .utils import get_arg_option, abort_command, haproxy_object
 
 
-class FrontendCommand(object):
+class FrontendCommand():
     def __init__(self, hap, args):
         self.hap = hap
         self.args = args

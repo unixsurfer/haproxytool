@@ -58,7 +58,7 @@ OPTIONS = {
 }
 
 
-class HAProxyCommand(object):
+class HAProxyCommand():
     def __init__(self, hap, args):
         self.hap = hap
         self.args = args

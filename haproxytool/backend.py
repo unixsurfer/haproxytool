@@ -37,7 +37,7 @@ from haproxyadmin import BACKEND_METRICS
 from .utils import get_arg_option, haproxy_object
 
 
-class BackendCommand(object):
+class BackendCommand():
     """Parse and run input from CLI
 
     Argument:

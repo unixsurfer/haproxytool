@@ -65,7 +65,7 @@ from haproxyadmin.exceptions import (CommandFailed, IncosistentData,
 from .utils import get_arg_option, abort_command, haproxy_object
 
 
-class ServerCommand(object):
+class ServerCommand():
     """Parse and run input from CLI
 
     Argument:

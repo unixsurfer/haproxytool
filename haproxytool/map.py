@@ -43,7 +43,7 @@ from haproxyadmin.exceptions import CommandFailed
 from .utils import get_arg_option, haproxy_object
 
 
-class MapCommand(object):
+class MapCommand():
     def __init__(self, hap, args):
         self.hap = hap
         self.args = args
