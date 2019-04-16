@@ -24,15 +24,19 @@ import sys
 from operator import methodcaller
 from importlib import import_module
 from docopt import docopt
-from haproxytool import __version__ as version
+from haproxytool import __version__
 from haproxytool import OUR_CMDS
+from haproxyadmin import __version__ as hapadmin_version
 
 
 def main():
     """
     Parse top level CLI interface and invoke subcommand
     """
+    version = ("haproxytool version: {}, haproxyadmin library version: {}"
+               .format(__version__, hapadmin_version))
     args = docopt(__doc__, version=version, options_first=True)
+    print(args)
 
     call_main = methodcaller('main')
 
