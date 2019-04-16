@@ -1,4 +1,5 @@
 # vim:fenc=utf-8
+from urllib.parse import urlparse
 import sys
 from six.moves import input
 from haproxyadmin import haproxy
@@ -53,13 +54,24 @@ def haproxy_object(arguments):
     """
     if arguments['--file'] is not None:
         arguments['--socket-dir'] = None
+    if arguments['--servers']:
+        servers = []
+        for server in arguments['--servers']:
+            url = urlparse(server.strip())
+            if url.scheme == 'tcp':
+                servers.append("{}://{}:{}".format(url.scheme, url.hostname,
+                                                   url.port))
+    else:
+        servers = None
+
     try:
         hap = haproxy.HAProxy(socket_file=arguments['--file'],
-                              socket_dir=arguments['--socket-dir'])
+                              socket_dir=arguments['--socket-dir'],
+                              servers=servers)
     except (SocketApplicationError,
             SocketConnectionError,
             SocketPermissionError) as error:
-        sys.exit(1)
+        sys.exit(error)
     except ValueError as error:
         sys.exit(error)
     else:

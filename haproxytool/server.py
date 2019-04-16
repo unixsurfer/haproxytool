@@ -6,7 +6,7 @@
 """Manage servers
 
 Usage:
-    haproxytool server [-D DIR | -F SOCKET] (-A | -r | -s | -e | -R | -p | -W |
+    haproxytool server [-D DIR | -F SOCKET -o SERVER...] (-A | -r | -s | -e | -R | -p | -W |
                        -i | -c | -C | -S | -X) [--backend=<name>...] [NAME...]
     haproxytool server [-D DIR | -F SOCKET] -w VALUE [--backend=<name>...]
                        [NAME...]
@@ -14,7 +14,7 @@ Usage:
     haproxytool server [-D DIR | -F SOCKET] -x VALUE [--backend=<name>...] NAME
     haproxytool server [-D DIR | -F SOCKET] [-f ] (-d | -t | -n)
                        [--backend=<name>...] [NAME...]
-    haproxytool server [-D DIR | -F SOCKET] (-l | -M)
+    haproxytool server [-D DIR | -F SOCKET | -o SERVER...] (-l | -M)
     haproxytool server [-D DIR | -F SOCKET] -m METRIC [--backend=<name>...]
                        [NAME...]
 
@@ -24,34 +24,36 @@ Arguments:
     SOCKET  Socket file
     VALUE   Value to set
     METRIC  Name of a metric, use '-M' to get metric names
+    SERVER  server name
 
 Options:
-    -a, --address             set server's address
-    -A, --show-address        show server's address
-    -c, --show-check-code     show check code
-    -C, --show-check-status   show check status
-    -d, --disable             disable server
-    -e, --enable              enable server
-    -f, --force               force an operation
-    -F SOCKET, --file SOCKET  socket file
-    -h, --help                show this screen
-    -i, --sid                 show server ID
-    -l, --show                show all servers
-    -m, --metric              show value of a metric
-    -M, --show-metrics        show all metrics
-    -n, --drain               drain server
-    -p, --process             show process number
-    -r, --requests            show requests
-    -R, --ready               set server in normal mode
-    -s, --status              show status
-    -S, --show-last-status    show last check status
-    -t, --maintenance         set server in maintenance mode
-    -w, --weight              change weight for server
-    -W, --get-weight          show weight of server
-    -x --port                 set servers's port
-    -X, --show-port           show servers's port
-    -D DIR, --socket-dir=DIR  directory with HAProxy socket files
-                              [default: /var/lib/haproxy]
+    -a, --address                set server's address
+    -A, --show-address           show server's address
+    -c, --show-check-code        show check code
+    -C, --show-check-status      show check status
+    -d, --disable                disable server
+    -e, --enable                 enable server
+    -f, --force                  force an operation
+    -F SOCKET, --file SOCKET     socket file
+    -h, --help                   show this screen
+    -i, --sid                    show server ID
+    -l, --show                   show all servers
+    -m, --metric                 show value of a metric
+    -M, --show-metrics           show all metrics
+    -n, --drain                  drain server
+    -p, --process                show process number
+    -o SERVER, --servers=server  server name
+    -r, --requests               show requests
+    -R, --ready                  set server in normal mode
+    -s, --status                 show status
+    -S, --show-last-status       show last check status
+    -t, --maintenance            set server in maintenance mode
+    -w, --weight                 change weight for server
+    -W, --get-weight             show weight of server
+    -x --port                    set servers's port
+    -X, --show-port              show servers's port
+    -D DIR, --socket-dir=DIR     directory with HAProxy socket files
+                                 [default: /var/lib/haproxy]
 
 """
 import sys
@@ -243,8 +245,8 @@ class ServerCommand():
             for server in self.servers:
                 try:
                     method_caller(server)
-                    print("{} backend set weight to {} in {} backend".format(
-                        server.name, value, server.backendname))
+                    print("set weight for {} in {} backend to {}".format(
+                        server.name, server.backendname, value))
                 except CommandFailed as error:
                     print("{} failed to change weight:{}".format(server.name,
                                                                  error))
@@ -321,6 +323,7 @@ class ServerCommand():
 def main():
     "Parse CLI"
     arguments = docopt(__doc__)
+    print(arguments)
     hap = haproxy_object(arguments)
 
     cmd = ServerCommand(hap, arguments)
