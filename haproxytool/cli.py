@@ -36,7 +36,6 @@ def main():
     version = ("haproxytool version: {}, haproxyadmin library version: {}"
                .format(__version__, hapadmin_version))
     args = docopt(__doc__, version=version, options_first=True)
-    print(args)
 
     call_main = methodcaller('main')
 
