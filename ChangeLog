@@ -1,6 +1,12 @@
 CHANGES
 =======
 
+0.5.7
+-----
+
+* RELEASE 0.5.7 version
+* Remove shebang from cli, map and server
+
 0.5.6
 -----
 
