@@ -1,4 +1,3 @@
-#! /usr/bin/env python
 # vim:fenc=utf-8
 """A tool to manage HAProxy via the stats socket.
 
