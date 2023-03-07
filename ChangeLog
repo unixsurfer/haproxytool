@@ -1,11 +1,20 @@
 CHANGES
 =======
 
+0.5.6
+-----
+
+* RELEASE 0.5.6 version
+* Remove shebang and executable bit from files
+* Remove unnecessary print statement
+* Print version of haproxyadmin library as well
+* Require haproxyadmin version 0.2.2 or higher
+
 0.5.5
 -----
 
 * RELEASE 0.5.5 version
-* Make __init__.py more pylint friendly
+* Make \_\_init\_\_.py more pylint friendly
 * Remove encoding declaration as default encoding is UTF-8
 * DOC: Update README to include examples for changing address/port
 * Fix wrong continued indentation, add space after comma
@@ -33,7 +42,7 @@ CHANGES
 * Remove redundant header
 * Fix ordering of module so pylint is happy
 * Add docstring and polish a bit the output
-* Move the list of valid cmds in __init__
+* Move the list of valid cmds in \_\_init\_\_
 * Update installation instructions
 
 0.5.2
@@ -59,7 +68,7 @@ CHANGES
 * Remove unused classes and exceptions part 2
 * Remove unused classes and exceptions
 * Add support for accepting a socket file
-* Add haproxy_object function
+* Add haproxy\_object function
 * Fix indentation issues
 * Simplify conditional statement
 
@@ -90,7 +99,7 @@ CHANGES
 
 * RELEASE 0.4.3 version
 * Use correct constant for backend metrics
-* Rename `list` CLI argument to `show`
+* Rename \`list\` CLI argument to \`show\`
 * add support for showing pids of HAProxy processes
 * fix typo in README
 
@@ -118,7 +127,7 @@ CHANGES
 * RELEASE 0.4.0 version
 * add in README section for haproxy command
 * add support for managing some options/metric for haproxy
-* version is set in __init__, use that one
+* version is set in \_\_init\_\_, use that one
 * update README to reflect the changes in frontend CLI
 * add support for force and abort operations in frontend
 * order frontend options alphabetically
@@ -131,14 +140,14 @@ CHANGES
 
 * RELEASE 0.3.2 version
 * update README for the new usage on server command
-* remove unused sorted_nicely function
+* remove unused sorted\_nicely function
 * support for abort also when we drain servers or set them in maintenance
 * update README for the new option(f) in server subcommand
 * add six module in requirements as it was introduced by 2819db4f
 * add -f option to force disabling servers
 * prompt user when he disables server
 * remove unnecessary brackets
-* add a read_user input function
+* add a read\_user input function
 
 0.3.1
 -----
@@ -148,7 +157,7 @@ CHANGES
 * Fix typo in README.RST
 * introduce class also for MAP command as we did with dad1424
 * acl.py: use a proper name for the class which perform commands for ACL
-* include version in __init__.py
+* include version in \_\_init\_\_.py
 
 0.3.0
 -----
@@ -168,7 +177,7 @@ CHANGES
 * fix incorrect indentation for -D in the usage
 * add a helper function to parse arguments
 * update README to reflect to the fact that -D is only part of command args
-* cli.py does not need to  parse socket_dir
+* cli.py does not need to  parse socket\_dir
 
 0.2.1
 -----
@@ -176,7 +185,7 @@ CHANGES
 * RELEASE 0.2.1 version
 * add an extra line between function to make pylint happy
 * Implicitly import sys rather using it from docopt space
-* catch the error when socket_dir doesn't exist
+* catch the error when socket\_dir doesn't exist
 
 0.2.0
 -----
@@ -228,7 +237,7 @@ CHANGES
 * change license to Apache 2.0
 * switch to gmail account
 * remove redundant information from the headers of each module
-* __init__: clean useless string which was added accidentally
+* \_\_init\_\_: clean useless string which was added accidentally
 * bump version in cli.py
 * update ChangeLog
 
